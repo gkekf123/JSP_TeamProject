@@ -28,7 +28,7 @@ public class DBConnect {
 		Connection conn=null;
 		
 		try {
-			conn=DriverManager.getConnection(MYSQL_URL, "min","a1234");
+			conn=DriverManager.getConnection(MYSQL_URL, "adminjoo","asioetu609l3!");
 			System.out.println("MYSQL 서버연결 성공");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
