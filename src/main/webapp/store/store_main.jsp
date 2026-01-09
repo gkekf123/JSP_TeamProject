@@ -68,9 +68,7 @@
     <div class="store-grid">
         <% for(StoreDTO store : storeList) { %>
             <div class="store-card">
-                <%-- <img src="/images/<%= store.getStoreImg() %>" class="store-img" alt="가게사진"> --%>
-                <img src="../images/test_image.jpg" class="store-img" alt="가게사진">
-                
+                <img src="<%= request.getContextPath() %>/images/<%= store.getStoreImg() %>" class="store-img" alt="가게사진" onerror="이미지 없음">
                 <div class="store-info">
                     <div class="store-name"><%= store.getStoreName() %></div>
                     <div class="store-stats">

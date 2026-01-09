@@ -20,18 +20,18 @@ public class StoreDAO {
 
         // 1. SQL 작성
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_addr");
-        sql.append("FROM store");
+        sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_addr ");
+        sql.append("FROM store ");
         
         // 2. 동적 정렬
         if ("rating".equals(sortType)) {
-            sql.append("ORDER BY store_rating_avg DESC, store_idx DESC");
+            sql.append("ORDER BY store_rating_avg DESC, store_idx DESC ");
         } else if ("review".equals(sortType)) {
-            sql.append("ORDER BY store_rating_count DESC, store_idx DESC");
+            sql.append("ORDER BY store_rating_count DESC, store_idx DESC ");
         } else if ("view".equals(sortType)) {
-            sql.append("ORDER BY store_view_count DESC, store_idx DESC");
+            sql.append("ORDER BY store_view_count DESC, store_idx DESC ");
         } else {
-            sql.append("ORDER BY store_created_at DESC");
+            sql.append("ORDER BY store_created_at DESC ");
         }
 
         try {
