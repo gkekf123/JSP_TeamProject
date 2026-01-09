@@ -1,5 +1,7 @@
 package com.team.project.dto;
 
+import java.sql.Timestamp;
+
 public class StoreDTO {
     private long storeIdx;          // store_idx
     private String storeName;       // store_name
@@ -9,6 +11,13 @@ public class StoreDTO {
     private int storeRatingCount;   // store_rating_count
     private double storeRatingAvg;  // store_rating_avg (DECIMAL -> double)
     private int storeViewCount;     // store_view_count
+    
+    private String storeIntro;           // 가게 한줄 소개
+    private String storeTel;             // 전화번호
+    private double latitude;             // 위도
+    private double longitude;            // 경도
+    private Timestamp storeCreatedAt;    // 등록일
+    private Timestamp storeUpdateAt;     // 수정일
     
 	public long getStoreIdx() {
 		return storeIdx;
@@ -58,4 +67,44 @@ public class StoreDTO {
 	public void setStoreViewCount(int storeViewCount) {
 		this.storeViewCount = storeViewCount;
 	}
+	
+	
+	public String getStoreIntro() {
+		return storeIntro;
+	}
+	public void setStoreIntro(String storeIntro) {
+		this.storeIntro = storeIntro;
+	}
+	public String getStoreTel() {
+		return storeTel;
+	}
+	public void setStoreTel(String storeTel) {
+		this.storeTel = storeTel;
+	}
+	public double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	public double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+	public Timestamp getStoreCreatedAt() {
+		return storeCreatedAt;
+	}
+	public void setStoreCreatedAt(Timestamp storeCreatedAt) {
+		this.storeCreatedAt = storeCreatedAt;
+	}
+	public Timestamp getStoreUpdateAt() {
+		return storeUpdateAt;
+	}
+	public void setStoreUpdateAt(Timestamp storeUpdateAt) {
+		this.storeUpdateAt = storeUpdateAt;
+	}
+	
+	
 }
