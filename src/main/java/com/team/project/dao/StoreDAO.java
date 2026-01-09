@@ -11,7 +11,7 @@ import com.team.project.util.DBConn;
 
 public class StoreDAO {
     
-    public List<StoreDTO> selectStoreList(String sortType) {
+    public List<StoreDTO> selectStoreList(String sortType, String searchWord) {
         List<StoreDTO> list = new ArrayList<>();
         
         Connection conn = null;
@@ -22,6 +22,12 @@ public class StoreDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_addr ");
         sql.append("FROM store ");
+        
+        // 검색어가 있을 경우 WHERE절 추가
+        boolean hasSearch = (searchWord != null && !searchWord.trim().isEmpty());
+        if (hasSearch) {
+            sql.append("WHERE store_name LIKE ? OR store_addr LIKE ? ");
+        }
         
         // 2. 동적 정렬
         if ("rating".equals(sortType)) {
@@ -37,9 +43,17 @@ public class StoreDAO {
         try {
             conn = DBConn.getConnection(); 
             pstmt = conn.prepareStatement(sql.toString());
+            
+            // 물음표(?) 채우기
+            if (hasSearch) {
+                String keyword = "%" + searchWord + "%"; 
+                pstmt.setString(1, keyword); // 첫 번째 ? (이름)
+                pstmt.setString(2, keyword); // 두 번째 ? (주소)
+            }
+            
             rs = pstmt.executeQuery();
 
-            // 4. 결과 매핑
+            int count = 0;
             while (rs.next()) {
                 StoreDTO dto = new StoreDTO();
                 dto.setStoreIdx(rs.getLong("store_idx"));
@@ -50,8 +64,10 @@ public class StoreDAO {
                 dto.setStoreAddr(rs.getString("store_addr"));
                 
                 list.add(dto);
+                count++;
             }
         } catch (Exception e) {
+            System.out.println("[DAO] ❌ 에러 발생!");
             e.printStackTrace();
         } finally {
            DBConn.close(rs, pstmt, conn);
