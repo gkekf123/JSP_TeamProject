@@ -1,5 +1,5 @@
-<%@page import="com.team.project.dao.MemberDao"%>
-<%@page import="com.team.project.dto.MemberDto"%>
+<%@page import="com.team.project.dao.MemberDAO"%>
+<%@page import="com.team.project.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
@@ -21,7 +21,7 @@
 <div class="signup-container">
     <div class="signup-title">회원가입</div>
 
-<form action="Sign_Up_Action.jsp" method="post" enctype="multipart/form-data">
+<form action="sign_up_action.jsp" method="post" enctype="multipart/form-data">
 <table class="table signup-table">
 <!-- 관리자 체크박스 -->
     <tr>

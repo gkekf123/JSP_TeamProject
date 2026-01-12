@@ -2,26 +2,23 @@
 var markers = [];
 var map;
 var ps;
-var infowindow;
+var selectedOverlay = null; // 현재 떠있는 오버레이를 추적하기 위한 변수
 
 // 화면이 다 로딩된 후에 지도를 그리도록 설정
 window.onload = function() {
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    var mapContainer = document.getElementById('map'), 
         mapOption = {
             center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표 (서울시청)
             level: 3 // 지도의 확대 레벨
         };  
 
-    // 1. 지도 생성 (이제 map div를 찾을 수 있습니다!)
+    // 1. 지도 생성
     map = new kakao.maps.Map(mapContainer, mapOption); 
 
     // 2. 장소 검색 객체 생성
     ps = new kakao.maps.services.Places();  
 
-    // 3. 인포윈도우 생성
-    infowindow = new kakao.maps.InfoWindow({zIndex:1});
-
-    // 4. 키워드로 장소를 검색합니다 (기본값: 강남 맛집)
+    // 3. 키워드로 장소를 검색합니다 (기본값: 강남 맛집)
     searchPlaces();
 };
 
@@ -57,11 +54,14 @@ function displayPlaces(places) {
     var listEl = document.getElementById('placesList'), 
     menuEl = document.getElementById('menu_wrap'),
     fragment = document.createDocumentFragment(), 
-    bounds = new kakao.maps.LatLngBounds(), 
-    listStr = '';
+    bounds = new kakao.maps.LatLngBounds();
     
+    // 기존 목록 및 마커 제거
     removeAllChildNods(listEl);
     removeMarker();
+    
+    // 검색할 때마다 기존에 열려있던 오버레이를 닫아줍니다.
+    closeOverlay();
     
     for ( var i=0; i<places.length; i++ ) {
         var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
@@ -70,20 +70,16 @@ function displayPlaces(places) {
 
         bounds.extend(placePosition);
 
-        (function(marker, title) {
-            kakao.maps.event.addListener(marker, 'mouseover', function() {
-                displayInfowindow(marker, title);
+        // 마커와 리스트 항목 클릭 시 오버레이(커스텀) 띄우기
+        (function(marker, place) {
+            kakao.maps.event.addListener(marker, 'click', function() {
+                displayCustomOverlay(marker, place);
             });
-            kakao.maps.event.addListener(marker, 'mouseout', function() {
-                infowindow.close();
-            });
-            itemEl.onmouseover =  function () {
-                displayInfowindow(marker, title);
+
+            itemEl.onclick =  function () {
+                displayCustomOverlay(marker, place);
             };
-            itemEl.onmouseout =  function () {
-                infowindow.close();
-            };
-        })(marker, places[i].place_name);
+        })(marker, places[i]);
 
         fragment.appendChild(itemEl);
     }
@@ -93,10 +89,63 @@ function displayPlaces(places) {
     map.setBounds(bounds); 
 }
 
+// 커스텀 오버레이를 표시하는 함수 (HTML 문자열 생성)
+function displayCustomOverlay(marker, place) {
+    // 1. 기존에 열려있는 오버레이 닫기
+    closeOverlay();
+
+    // 2. 오버레이 내용(HTML) 구성 - 검색된 데이터(place)를 넣습니다.
+    var content = '<div class="wrap">' + 
+                '    <div class="info">' + 
+                '        <div class="title">' + 
+                            place.place_name + 
+                '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
+                '        </div>' + 
+                '        <div class="body">' + 
+                '            <div class="img">' +
+                //               이미지는 API에서 주지 않으므로 기본 이미지를 사용합니다. 필요 없으면 이 div를 지우세요.
+                '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
+                '           </div>' + 
+                '            <div class="desc">' + 
+                '                <div class="ellipsis">' + (place.road_address_name ? place.road_address_name : place.address_name) + '</div>' + 
+                '                <div class="jibun ellipsis">(지번) ' + place.address_name + '</div>' + 
+                '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세보기</a></div>' + 
+                '            </div>' + 
+                '        </div>' + 
+                '    </div>' +    
+                '</div>';
+
+    // 3. 커스텀 오버레이 생성
+    var overlay = new kakao.maps.CustomOverlay({
+        content: content,
+        map: map,
+        position: marker.getPosition()       
+    });
+
+    // 4. 지도 중심 이동 (부드럽게)
+    map.panTo(marker.getPosition());
+
+    // 5. 현재 열린 오버레이 저장
+    selectedOverlay = overlay;
+}
+
+// 오버레이 닫기 (X 버튼 클릭 시 호출됨)
+function closeOverlay() {
+    if (selectedOverlay) {
+        selectedOverlay.setMap(null);
+        selectedOverlay = null;
+    }
+}
+
 // 검색결과 항목을 Element로 반환하는 함수
 function getListItem(index, places) {
-    var el = document.createElement('li'),
-    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+    var el = document.createElement('li');
+    
+    // 스프라이트 이미지의 시작 위치가 10px이고, 간격이 46px입니다.
+    var spriteOffset = 10 + (index * 46);
+    
+    // style="background-position: 0 -...px" 를 직접 넣어줍니다.
+    var itemStr = '<span class="markerbg" style="background-position: 0 -' + spriteOffset + 'px;"></span>' +
                 '<div class="info">' +
                 '   <h5>' + places.place_name + '</h5>';
 
@@ -135,6 +184,7 @@ function addMarker(position, idx, title) {
     return marker;
 }
 
+// 마커 제거 함수
 function removeMarker() {
     for ( var i = 0; i < markers.length; i++ ) {
         markers[i].setMap(null);
@@ -142,6 +192,7 @@ function removeMarker() {
     markers = [];
 }
 
+// 페이지네이션 함수
 function displayPagination(pagination) {
     var paginationEl = document.getElementById('pagination'),
         fragment = document.createDocumentFragment(),
@@ -169,12 +220,7 @@ function displayPagination(pagination) {
     paginationEl.appendChild(fragment);
 }
 
-function displayInfowindow(marker, title) {
-    var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
-    infowindow.setContent(content);
-    infowindow.open(map, marker);
-}
-
+// 자식 노드 제거 함수
 function removeAllChildNods(el) {   
     while (el.hasChildNodes()) {
         el.removeChild (el.lastChild);

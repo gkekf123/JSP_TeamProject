@@ -10,7 +10,7 @@ import java.util.List;
 import com.team.project.dto.StoreDTO;
 import com.team.project.util.DBConn;
 
-public class Store_DetailDao {
+public class Store_DetailDAO {
 
 	DBConn db=new DBConn();
 	
