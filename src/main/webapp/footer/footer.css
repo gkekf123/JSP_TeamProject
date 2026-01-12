@@ -3,13 +3,12 @@
 body {
 	font-family: 'Noto Sans KR', sans-serif;
 	background-color: #f4f4f4;
-	margin-top: 62px;
 }
 
 #footer {
     background-color: #333; /* 어두운 배경 */
     color: #fff;            /* 흰색 글씨 */
-    padding: 20px 0;        /* 위아래 여백 */
+    padding: 20px;        /* 위아래 여백 */
     text-align: center;     /* 가운데 정렬 */
     width: 100%;
     margin-top: 50px;       /* 본문과 거리 두기 */
@@ -18,4 +17,8 @@ body {
 
 .footer-content p {
     margin: 5px 0;          /* 줄 간격 조정 */
+}
+
+.main-page #footer {
+    margin-top: 0;
 }
