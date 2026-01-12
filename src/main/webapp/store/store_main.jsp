@@ -6,7 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
-    // 1. 파라미터 받기 (POST 방식의 한글 처리를 위해 필수)
+    // 1. 파라미터 받기
     request.setCharacterEncoding("UTF-8");
     
     String sort = request.getParameter("sort");
@@ -18,7 +18,7 @@
     StoreDAO dao = new StoreDAO();
     List<StoreDTO> storeList = dao.selectStoreList(sort, question);
     
-    // 3. AI 답변 준비 (하이브리드 로직)
+    // 3. AI 답변 준비
     String answer = "";
     
     if(question != null && !question.trim().isEmpty()) {
@@ -26,7 +26,7 @@
         
         // DB 결과 유무에 따라 프롬프트 변경
         if (storeList != null && !storeList.isEmpty()) {
-            // [Case A] DB에 데이터가 있을 때
+            // 1. DB에 데이터가 있을 때
             prompt.append("다음은 우리 서비스에 등록된 맛집 데이터야. 일치하는 데이터를 전부 보여줘\n");
             prompt.append("[우리 DB 데이터]\n");
             
@@ -35,13 +35,13 @@
             int count = 0;
             for(StoreDTO s : storeList) {
                  if(count >= maxLimit) break;
-                 prompt.append(String.format("- 이름:%s | 평점:%.1f | 주소:%s\n", s.getStoreName(), s.getStoreRatingAvg(), s.getStoreAddr()));
+                 prompt.append(String.format("- 가게명:%s | 평점:%.1f | 주소:%s\n", s.getStoreName(), s.getStoreRatingAvg(), s.getStoreAddr()));
                  count++;
             }
             prompt.append("\n[사용자 질문]\n" + question);
             
         } else {
-            // [Case B] DB에 데이터가 없을 때
+            // 2. DB에 데이터가 없을 때
             prompt.append("사용자가 '" + question + "'에 대해 검색했는데, 우리 DB에는 관련 정보가 없어.\n");
             prompt.append("네가 알고 있는 한국의 실제 맛집 정보 중에서 '" + question + "'와 관련된 가장 유명한 곳을 **딱 2군데만** 추천해줘.\n");
             prompt.append("형식은 [가게명-주소] - [추천이유] 로 간단하게 해줘.");
@@ -165,7 +165,7 @@
                 <% if(storeList == null || storeList.isEmpty()) { %>
                     <strong style="color: #e74c3c;">등록된 정보 없음.</strong> <br><br>
                 <% } else { %>
-                    <strong>🤖 AI 추천 (내부 데이터 기반):</strong><br>
+                    <strong>🤖 AI 추천 :</strong><br>
                 <% } %>
                 <%= answer %>
             </div>
