@@ -2,6 +2,7 @@ package com.team.project.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.team.project.dto.MemberDto;
@@ -40,7 +41,38 @@ public class MemberDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			DBConn.close(pstmt, conn);
 		}
+	}
+	
+	public MemberDto selectMember(String member_id, String member_pw) {
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		MemberDto dto=new MemberDto();
+		
+		String sql="select * from member where member_id=? and member_pw=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, member_id);
+			pstmt.setString(2, member_pw);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto.setMember_id(rs.getString("member_id"));
+				dto.setMember_name(rs.getString("member_name"));
+				dto.setMember_role(rs.getString("member_role"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			DBConn.close(rs, pstmt, conn);
+		}
+		
+		return dto;
 	}
 	
 }

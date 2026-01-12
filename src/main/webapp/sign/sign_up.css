@@ -46,7 +46,14 @@ body {
 /*버튼*/
     .signup-btn {
         margin-top: 30px;
-        background-color: #ddd;
+        background-color: #f26e02;
         border: none;
+        border-radius:10px;
         padding: 10px 40px;
+        color: white;
+        font-family: 'Nanum Myeongjo';
+        font-weight: 600;
+    }
+    .signup-btn:hover{
+    	background-color: #d46002;
     }

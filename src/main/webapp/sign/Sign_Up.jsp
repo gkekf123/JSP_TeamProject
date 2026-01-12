@@ -74,7 +74,7 @@
 <!-- 회원가입 버튼 -->
     <tr>
         <td colspan="2" align="center">
-            <button type="submit" class="btn btn-primary">회원가입</button>
+            <button type="submit" class="signup-btn">회원가입</button>
         </td>
     </tr>
 </table>
