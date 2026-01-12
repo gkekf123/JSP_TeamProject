@@ -1,12 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-</body>
-</html>
+<footer id="footer">
+    <div class="footer-content">
+        <p>Copyright © 2026 맛집리뷰 Team. All rights reserved.</p>
+        <p>문의: help@foodroad.com | 서울특별시 강남구</p>
+    </div>
+</footer>
