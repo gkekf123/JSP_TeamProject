@@ -140,6 +140,8 @@
     </div>
     
     <script src="<%= ctxPath %>/store/store.js"></script>
+    
+    <jsp:include page="/footer/footer.jsp" />
 
 </body>
 </html>
