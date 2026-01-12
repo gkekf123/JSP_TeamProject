@@ -2,6 +2,9 @@
 <%@page import="com.team.project.dto.MemberDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+    String ctxPath = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,67 +12,12 @@
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 <title>Insert title here</title>
-<style>
-    body {
-        background-color: #f4e3d6;
-        font-family: 'Nanum Myeongjo';
-    }
-
-    .signup-container {
-        width: 600px;
-        margin: 80px auto;
-    }
-
-    .signup-title {
-        font-size: 22px;
-        font-weight: bold;
-        margin-bottom: 30px;
-    }
-
-    .signup-table th {
-        width: 120px;
-        background-color: #f8f8f8;
-        vertical-align: middle;
-    }
-
-    .signup-table input[type="text"],
-    .signup-table input[type="password"],
-    .signup-table input[type="email"] {
-        width: 100%;
-        height: 40px;
-        background-color: none;
-        border: 1px solid gray;
-        border-radius: 10px;
-        padding: 0 10px;
-    }
-	
-	.signup-table input[type="file"] {
-        width: 100%;
-    }
-    #preview{
-    	width: 200px;
-    }
-
-    .signup-btn {
-        margin-top: 30px;
-        background-color: #ddd;
-        border: none;
-        padding: 10px 40px;
-    }
-</style>
-<script>
-function previewImage(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('preview').src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="<%= ctxPath %>/sign/sign_up.css">
+<script src="<%= ctxPath %>/sign/sign_up.js"></script>
 </head>
 <body>
+ <jsp:include page="/header/header.jsp" />
 <div class="signup-container">
     <div class="signup-title">회원가입</div>
 
@@ -115,14 +63,15 @@ function previewImage(input) {
         <th>프로필사진</th>
         <td>
             <div class="d-flex align-items-center gap-2">
-                        <div class="preview-box">
-                            <img id="preview" src="" alt="">
-                        </div>
-                        <input type="file" name="member_img" accept="image/*" onchange="previewImage(this)">
+            	<div class="preview-box">
+                	<img id="preview" src="" alt="">
+                </div>
+                <input type="file" name="member_img" accept="image/*" onchange="previewImage(this)">
             </div>
         </td>
         </tr>
-
+        
+<!-- 회원가입 버튼 -->
     <tr>
         <td colspan="2" align="center">
             <button type="submit" class="btn btn-primary">회원가입</button>
@@ -130,5 +79,6 @@ function previewImage(input) {
     </tr>
 </table>
 </form>
+<jsp:include page="/footer/footer.jsp" />
 </body>
 </html>
