@@ -5,14 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.team.project.dto.MemberDto;
+import com.team.project.dto.MemberDTO;
 import com.team.project.util.DBConn;
 
-public class MemberDao {
+public class MemberDAO {
 
 	DBConn db = new DBConn();
 	
-	public void insertMember(MemberDto dto) {
+	public void insertMember(MemberDTO dto) {
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
 		
@@ -46,11 +46,11 @@ public class MemberDao {
 		}
 	}
 	
-	public MemberDto selectMember(String member_id, String member_pw) {
+	public MemberDTO selectMember(String member_id, String member_pw) {
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		MemberDto dto=new MemberDto();
+		MemberDTO dto=new MemberDTO();
 		
 		String sql="select * from member where member_id=? and member_pw=?";
 		

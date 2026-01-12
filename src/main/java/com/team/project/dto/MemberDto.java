@@ -2,7 +2,7 @@ package com.team.project.dto;
 
 import java.sql.Timestamp;
 
-public class MemberDto {
+public class MemberDTO {
 	private int member_idx;
     private String member_id;
     private String member_pw;

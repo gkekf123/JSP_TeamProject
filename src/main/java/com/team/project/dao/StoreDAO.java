@@ -11,6 +11,7 @@ import com.team.project.util.DBConn;
 
 public class StoreDAO {
     
+	// select
     public List<StoreDTO> selectStoreList(String sortType, String searchWord) {
         List<StoreDTO> list = new ArrayList<>();
         
@@ -74,5 +75,39 @@ public class StoreDAO {
         }
         
         return list;
+    }
+    
+    // insert
+    public int insertStore(StoreDTO dto) {
+        int result = 0;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        
+        try {
+            conn = DBConn.getConnection();
+            StringBuilder sql = new StringBuilder();
+            
+            sql.append("INSERT INTO store ");
+            sql.append("(store_name, store_category, store_addr, store_img, store_intro, store_tel) ");
+            sql.append("VALUES (?, ?, ?, ?, ?, ?)");
+            
+            pstmt = conn.prepareStatement(sql.toString());
+            
+            pstmt.setString(1, dto.getStoreName());
+            pstmt.setString(2, dto.getStoreCategory());
+            pstmt.setString(3, dto.getStoreAddr());
+            pstmt.setString(4, dto.getStoreImg());
+            pstmt.setString(5, dto.getStoreIntro());
+            pstmt.setString(6, dto.getStoreTel());
+            
+            result = pstmt.executeUpdate();
+            
+        } catch (Exception e) {
+            System.out.println("[DAO] 맛집 등록 실패");
+            e.printStackTrace();
+        } finally {
+            DBConn.close(null, pstmt, conn);
+        }
+        return result;
     }
 }

@@ -1,7 +1,7 @@
 <%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
-<%@page import="com.team.project.dao.MemberDao"%>
-<%@page import="com.team.project.dto.MemberDto"%>
+<%@page import="com.team.project.dao.MemberDAO"%>
+<%@page import="com.team.project.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -35,7 +35,7 @@ try{
 	 member_img = "noimage.png";
 	}
 
-	MemberDto dto=new MemberDto();
+	MemberDTO dto=new MemberDTO();
 	dto.setMember_id(member_id);
 	dto.setMember_pw(member_pw);
 	dto.setMember_name(member_name);
@@ -45,13 +45,12 @@ try{
 	dto.setMember_addr(member_addr);
 	dto.setMember_img(member_img); // 기본 이미지
 
-	MemberDao dao = new MemberDao();
+	MemberDAO dao = new MemberDAO();
 	dao.insertMember(dto);
 
 }catch(Exception e){
 	
 }
-
 %>
 <script>
     alert("회원가입이 완료되었습니다");

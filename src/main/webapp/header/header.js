@@ -19,7 +19,7 @@ window.addEventListener("load", () => {
 	// 2. 로그인 버튼 클릭 시 -> 로그인 페이지로 이동
 	if (headerLogin) {
 		headerLogin.addEventListener('click', () => {
-			location.href = contextPath + "/member/login.jsp"; // 경로에 맞게 수정
+			location.href = contextPath + "/login/login.jsp"; // 경로에 맞게 수정
 		});
 	}
 
