@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
-<link rel="stylesheet" href="<%= ctxPath %>/public/public.css">
-<script src="<%= ctxPath %>/public/public.js" defer></script>
+
+<script type="text/javascript">
+    const contextPath = "<%= ctxPath %>";
+</script>
+<link rel="stylesheet" href="<%= ctxPath %>/header/header.css">
+<script src="<%= ctxPath %>/header/header.js" defer></script>
 <!-- 로그인여부 변수 loginMember-->
 <!-- ===== 헤더 ===== -->
 <header>
@@ -11,8 +15,8 @@
     <nav>
         <ul>
         	<!-- 링크 수정 필요 -->
-            <li><a href="<%= ctxPath %>/">맛집추천</a></li> 
-        	<li><a href="<%= ctxPath %>/">맛집지도</a></li>
+            <li><a href="<%= ctxPath %>/store/store_main.jsp">맛집추천</a></li> 
+        	<li><a href="<%= ctxPath %>/map/map_main.jsp">맛집지도</a></li>
         	<li><a href="<%= ctxPath %>/">맛집공유</a></li>
         </ul>
     </nav>
