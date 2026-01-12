@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI; // [추가됨] 이 줄이 꼭 필요합니다!
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -20,7 +21,9 @@ public class GeminiUtil {
         String aiAnswer = "";
         
         try {
-            URL url = new URL(API_URL);
+            // new URL(문자열) 대신 URI를 거쳐서 변환해야 에러가 안 납니다.
+            URL url = new URI(API_URL).toURL();
+            
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
