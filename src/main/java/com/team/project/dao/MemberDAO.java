@@ -21,21 +21,21 @@ public class MemberDAO {
 		try {
 			pstmt=conn.prepareStatement(sql);
 			
-			pstmt.setString(1, dto.getMember_id());
-            pstmt.setString(2, dto.getMember_pw());
-            pstmt.setString(3, dto.getMember_name());
+			pstmt.setString(1, dto.getMemberId());
+            pstmt.setString(2, dto.getMemberPw());
+            pstmt.setString(3, dto.getMemberName());
             
          //: 체크 안 하면 null
-            if(dto.getMember_role() == null || dto.getMember_role().isEmpty()) {
+            if(dto.getMemberRole() == null || dto.getMemberRole().isEmpty()) {
                 pstmt.setNull(4, java.sql.Types.VARCHAR);
             } else {
-                pstmt.setString(4, dto.getMember_role()); // admin
+                pstmt.setString(4, dto.getMemberRole()); // admin
             }
             
-            pstmt.setString(5, dto.getMember_email());
-            pstmt.setString(6, dto.getMember_hp());
-            pstmt.setString(7, dto.getMember_addr());
-            pstmt.setString(8, dto.getMember_img());
+            pstmt.setString(5, dto.getMemberEmail());
+            pstmt.setString(6, dto.getMemberHp());
+            pstmt.setString(7, dto.getMemberAddr());
+            pstmt.setString(8, dto.getMemberImg());
             
             pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -61,9 +61,9 @@ public class MemberDAO {
 			rs=pstmt.executeQuery();
 			
 			if(rs.next()) {
-				dto.setMember_id(rs.getString("member_id"));
-				dto.setMember_name(rs.getString("member_name"));
-				dto.setMember_role(rs.getString("member_role"));
+				dto.setMemberId(rs.getString("member_id"));
+				dto.setMemberName(rs.getString("member_name"));
+				dto.setMemberRole(rs.getString("member_role"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
