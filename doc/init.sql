@@ -10,7 +10,7 @@ CREATE TABLE member (
     member_email    VARCHAR(100) COMMENT '연락용 이메일',
     member_hp       VARCHAR(20) COMMENT '전화번호',
     member_addr     VARCHAR(200) COMMENT '주소',
-    member_img      VARCHAR(500) DEFAULT 'default.png' COMMENT '프로필 사진',
+    member_img      VARCHAR(500) COMMENT '프로필 사진',
     member_joinday  TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '가입일'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='회원 정보';
 
@@ -20,7 +20,7 @@ CREATE TABLE store (
     store_name          VARCHAR(100) NOT NULL COMMENT '가게 이름',
     store_category      VARCHAR(100) COMMENT '카테고리',
     store_addr          VARCHAR(255) NOT NULL COMMENT '도로명 주소',
-    store_img           VARCHAR(500) DEFAULT 'no_image.png' COMMENT '썸네일 이미지',
+    store_img           VARCHAR(500) COMMENT '썸네일 이미지',
     store_intro         TEXT COMMENT '가게 한줄 소개',
     store_tel           VARCHAR(30) COMMENT '전화번호',
     store_rating_count  INT DEFAULT 0 COMMENT '리뷰 갯수 (리뷰순 정렬용)',
@@ -64,12 +64,15 @@ CREATE TABLE review (
 CREATE TABLE bookmark (
     like_idx    BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '찜 고유 번호',
     member_id   VARCHAR(50) NOT NULL COMMENT '회원 ID',
-    store_idx   BIGINT NOT NULL COMMENT '가게 고유 번호',
+    store_idx   BIGINT DEFAULT NULL COMMENT '내부 가게 고유 번호 (등록된 가게일 경우)',
+    place_name  VARCHAR(100) NOT NULL COMMENT '가게 이름 (필수)',
+    place_addr  VARCHAR(200) COMMENT '가게 주소',
+    place_url   VARCHAR(500) COMMENT '가게 상세 URL (카카오맵 등)',
+    place_phone VARCHAR(50)  COMMENT '전화번호',
     like_date   TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '찜한 날짜',
-    UNIQUE KEY uk_bookmark (member_id, store_idx),
     CONSTRAINT fk_bookmark_member FOREIGN KEY (member_id) REFERENCES member(member_id) ON DELETE CASCADE,
     CONSTRAINT fk_bookmark_store FOREIGN KEY (store_idx) REFERENCES store(store_idx) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='찜 목록';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='찜 목록(내부/외부 통합)';
 
 -- 6. 제미나이 검색 기록 로그
 CREATE TABLE search_log (
@@ -94,7 +97,3 @@ INSERT INTO store (store_name, store_category, store_addr, store_img, store_rati
 VALUES 
 ('맛집', '한식', '서울시 강남구 역삼동 123', 'test1.jpg', 4.8, 120, 500),
 ('강남 파스타', '양식', '서울시 강남구 삼성동 456', 'test2.jpg', 4.2, 55, 300);
-
-SELECT *
-FROM store
-;
