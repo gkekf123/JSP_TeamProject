@@ -17,7 +17,7 @@
         	<!-- 링크 수정 필요 -->
             <li><a href="<%= ctxPath %>/store/store_main.jsp">맛집추천</a></li> 
         	<li><a href="<%= ctxPath %>/map/map_main.jsp">맛집지도</a></li>
-        	<li><a href="<%= ctxPath %>/">맛집공유</a></li>
+        	<li><a href="<%= ctxPath %>/news/news.jsp">맛집공유</a></li>
         </ul>
     </nav>
 

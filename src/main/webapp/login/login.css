@@ -1,8 +1,8 @@
 @charset "UTF-8";
 
 body {
-        background-color: #f4e3d6;
-        font-family: 'Nanum Myeongjo';
+        background-color: #f4f4f4;
+        font-family: 'Noto Sans KR' sans-serif;
     }
 .container {
     width: 600px;
@@ -68,11 +68,10 @@ body {
     font-size: 16px;
     margin-top: 15px;
     cursor: pointer;
-    background-color: #f26e02;
+    background-color: #f39c12;
 }
-
-.login-btn:hover {
-    background-color: #d46002;
+.login-btn:hover{
+	background-color: #e67e22;
 }
 
 .login-sign {
