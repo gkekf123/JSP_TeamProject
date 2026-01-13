@@ -1,0 +1,152 @@
+@charset "UTF-8";
+
+/* 기본 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f4f4;
+    margin-top: 62px;
+}
+
+/* 반응형 컨테이너 */
+.container {
+    max-width: 1200px;
+    width: 90%;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* 헤더 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* [추가] 관리자 글쓰기 버튼 스타일 */
+.write-btn {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 38px;
+    white-space: nowrap;
+    transition: background 0.3s;
+}
+
+.write-btn:hover {
+    background-color: #e67e22;
+}
+
+/*뉴스 카드*/
+.news-card-wrap {
+    display: grid;
+    margin-top: 30px;
+}
+
+.news-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+    display: flex;
+    height: 110px;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+}
+
+.news-img img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin: 20px 20px;
+}
+
+.news-info {
+    padding: 14px;
+    flex: 1;
+    position: relative;
+}
+
+.news-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+
+.news-source {
+    font-size: 13px;
+    color: #666;
+}
+
+.news-date {
+	position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 12px;
+    color: #999;
+}
+
+.no-data {
+    text-align: center;
+    margin-top: 40px;
+    color: #777;
+}
+
+
+/* 반응형 (태블릿) */
+@media screen and (max-width: 900px) {
+    .news-card {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .header-right {
+        justify-content: flex-end;
+    }
+}
+
+/* 반응형 (모바일) */
+@media screen and (max-width: 600px) {
+    .news-card {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .container {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+    .header h1 {
+        text-align: center;
+    }
+}

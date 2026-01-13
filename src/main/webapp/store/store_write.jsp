@@ -9,7 +9,7 @@
         if (loginObj instanceof MemberDTO) {
             MemberDTO loginMember = (MemberDTO) loginObj;
             // role이 admin인지 확인
-            if ("admin".equals(loginMember.getMember_role())) {
+            if ("admin".equals(loginMember.getMemberRole())) {
                 isAdmin = true;
             }
         }
@@ -20,7 +20,7 @@
         }
     }
 
-    // 2. 관리자가 아니면 쫓아내기
+    // 2. 관리자체크
     if (!isAdmin) {
 %>
     <script>

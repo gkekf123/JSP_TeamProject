@@ -1,29 +1,26 @@
-// 정렬(Select Box) 변경 시 form 제출
+// 정렬 변경
 function changeSort() {
     var sortVal = document.getElementById("sortFilter").value;
-    // hidden input에 값 설정
     document.querySelector('input[name="sort"]').value = sortVal;
-    // form 강제 제출
     document.querySelector('.search-box').submit();
 }
 
-// 찜하기 토글 함수
+// 찜하기 토글
 function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
-    // 1. 현재 하트 상태 확인
     var currentText = $(btn).text().trim();
-    var isEmpty = (currentText === '♡'); // 비어있으면 true
+    var isEmpty = (currentText === '♡');
     
-    // 서버 응답 기다리지 않고 즉시 화면 변경
+    // 1. 화면 먼저 변경
     if(isEmpty) {
-        $(btn).text('♥'); // 채운 하트로 변경
+        $(btn).text('♥');
         $(btn).css({transform: "scale(1.5)", transition: "0.2s"});
         setTimeout(() => $(btn).css("transform", "scale(1)"), 200);
     } else {
-        $(btn).text('♡'); // 빈 하트로 변경
+        $(btn).text('♡');
         $(btn).css("transform", "scale(1)");
     }
 
-    // 서버에 비동기 요청
+    // 2. 서버 요청 (비동기)
     $.ajax({
         type: "POST",
         url: "/bookmark/bookmark_action.jsp",
@@ -34,23 +31,18 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
         },
         success: function(response) {
             var res = response.trim();
-            
             if(res === "login_needed") {
-                // 로그인이 필요하면 롤백(원상복구) 및 이동
                 alert("로그인이 필요한 서비스입니다.");
-                location.href = "/login/login.jsp"; 
-                // 화면 원상복구
-                $(btn).text(isEmpty ? '♡' : '♥'); 
+                location.href = "/login/login.jsp";
+                $(btn).text(isEmpty ? '♡' : '♥'); // 롤백
             } else if(res === "error") {
-                // 에러나면 롤백
-                alert("서버 오류로 처리에 실패했습니다.");
-                $(btn).text(isEmpty ? '♡' : '♥');
+                alert("처리 실패");
+                $(btn).text(isEmpty ? '♡' : '♥'); // 롤백
             }
         },
         error: function() {
-            // 통신 에러 시 롤백
             console.log("AJAX Error");
-            $(btn).text(isEmpty ? '♡' : '♥'); 
+            $(btn).text(isEmpty ? '♡' : '♥'); // 롤백
         }
     });
 }
