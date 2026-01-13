@@ -21,9 +21,9 @@ if(dto==null){
 <% return;}
 
 session.setAttribute("loginMember", dto);
-session.setAttribute("login_id", dto.getMember_id());
-session.setAttribute("login_name", dto.getMember_name());
-session.setAttribute("login_role", dto.getMember_role());
+session.setAttribute("login_id", dto.getMemberId());
+session.setAttribute("login_name", dto.getMemberName());
+session.setAttribute("login_role", dto.getMemberRole());
 
 response.sendRedirect(request.getContextPath()+"/index.jsp");
 %>

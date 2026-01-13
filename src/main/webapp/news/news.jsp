@@ -23,7 +23,7 @@
             MemberDTO loginMember = (MemberDTO) loginObj;
             
             // DTO 안의 권한(role)이 'admin'인지 확인
-            if ("admin".equals(loginMember.getMember_role())) { 
+            if ("admin".equals(loginMember.getMemberRole())) { 
                 isAdmin = true;
             }
         }
@@ -74,19 +74,19 @@
     		<div class="news-card">
     			
 	    		<div class="news-img">
-	    			<% if(dto.getNews_img() !=null && !dto.getNews_img().isEmpty()){%>
+	    			<% if(dto.getNewsImg() !=null && !dto.getNewsImg().isEmpty()){%>
 	    				<img alt="" src="<%=ctxPath%>/images/noimage.png" alt="기본 이미지">
 	    			<%}else{%>
-	    				<img src="<%=dto.getNews_img()%>" alt="뉴스 이미지">
+	    				<img src="<%=dto.getNewsImg()%>" alt="뉴스 이미지">
 	    			<%}
 	    			%>
 	    		</div>
 	    		
 	    		<div class="news-info">
-	    			<p class="news-title"  onclick="window.open('<%=dto.getNews_url()%>')" ><%=dto.getNews_title() %></p>
-	    			<p class="news-source"><%=dto.getNews_source() %></p>
+	    			<p class="news-title"  onclick="window.open('<%=dto.getNewsUrl()%>')" ><%=dto.getNewsTitle() %></p>
+	    			<p class="news-source"><%=dto.getNewsSource() %></p>
 	    			<span class="news-date">
-	    			<%= new SimpleDateFormat("yyyy-MM-dd HH:mm").format(dto.getNews_regdate()) %>
+	    			<%= new SimpleDateFormat("yyyy-MM-dd HH:mm").format(dto.getNewsRegdate()) %>
 	    			</span>
 	    		</div>
     		</div>

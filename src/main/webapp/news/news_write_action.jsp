@@ -35,10 +35,10 @@ if (fileName != null) {
 
 //5. DTO 세팅
 NewsDTO dto = new NewsDTO();
-dto.setNews_title(news_title);
-dto.setNews_url(news_url);
-dto.setNews_img(news_img);
-dto.setNews_source(news_source);
+dto.setNewsTitle(news_title);
+dto.setNewsUrl(news_url);
+dto.setNewsImg(news_img);
+dto.setNewsSource(news_source);
 
 // 6. DB insert
 NewsDAO dao = new NewsDAO();

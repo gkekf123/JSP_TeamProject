@@ -22,10 +22,10 @@ public class NewsDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setString(1, dto.getNews_title());
-			pstmt.setString(2, dto.getNews_url());
-			pstmt.setString(3, dto.getNews_img());
-			pstmt.setString(4, dto.getNews_source());
+			pstmt.setString(1, dto.getNewsTitle());
+			pstmt.setString(2, dto.getNewsUrl());
+			pstmt.setString(3, dto.getNewsImg());
+			pstmt.setString(4, dto.getNewsSource());
 			pstmt.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -50,12 +50,12 @@ public class NewsDAO {
 			
 			while(rs.next()) {
 				NewsDTO dto=new NewsDTO();
-				dto.setNews_idx(rs.getLong("news_idx"));
-				dto.setNews_title(rs.getString("news_title"));
-				dto.setNews_url(rs.getString("news_url"));
-				dto.setNews_img(rs.getString("news_img"));
-				dto.setNews_source(rs.getString("news_source"));
-				dto.setNews_regdate(rs.getTimestamp("news_regdate"));
+				dto.setNewsIdx(rs.getLong("news_idx"));
+				dto.setNewsTitle(rs.getString("news_title"));
+				dto.setNewsUrl(rs.getString("news_url"));
+				dto.setNewsImg(rs.getString("news_img"));
+				dto.setNewsSource(rs.getString("news_source"));
+				dto.setNewsRegdate(rs.getTimestamp("news_regdate"));
 				
 				list.add(dto);
 			}
