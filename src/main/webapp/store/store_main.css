@@ -2,203 +2,231 @@
 
 /* 기본 스타일 */
 body {
-	font-family: 'Noto Sans KR', sans-serif;
-	background-color: #f4f4f4;
-	margin-top: 62px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f4f4;
+    margin-top: 62px;
 }
 
 /* 반응형 컨테이너 */
 .container {
-	max-width: 1200px;
-	width: 90%;
-	margin: 30px auto;
-	padding: 20px;
-	background: #fff;
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	box-sizing: border-box;
+    max-width: 1200px;
+    width: 90%;
+    margin: 30px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 /* 헤더 */
 .header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
-	border-bottom: 2px solid #eee;
-	padding-bottom: 15px;
-	flex-wrap: wrap;
-	gap: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .header h1 {
-	margin: 0;
-	color: #333;
-	font-size: 24px;
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /* 검색창 */
 .search-box {
-	display: flex;
-	gap: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 .search-box input {
-	padding: 10px;
-	width: 300px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 .search-box button {
-	padding: 10px 20px;
-	background: #f39c12;
-	color: white;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-weight: bold;
-	white-space: nowrap;
+    padding: 10px 20px;
+    background: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
 .search-box button:hover {
-	background: #e67e22;
+    background: #e67e22;
 }
 
 #sortFilter {
-	padding: 8px;
-	border-radius: 5px;
-	border: 1px solid #ddd;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    height: 38px;
+}
+
+/* [추가] 관리자 글쓰기 버튼 스타일 */
+.write-btn {
+    background-color: #e74c3c; /* 붉은색 계열 */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    height: 38px;
+    white-space: nowrap;
+    transition: background 0.3s;
+}
+
+.write-btn:hover {
+    background-color: #c0392b;
 }
 
 /* AI 결과 박스 */
 .ai-result-box {
-	background-color: #f8f9fa;
-	border-left: 5px solid #f39c12;
-	padding: 20px;
-	margin-bottom: 30px;
-	border-radius: 5px;
+    background-color: #f8f9fa;
+    border-left: 5px solid #f39c12;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 5px;
 }
 
 .ai-result-box strong {
-	color: #d35400;
+    color: #d35400;
 }
 
 .ai-question {
-	font-size: 1.1em;
-	margin-bottom: 10px;
-	font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .ai-answer {
-	line-height: 1.6;
-	color: #555;
-	white-space: pre-wrap;
-	word-break: break-all;
+    line-height: 1.6;
+    color: #555;
+    white-space: pre-wrap;
+    word-break: break-all;
 }
 
 /* 그리드 (카드 리스트) */
 .store-grid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 .store-card {
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	overflow: hidden;
-	background: #fff;
-	transition: transform 0.2s;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.2s;
 }
 
 .store-card:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .img-link {
-	display: block;
-	text-decoration: none;
-	color: inherit;
+    display: block;
+    text-decoration: none;
+    color: inherit;
 }
 
 .store-img {
-	width: 100%;
-	height: 180px;
-	background-color: #eee;
-	object-fit: cover;
-	border-bottom: 1px solid #eee;
+    width: 100%;
+    height: 180px;
+    background-color: #eee;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
 }
 
 /* 이미지 없을 때 회색 박스 */
 .no-img-box {
-	width: 100%;
-	height: 180px;
-	background-color: #eee;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #888;
-	font-size: 14px;
-	font-weight: bold;
-	border-bottom: 1px solid #ddd;
+    width: 100%;
+    height: 180px;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
 }
 
 .store-info {
-	padding: 15px;
+    padding: 15px;
 }
 
 .store-name {
-	font-size: 18px;
-	font-weight: bold;
-	margin-bottom: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .store-stats {
-	color: #666;
-	font-size: 14px;
-	margin-bottom: 5px;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 5px;
 }
 
 .store-addr {
-	color: #999;
-	font-size: 12px;
+    color: #999;
+    font-size: 12px;
 }
 
 .star-icon {
-	color: #f39c12;
+    color: #f39c12;
 }
 
 /* 반응형 (태블릿) */
 @media screen and (max-width: 900px) {
-	.store-grid {
-		grid-template-columns: repeat(2, 1fr);
-	}
-	.header {
-		flex-direction: column;
-		align-items: stretch;
-	}
-	.search-box {
-		width: 100%;
-		justify-content: center;
-	}
-	.search-box input {
-		width: 100%;
-	}
+    .store-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .header-right {
+        justify-content: flex-end;
+    }
+    .search-box {
+        width: 100%;
+        justify-content: center;
+    }
+    .search-box input {
+        width: 100%;
+    }
 }
 
 /* 반응형 (모바일) */
 @media screen and (max-width: 600px) {
-	.store-grid {
-		grid-template-columns: repeat(1, 1fr);
-	}
-	.container {
-		width: 100%;
-		margin: 0;
-		border-radius: 0;
-	}
-	.header h1 {
-		text-align: center;
-	}
+    .store-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .container {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+    .header h1 {
+        text-align: center;
+    }
 }

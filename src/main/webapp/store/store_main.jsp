@@ -1,3 +1,4 @@
+<%@page import="com.team.project.dto.MemberDTO"%>
 <%@page import="com.team.project.dao.SearchLogDAO"%>
 <%@page import="com.team.project.util.GeminiUtil"%>
 <%@page import="com.team.project.dto.StoreDTO"%>
@@ -7,7 +8,7 @@
 <%
     // 0. 기본 설정
     request.setCharacterEncoding("UTF-8");
-    String ctxPath = request.getContextPath(); // 경로 변수 선언 (중요!)
+    String ctxPath = request.getContextPath();
 
     // 1. 파라미터 받기
     String sort = request.getParameter("sort");
@@ -19,19 +20,38 @@
     StoreDAO dao = new StoreDAO();
     List<StoreDTO> storeList = dao.selectStoreList(sort, question);
     
-    // 3. AI 답변 준비
+ // 3. 관리자 권한 확인 (세션 체크)
+    boolean isAdmin = false;
+    Object loginObj = session.getAttribute("loginMember");
+    
+    if (loginObj != null) {
+        // 경우 1: 세션값이 MemberDTO 객체일 때 (정상적인 경우)
+        if (loginObj instanceof MemberDTO) {
+            MemberDTO loginMember = (MemberDTO) loginObj;
+            
+            // DTO 안의 권한(role)이 'admin'인지 확인
+            if ("admin".equals(loginMember.getMember_role())) { 
+                isAdmin = true;
+            }
+        }
+        // 경우 2: 세션값이 혹시 문자열일 때 (예외 처리)
+        else if (loginObj instanceof String) {
+            if ("admin".equals((String)loginObj)) {
+                isAdmin = true;
+            }
+        }
+    }
+
+    // 4. AI 답변 준비
     String answer = "";
     
     if(question != null && !question.trim().isEmpty()) {
         StringBuilder prompt = new StringBuilder();
         
-        // DB 결과 유무에 따라 프롬프트 변경
         if (storeList != null && !storeList.isEmpty()) {
-            // 1. DB에 데이터가 있을 때
             prompt.append("다음은 우리 서비스에 등록된 맛집 데이터야. 일치하는 데이터를 전부 보여줘\n");
             prompt.append("[우리 DB 데이터]\n");
             
-            // 데이터 과부하 방지 (최대 30개만 전송)
             int maxLimit = 30;
             int count = 0;
             for(StoreDTO s : storeList) {
@@ -40,18 +60,14 @@
                  count++;
             }
             prompt.append("\n[사용자 질문]\n" + question);
-            
         } else {
-            // 2. DB에 데이터가 없을 때
             prompt.append("사용자가 '" + question + "'에 대해 검색했는데, 우리 DB에는 관련 정보가 없어.\n");
             prompt.append("네가 알고 있는 한국의 실제 맛집 정보 중에서 '" + question + "'와 관련된 가장 유명한 곳을 **딱 2군데만** 추천해줘.\n");
             prompt.append("형식은 [가게명-주소] - [추천이유] 로 간단하게 해줘.");
         }
         
-        // GeminiUtil 호출
         answer = GeminiUtil.getGeminiResponse(prompt.toString());
         
-        // 로그 저장
         SearchLogDAO logDao = new SearchLogDAO();
         logDao.insertSearchLog(question, answer);
     }
@@ -63,7 +79,7 @@
     <title>맛집 추천 리스트</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css">
-    <script src="<%= ctxPath %>/store/store_main.js"></script>
+    <script src="<%= ctxPath %>/store/store_main.js" defer></script>
 </head>
 <body>
 
@@ -78,13 +94,22 @@
                 <input type="text" name="q" placeholder="가게명, 주소 또는 메뉴 추천!" value="<%= (question != null) ? question : "" %>">
                 <button type="submit">검색</button>
             </form>
-    
-            <select id="sortFilter" onchange="changeSort()">
-                <option value="latest" <%= "latest".equals(sort) ? "selected" : "" %>>최신순</option>
-                <option value="rating" <%= "rating".equals(sort) ? "selected" : "" %>>별점 높은순</option>
-                <option value="review" <%= "review".equals(sort) ? "selected" : "" %>>리뷰 많은순</option>
-                <option value="view"   <%= "view".equals(sort) ? "selected" : "" %>>조회수순</option>
-            </select>
+            
+            <div class="header-right">
+                <%-- 관리자(admin)일 때만 글쓰기 버튼 표시 --%>
+                <% if(isAdmin) { %>
+                    <button type="button" class="write-btn" onclick="location.href='store_write.jsp'">
+                        ✏️ 맛집등록
+                    </button>
+                <% } %>
+        
+                <select id="sortFilter" onchange="changeSort()">
+                    <option value="latest" <%= "latest".equals(sort) ? "selected" : "" %>>최신순</option>
+                    <option value="rating" <%= "rating".equals(sort) ? "selected" : "" %>>별점 높은순</option>
+                    <option value="review" <%= "review".equals(sort) ? "selected" : "" %>>리뷰 많은순</option>
+                    <option value="view"   <%= "view".equals(sort) ? "selected" : "" %>>조회수순</option>
+                </select>
+            </div>
         </div>
     
         <% if(question != null && !answer.isEmpty()) { %>
@@ -106,7 +131,6 @@
             if (storeList != null && !storeList.isEmpty()) {
                 for(StoreDTO store : storeList) { 
                     String imgPath = store.getStoreImg();
-                    // 이미지 유효성 체크
                     boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty() && !imgPath.equals("no_image.png"));
             %>
                 <div class="store-card">
@@ -138,8 +162,6 @@
             <% } %>
         </div>
     </div>
-    
-    <script src="<%= ctxPath %>/store/store.js"></script>
     
     <jsp:include page="/footer/footer.jsp" />
 
