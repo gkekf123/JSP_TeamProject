@@ -36,14 +36,14 @@ try{
 	}
 
 	MemberDTO dto=new MemberDTO();
-	dto.setMember_id(member_id);
-	dto.setMember_pw(member_pw);
-	dto.setMember_name(member_name);
-	dto.setMember_role(member_role); // admin or null
-	dto.setMember_email(member_email);
-	dto.setMember_hp(member_hp);
-	dto.setMember_addr(member_addr);
-	dto.setMember_img(member_img); // 기본 이미지
+	dto.setMemberId(member_id);
+	dto.setMemberPw(member_pw);
+	dto.setMemberName(member_name);
+	dto.setMemberRole(member_role); // admin or null
+	dto.setMemberEmail(member_email);
+	dto.setMemberHp(member_hp);
+	dto.setMemberAddr(member_addr);
+	dto.setMemberImg(member_img); // 기본 이미지
 
 	MemberDAO dao = new MemberDAO();
 	dao.insertMember(dto);
