@@ -7,7 +7,7 @@
     if (loginObj != null && loginObj instanceof MemberDTO) {
         MemberDTO loginMember = (MemberDTO) loginObj;
         
-        if ("admin".equals(loginMember.getMember_role())) {
+        if ("admin".equals(loginMember.getMemberRole())) {
             isAdmin = true;
         }
     }

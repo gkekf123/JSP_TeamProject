@@ -30,7 +30,7 @@
             MemberDTO loginMember = (MemberDTO) loginObj;
             
             // DTO 안의 권한(role)이 'admin'인지 확인
-            if ("admin".equals(loginMember.getMember_role())) { 
+            if ("admin".equals(loginMember.getMemberRole())) { 
                 isAdmin = true;
             }
         }
