@@ -8,6 +8,8 @@ public class StoreDTO {
     private String storeCategory;   // store_category
     private String storeAddr;       // store_addr
     private String storeImg;        // store_img
+    private String storeImg2;       // store_img2
+    private String storeImg3;       // store_img3
     private int storeRatingCount;   // store_rating_count
     private double storeRatingAvg;  // store_rating_avg (DECIMAL -> double)
     private int storeViewCount;     // store_view_count
@@ -18,7 +20,6 @@ public class StoreDTO {
     private double longitude;            // 경도
     private Timestamp storeCreatedAt;    // 등록일
     private Timestamp storeUpdateAt;     // 수정일
-    
 	public long getStoreIdx() {
 		return storeIdx;
 	}
@@ -49,6 +50,18 @@ public class StoreDTO {
 	public void setStoreImg(String storeImg) {
 		this.storeImg = storeImg;
 	}
+	public String getStoreImg2() {
+		return storeImg2;
+	}
+	public void setStoreImg2(String storeImg2) {
+		this.storeImg2 = storeImg2;
+	}
+	public String getStoreImg3() {
+		return storeImg3;
+	}
+	public void setStoreImg3(String storeImg3) {
+		this.storeImg3 = storeImg3;
+	}
 	public int getStoreRatingCount() {
 		return storeRatingCount;
 	}
@@ -67,8 +80,6 @@ public class StoreDTO {
 	public void setStoreViewCount(int storeViewCount) {
 		this.storeViewCount = storeViewCount;
 	}
-	
-	
 	public String getStoreIntro() {
 		return storeIntro;
 	}
@@ -105,6 +116,4 @@ public class StoreDTO {
 	public void setStoreUpdateAt(Timestamp storeUpdateAt) {
 		this.storeUpdateAt = storeUpdateAt;
 	}
-	
-	
 }
