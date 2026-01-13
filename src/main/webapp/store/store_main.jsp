@@ -1,3 +1,9 @@
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="com.team.project.util.DBConn"%>
 <%@page import="com.team.project.dto.MemberDTO"%>
 <%@page import="com.team.project.dao.SearchLogDAO"%>
 <%@page import="com.team.project.util.GeminiUtil"%>
@@ -16,35 +22,56 @@
     
     String question = request.getParameter("q"); // 검색어
 
-    // 2. DB 데이터 가져오기
+    // 2. DB 데이터 가져오기 (가게 목록)
     StoreDAO dao = new StoreDAO();
     List<StoreDTO> storeList = dao.selectStoreList(sort, question);
     
- // 3. 관리자 권한 확인 (세션 체크)
+    // 3. 로그인 및 관리자 권한 확인
     boolean isAdmin = false;
+    String myId = null; // 로그인한 ID 저장용
     Object loginObj = session.getAttribute("loginMember");
     
     if (loginObj != null) {
-        // 경우 1: 세션값이 MemberDTO 객체일 때 (정상적인 경우)
         if (loginObj instanceof MemberDTO) {
             MemberDTO loginMember = (MemberDTO) loginObj;
-            
-            // DTO 안의 권한(role)이 'admin'인지 확인
+            myId = loginMember.getMember_id(); // ID 추출
             if ("admin".equals(loginMember.getMember_role())) { 
                 isAdmin = true;
             }
         }
-        // 경우 2: 세션값이 혹시 문자열일 때 (예외 처리)
         else if (loginObj instanceof String) {
+            // 예외적 상황 (세션이 String일 때)
             if ("admin".equals((String)loginObj)) {
                 isAdmin = true;
             }
         }
     }
 
-    // 4. AI 답변 준비
+    // 4. 내가 찜한 가게 목록 가져오기
+    Set<Integer> myBookmarkSet = new HashSet<>();
+    if(myId != null) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            conn = DBConn.getConnection();
+            // store_idx가 있는(내부 가게) 찜 목록만 조회
+            String sql = "SELECT store_idx FROM bookmark WHERE member_id = ? AND store_idx IS NOT NULL";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, myId);
+            rs = pstmt.executeQuery();
+            while(rs.next()) {
+                myBookmarkSet.add(rs.getInt("store_idx"));
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBConn.close(rs, pstmt, conn);
+        }
+    }
+
+    // 5. AI 답변 준비
     String answer = "";
-    
     if(question != null && !question.trim().isEmpty()) {
         StringBuilder prompt = new StringBuilder();
         
@@ -67,7 +94,6 @@
         }
         
         answer = GeminiUtil.getGeminiResponse(prompt.toString());
-        
         SearchLogDAO logDao = new SearchLogDAO();
         logDao.insertSearchLog(question, answer);
     }
@@ -78,8 +104,9 @@
 <head>
     <title>맛집 추천 리스트</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css">
-    <script src="<%= ctxPath %>/store/store_main.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=4">
+    <script src="<%= ctxPath %>/store/store_main.js?v=4" defer></script>
 </head>
 <body>
 
@@ -94,9 +121,8 @@
                 <input type="text" name="q" placeholder="가게명, 주소 또는 메뉴 추천!" value="<%= (question != null) ? question : "" %>">
                 <button type="submit">검색</button>
             </form>
-            
+    
             <div class="header-right">
-                <%-- 관리자(admin)일 때만 글쓰기 버튼 표시 --%>
                 <% if(isAdmin) { %>
                     <button type="button" class="write-btn" onclick="location.href='store_write.jsp'">
                         ✏️ 맛집등록
@@ -131,9 +157,19 @@
             if (storeList != null && !storeList.isEmpty()) {
                 for(StoreDTO store : storeList) { 
                     String imgPath = store.getStoreImg();
-                    boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty() && !imgPath.equals("no_image.png"));
+                    boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty());
+                    
+                    // [핵심] 현재 가게가 내 찜 목록(HashSet)에 들어있는지 확인
+                    boolean isBookmarked = myBookmarkSet.contains(store.getStoreIdx());
+                    String heartShape = isBookmarked ? "♥" : "♡"; // 있으면 찬 하트, 없으면 빈 하트
             %>
                 <div class="store-card">
+                    
+                    <button type="button" class="store-jjim-btn" 
+                            onclick="toggleBookmark(this, '<%= store.getStoreIdx() %>', '<%= store.getStoreName() %>', '<%= store.getStoreAddr() %>')">
+                        <%= heartShape %>
+                    </button>
+
                     <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
                         <% if(hasImage) { %>
                             <img src="<%= ctxPath %>/images/<%= imgPath %>" class="store-img" alt="가게사진">

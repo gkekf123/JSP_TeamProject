@@ -5,9 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <title>맛집지도 - 검색</title>
-    <link rel="stylesheet" href="<%= ctxPath %>/map/map_main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="<%= ctxPath %>/map/map_main.css?v=2">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d6ec00692a6f465a841ee2f2e06d862&libraries=services"></script>
-    <script src="<%= ctxPath %>/map/map_main.js" defer></script>
+    <script src="<%= ctxPath %>/map/map_main.js?v=3" defer></script>
 </head>
 <body>
 

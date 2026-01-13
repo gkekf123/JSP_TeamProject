@@ -140,11 +140,17 @@ function closeOverlay() {
 // 검색결과 항목을 Element로 반환하는 함수
 function getListItem(index, places) {
     var el = document.createElement('li');
-    
-    // 스프라이트 이미지의 시작 위치가 10px이고, 간격이 46px입니다.
     var spriteOffset = 10 + (index * 46);
     
-    // style="background-position: 0 -...px" 를 직접 넣어줍니다.
+    var safeName = places.place_name.replace(/'/g, "\\'");
+    var safeAddr = places.road_address_name ? places.road_address_name.replace(/'/g, "\\'") : "";
+    
+    var saveBtn = '<button class="jjim-btn" onclick="saveBookmark(\'' + 
+                  safeName + '\', \'' + 
+                  safeAddr + '\', \'' + 
+                  places.place_url + '\', \'' + 
+                  places.phone + '\')">♥ 찜하기</button>';
+
     var itemStr = '<span class="markerbg" style="background-position: 0 -' + spriteOffset + 'px;"></span>' +
                 '<div class="info">' +
                 '   <h5>' + places.place_name + '</h5>';
@@ -156,11 +162,13 @@ function getListItem(index, places) {
         itemStr += '    <span>' +  places.address_name  + '</span>'; 
     }
                  
-      itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-                '</div>';           
+    itemStr += '  <span class="tel">' + places.phone  + '</span>' +
+                '</div>' +
+                saveBtn; // 버튼 추가
 
     el.innerHTML = itemStr;
     el.className = 'item';
+
     return el;
 }
 
@@ -225,4 +233,30 @@ function removeAllChildNods(el) {
     while (el.hasChildNodes()) {
         el.removeChild (el.lastChild);
     }
+}
+
+// 찜하기 버튼 클릭 시 실행될 함수
+function saveBookmark(name, addr, url, phone) {
+    if(!confirm(name + "을(를) 찜 목록에 추가하시겠습니까?")) return;
+
+    $.ajax({
+        type: "POST",
+        url: "/bookmark/bookmark_action.jsp",
+        data: {
+            place_name: name,
+            place_addr: addr,
+            place_url: url,
+            place_phone: phone
+        },
+        success: function(response) {
+            if(response.trim() === "success") {
+                alert("찜 목록에 저장되었습니다!");
+            } else {
+                alert("저장에 실패했습니다.");
+            }
+        },
+        error: function() {
+            alert("서버 통신 오류!");
+        }
+    });
 }
