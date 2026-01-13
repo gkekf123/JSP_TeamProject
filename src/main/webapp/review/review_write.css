@@ -1,0 +1,48 @@
+@charset "UTF-8";
+.modal-content { 
+    border: none; 
+    border-radius: 25px; 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+}
+.modal-header { 
+    border-bottom: none; 
+    padding-top: 30px; 
+}
+.modal-footer {
+    border-top: none; 
+    padding-bottom: 30px; 
+}
+.btn-submit { 
+   	background: #6366f1; 
+   	border: none; 
+   	border-radius: 12px; 
+   	padding: 12px; 
+   	font-weight: 600; 
+   	color: white; 
+}
+.btn-submit:hover { 
+    background: #4f46e5; 
+}
+
+/* 별점 스타일 */
+.bs-stars { 
+    font-size: 40px; 
+    color: #e5e7eb; 
+    cursor: pointer; 
+    transition: 0.2s; 
+}
+.bs-stars span.active {
+     color: #fbbf24; 
+     text-shadow: 0 0 10px rgba(251, 191, 36, 0.4); 
+}
+.upload-box {
+     background: #f9fafb; 
+     border: 2px dashed #e5e7eb; 
+     border-radius: 15px; 
+     padding: 20px; 
+     cursor: pointer; 
+}
+.bs-stars span {
+	user-select: none;
+    -webkit-user-select: none;
+}

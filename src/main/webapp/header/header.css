@@ -46,14 +46,14 @@ header nav ul {
 header nav ul li a {
 	cursor: pointer;
 	text-decoration: none;
-	color: inherit;
+	color:  #fff;
 	display: block;
 	width: 100%;
 	height: 100%;
 }
 
 header nav ul li a:hover {
-	color: #ffcc00;
+	color: #e67e22;
 }
 
 /* 오른쪽 영역 */
@@ -69,7 +69,7 @@ header nav ul li a:hover {
 }
 
 .header-login:hover {
-	color: #ffcc00;
+	color: #e67e22;
 }
 
 .header-open-sidebar {
@@ -112,12 +112,12 @@ header nav ul li a:hover {
 	border-bottom: 1px solid #444;
 	cursor: pointer;
 	text-decoration: none;
-	color: inherit;
+	color:  #fff;
 	display: block;
 	width: 100%;
 	height: 100%;
 }
 
-.header-sidebar ul li:hover {
-	color: #ffcc00;
+.header-sidebar ul li a:hover {
+	color: #e67e22;
 }
