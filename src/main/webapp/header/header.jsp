@@ -7,7 +7,7 @@
 </script>
 <link rel="stylesheet" href="<%= ctxPath %>/header/header.css">
 <script src="<%= ctxPath %>/header/header.js" defer></script>
-<!-- 로그인여부 변수 loginMember-->
+<!-- 로그인여부 임의변수 loginMember-->
 <!-- ===== 헤더 ===== -->
 <header>
     <div class="header-logo" id="headerLogo">🍽 맛집리뷰</div>
