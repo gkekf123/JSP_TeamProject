@@ -1,0 +1,123 @@
+@charset "UTF-8";
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f4f4;
+    margin-top: 62px;
+}
+.container{
+	max-width: 1200px;
+    width: 90%;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.info{
+	width: 100%;
+	margin: 0 auto;
+}
+
+.slider-container {
+    width: 100%;
+   	margin: 0 auto;
+}
+
+.carousel-inner {
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.carousel-img {
+    height: 420px;
+    object-fit: cover;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    z-index: 5;
+}
+
+.carousel-indicators {
+    z-index: 5;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 10%;
+    width: 36px;
+    height: 36px;
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: rgba(0,0,0,0.6);
+    color: rgba(0,0,0,0.6);
+}
+
+/* 가게 정보*/
+.store-info {
+	width: 80%;
+	margin: 0 auto;
+    padding: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+.store-category {
+    font-size: 13px;
+    color: #999;
+}
+
+.store-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0 25px 0;
+    
+}
+
+.store-name {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.store-intro{
+	font-size: 14px;
+	font-weight: 400;
+	color: #666;	
+}
+
+.like-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.like-btn.active {
+    color: red;
+}
+
+.store-rating,
+.store-tel,
+.store-addr {
+    font-size: 14px;
+    margin: 4px 0;
+    color: #555;
+}
+
+
+
+/*모바일*/
+@media (max-width: 768px) {
+    .store-detail-wrap {
+        width: 95%;
+    }
+
+    .carousel-img {
+        height: 240px;
+    }
+}
