@@ -12,7 +12,8 @@
     
     	<div class="overlay"></div>
 
-    	<div class="search-box">
-        	<input type="text" placeholder="지역, 음식점을 검색하세요">
-    	</div>
+	    <form action="<%= ctxPath %>/store/store_main.jsp" method="post" class="search-box">
+	        <input type="text" name="q" placeholder="지역, 음식점을 검색하세요" autocomplete="off">
+	        <button type="submit" class="search-btn">🔍</button>
+	    </form>
 </section>

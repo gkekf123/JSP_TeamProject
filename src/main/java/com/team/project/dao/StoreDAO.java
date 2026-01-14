@@ -19,18 +19,15 @@ public class StoreDAO {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        // 1. SQL 작성
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_addr ");
         sql.append("FROM store ");
         
-        // 검색어가 있을 경우 WHERE절 추가
         boolean hasSearch = (searchWord != null && !searchWord.trim().isEmpty());
         if (hasSearch) {
             sql.append("WHERE store_name LIKE ? OR store_addr LIKE ? ");
         }
         
-        // 2. 동적 정렬
         if ("rating".equals(sortType)) {
             sql.append("ORDER BY store_rating_avg DESC, store_idx DESC ");
         } else if ("review".equals(sortType)) {
@@ -45,7 +42,6 @@ public class StoreDAO {
             conn = DBConn.getConnection(); 
             pstmt = conn.prepareStatement(sql.toString());
             
-            // 물음표(?) 채우기
             if (hasSearch) {
                 String keyword = "%" + searchWord + "%"; 
                 pstmt.setString(1, keyword); // 첫 번째 ? (이름)
@@ -88,8 +84,8 @@ public class StoreDAO {
             StringBuilder sql = new StringBuilder();
             
             sql.append("INSERT INTO store ");
-            sql.append("(store_name, store_category, store_addr, store_img, store_intro, store_tel) ");
-            sql.append("VALUES (?, ?, ?, ?, ?, ?)");
+            sql.append("(store_name, store_category, store_addr, store_img, store_img2, store_img3, store_intro, store_tel) ");
+            sql.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             
             pstmt = conn.prepareStatement(sql.toString());
             
@@ -97,8 +93,10 @@ public class StoreDAO {
             pstmt.setString(2, dto.getStoreCategory());
             pstmt.setString(3, dto.getStoreAddr());
             pstmt.setString(4, dto.getStoreImg());
-            pstmt.setString(5, dto.getStoreIntro());
-            pstmt.setString(6, dto.getStoreTel());
+            pstmt.setString(5, dto.getStoreImg2());
+            pstmt.setString(6, dto.getStoreImg3());
+            pstmt.setString(7, dto.getStoreIntro());
+            pstmt.setString(8, dto.getStoreTel());
             
             result = pstmt.executeUpdate();
             
