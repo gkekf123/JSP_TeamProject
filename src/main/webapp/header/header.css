@@ -19,40 +19,51 @@ header {
 	height: 60px;
 	background: rgba(0, 0, 0, 0.6);
 	color: #fff;
-	display: flex;
-	align-items: center;
-	padding: 0 30px;
 	z-index: 100;
+    display: grid;
+    grid-template-columns: auto minmax(280px, 1fr) auto;
+    align-items: center;
+    padding: 0 clamp(16px, 4vw, 80px);
+    white-space: nowrap;
+	
 }
 
 .header-logo {
-	font-size: 22px;
-	font-weight: bold;
-	cursor: pointer;
+    display: flex;        
+    align-items: center; 
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;    
+}
+
+.header-logo img {
+    height: 40px;          
+    width: auto;           
+    object-fit: contain;   
+    display: block;   
 }
 
 /* 메뉴 */
 header nav {
-margin: 0 auto;
+    justify-self: center;
 }
 
 header nav ul {
 	list-style: none;
 	display: flex;
-	gap: 30px;
+    gap: clamp(14px, 7vw, 140px);
 }
 
 header nav ul li a {
 	cursor: pointer;
 	text-decoration: none;
-	color: inherit;
+	color:  #fff;
 	display: block;
-	width: 100%;
-	height: 100%;
+	padding: 10px 0;
 }
 
 header nav ul li a:hover {
-	color: #ffcc00;
+	color: #e67e22;
 }
 
 /* 오른쪽 영역 */
@@ -67,7 +78,7 @@ header nav ul li a:hover {
 }
 
 .header-login:hover {
-	color: #ffcc00;
+	color: #e67e22;
 }
 
 .header-open-sidebar {
@@ -87,18 +98,19 @@ header nav ul li a:hover {
 	transition: right 0.4s ease;
 	padding: 30px;
 	z-index: 200;
+	display: flex;
+	flex-direction: column;
 }
 
 .header-sidebar.active {
 	right: 0;
 }
 
-.header-sidebar h6 {
-	margin-bottom: 20px;
-	margin-right: 10px;
-	text-align: right;
-	padding: 10px 15px;
+.header-sidebar #headerCloseSidebar {
+	align-self: flex-end; /* 오른쪽 끝으로 배치 */
 	cursor: pointer;
+	font-size: 24px;
+	margin-bottom: 20px;
 }
 
 .header-sidebar ul {
@@ -110,12 +122,10 @@ header nav ul li a:hover {
 	border-bottom: 1px solid #444;
 	cursor: pointer;
 	text-decoration: none;
-	color: inherit;
+	color:  #fff;
 	display: block;
-	width: 100%;
-	height: 100%;
 }
 
-.header-sidebar ul li:hover {
-	color: #ffcc00;
+.header-sidebar ul li a:hover {
+	color: #e67e22;
 }
