@@ -2,7 +2,7 @@ package com.team.project.dto;
 
 public class MenuDTO {
 	private int menuIdx;
-    private int storeIdx;
+    private long storeIdx;
     private String menuName;
     private int menuPrice;
     private String menuImg;
@@ -14,10 +14,10 @@ public class MenuDTO {
 	public void setMenuIdx(int menuIdx) {
 		this.menuIdx = menuIdx;
 	}
-	public int getStoreIdx() {
+	public long getStoreIdx() {
 		return storeIdx;
 	}
-	public void setStoreIdx(int storeIdx) {
+	public void setStoreIdx(long storeIdx) {
 		this.storeIdx = storeIdx;
 	}
 	public String getMenuName() {

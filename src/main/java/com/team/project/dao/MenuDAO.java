@@ -23,7 +23,7 @@ public class MenuDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, dto.getMenuIdx());
+			pstmt.setLong(1, dto.getStoreIdx());
 			pstmt.setString(2, dto.getMenuName());
 			pstmt.setInt(3, dto.getMenuPrice());
 			pstmt.setString(4, dto.getMenuImg());
@@ -38,7 +38,7 @@ public class MenuDAO {
 	}
 	
 	//select
-	public List<MenuDTO> selectMenu(int storeIdx){
+	public List<MenuDTO> selectMenu(long storeIdx){
 		List<MenuDTO> list=new ArrayList<MenuDTO>();
 		
 		Connection conn=db.getConnection();
@@ -49,14 +49,14 @@ public class MenuDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, storeIdx);
+			pstmt.setLong(1, storeIdx);
 			rs=pstmt.executeQuery();
 			
 			while(rs.next()) {
 				 MenuDTO dto = new MenuDTO();
 
                 dto.setMenuIdx(rs.getInt("menu_idx"));
-                dto.setStoreIdx(rs.getInt("store_idx"));
+                dto.setStoreIdx(rs.getLong("store_idx"));
                 dto.setMenuName(rs.getString("menu_name"));
                 dto.setMenuPrice(rs.getInt("menu_price"));
                 dto.setMenuImg(rs.getString("menu_img"));
@@ -75,7 +75,8 @@ public class MenuDAO {
 	}
 
 	//삭제
-	public void deleteMenu(int menuIdx) {
+	public boolean deleteMenu(int menuIdx) {
+		boolean isSuccess = false;
         Connection conn = db.getConnection();
         PreparedStatement pstmt = null;
 
@@ -84,12 +85,19 @@ public class MenuDAO {
         try {
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, menuIdx);
+            
+            int n = pstmt.executeUpdate();
+            if (n > 0) {
+                isSuccess = true;
+            }
+            
             pstmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             db.close(pstmt, conn);
         }
+        return isSuccess;
     }
 	
 	//수정
