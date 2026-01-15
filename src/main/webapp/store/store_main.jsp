@@ -75,12 +75,7 @@
     <jsp:include page="/header/header.jsp" />
     <div class="container">
         <div class="header">
-<<<<<<< HEAD
             <h1>맛집추천</h1>
-            
-=======
-            <h1>맛집추천 메인메뉴</h1>
->>>>>>> master
             <form action="store_main.jsp" method="post" class="search-box">
                 <input type="hidden" name="sort" value="<%= sort %>">
                 <input type="text" name="q" placeholder="가게명, 주소 또는 메뉴 추천!" value="<%= (question != null) ? question : "" %>">
@@ -88,7 +83,7 @@
             </form>
             <div class="header-right">
                 <% if(isAdmin) { %>
-                    <button type="button" class="write-btn" onclick="location.href='store_write.jsp'">✏️ 맛집등록</button>
+                    <button type="button" class="write-btn" onclick="location.href='store_write.jsp'">맛집등록</button>
                 <% } %>
                 <select id="sortFilter" onchange="changeSort()">
                     <option value="rating" <%= "rating".equals(sort) ? "selected" : "" %>>별점 높은순</option>
