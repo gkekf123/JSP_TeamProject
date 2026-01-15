@@ -15,7 +15,7 @@ public class StoreDetailDAO {
 	DBConn db=new DBConn();
 	
 	//가게 정보 출력
-	public StoreDTO selectDetailIntro(long storeIdx) {
+	public StoreDTO selectDetailIntro(Long storeIdx) {
 		StoreDTO dto=new StoreDTO();
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
@@ -31,6 +31,8 @@ public class StoreDetailDAO {
 			if(rs.next()) {;
 				dto.setStoreIdx(rs.getLong("store_idx"));
 				dto.setStoreImg(rs.getString("store_img"));
+				dto.setStoreImg2(rs.getString("store_img2"));
+				dto.setStoreImg3(rs.getString("store_img3"));
 				dto.setStoreName(rs.getString("store_name"));
 				dto.setStoreCategory(rs.getString("store_category"));
 				dto.setStoreAddr(rs.getString("store_addr"));
@@ -41,6 +43,8 @@ public class StoreDetailDAO {
                 dto.setStoreViewCount(rs.getInt("store_view_count"));
                 dto.setStoreCreatedAt(rs.getTimestamp("store_created_at"));
                 dto.setStoreUpdateAt(rs.getTimestamp("store_update_at"));
+                dto.setLatitude(rs.getDouble("latitude"));
+                dto.setLongitude(rs.getDouble("longitude"));
                 
 			}
 		} catch (SQLException e) {

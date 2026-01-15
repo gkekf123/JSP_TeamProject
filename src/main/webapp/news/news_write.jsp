@@ -54,7 +54,7 @@ String ctxPath = request.getContextPath();
         <div class="form-group">
             <label>대표 이미지</label>
             <div class="img-upload-wrap">
-		        <input type="file" name="store_img" accept="image/*"
+		        <input type="file" name="news_img" accept="image/*"
 		               onchange="previewImage(this)">
 		        <img id="imgPreview" class="img-preview" style="display:none; width: 100px;">
     		</div>

@@ -20,6 +20,7 @@
         }
     }
 
+
     // 2. 관리자체크
     if (!isAdmin) {
 %>
@@ -59,6 +60,7 @@
         	var pop = window.open("juso_popup.jsp", "pop", "width=600,height=1000, scrollbars=yes, resizable=yes"); 
         }
 
+
         // 팝업에서 주소 입력받기 (콜백 함수)
         function jusoCallBack(roadFullAddr) {
             // 팝업에서 전달받은 주소를 입력칸에 넣기
@@ -68,7 +70,9 @@
 </head>
 <body>
 
+
     <jsp:include page="/header/header.jsp" />
+
 
     <div class="container">
         <h2>🍽 맛집 정보 등록</h2>
@@ -79,6 +83,7 @@
                 <label>가게 이름</label>
                 <input type="text" name="store_name" required placeholder="상호명을 입력하세요">
             </div>
+
 
             <div class="form-group">
                 <label>카테고리</label>
@@ -93,10 +98,12 @@
                 </select>
             </div>
 
+
             <div class="form-group">
                 <label>전화번호</label>
                 <input type="text" name="store_tel">
             </div>
+
 
             <div class="form-group">
 		        <label>주소</label>
@@ -106,10 +113,12 @@
 		        </div>
 		    </div>
 
+
             <div class="form-group">
                 <label>한줄 소개</label>
                 <textarea name="store_intro" rows="3" placeholder="가게에 대한 간단한 소개를 입력하세요"></textarea>
             </div>
+
 
             <div class="form-group">
                 <label>가게 이미지 등록 (최대 3장)</label>
@@ -130,6 +139,7 @@
                 </div>
             </div>
 
+
             <div class="btn-area">
                 <button type="submit" class="btn-submit">등록하기</button>
                 <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
@@ -137,7 +147,9 @@
         </form>
     </div>
 
+
     <jsp:include page="/footer/footer.jsp" />
+
 
 </body>
 </html>
