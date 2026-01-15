@@ -1,12 +1,51 @@
-body { font-family: 'Noto Sans KR', sans-serif; background-color: #f4f4f4; margin-top: 62px; }
+@charset "UTF-8";
+
+body { 
+    font-family: 'Noto Sans KR', sans-serif; 
+    background-color: #f4f4f4; 
+    margin-top: 62px; 
+    overflow: hidden; 
+}
 
 /* 지도 컨테이너 */
-.map_wrap, .map_wrap * { margin: 0; padding: 0; font-family: 'Malgun Gothic', dotum, '돋움', sans-serif; font-size: 12px; }
-.map_wrap a, .map_wrap a:hover, .map_wrap a:active { color: #000; text-decoration: none; }
-.map_wrap { position: relative; width: 100%; height: 600px; }
+.map_wrap { 
+    position: relative; 
+    width: 100%; 
+    margin: 0; 
+    height: calc(100vh - 62px); 
+}
+
+/* 지도와 관련된 모든 요소 초기화 */
+.map_wrap, .map_wrap * { 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif; 
+    font-size: 12px; 
+}
+
+.map_wrap a, .map_wrap a:hover, .map_wrap a:active { 
+    color: #000; 
+    text-decoration: none; 
+}
 
 /* 왼쪽 검색창 박스 */
-#menu_wrap { position: absolute; top: 0; left: 0; bottom: 0; width: 300px; margin: 10px 0 30px 10px; padding: 5px; overflow-y: auto; background: rgba(255, 255, 255, 0.9); z-index: 1; font-size: 12px; border-radius: 10px; box-shadow: 0 0 5px #333; }
+#menu_wrap { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    bottom: 0; 
+    width: 300px; 
+    margin: 10px 0 30px 10px; 
+    padding: 5px; 
+    overflow-y: auto; 
+    background: rgba(255, 255, 255, 0.9); 
+    /* 지도가 덮지 않도록 z-index 확인 */
+    z-index: 2; 
+    font-size: 12px; 
+    border-radius: 10px; 
+    box-shadow: 0 0 5px #333; 
+}
+
 #placesList li { list-style: none; }
 #placesList .item { position: relative; border-bottom: 1px solid #888; cursor: pointer; min-height: 80px; }
 #placesList .item span { display: block; margin-top: 4px; }
@@ -50,7 +89,6 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f4f4f4; margi
     padding: 0;
     line-height: 1;
     transition: transform 0.2s;
-    /* 하트 가독성을 위한 흰색 테두리 효과 */
     text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 

@@ -83,6 +83,7 @@
             <div class="form-group">
                 <label>카테고리</label>
                 <select name="store_category">
+                	<option value="전체">전체</option>
                     <option value="한식">한식</option>
                     <option value="중식">중식</option>
                     <option value="일식">일식</option>
@@ -94,7 +95,7 @@
 
             <div class="form-group">
                 <label>전화번호</label>
-                <input type="text" name="store_tel" placeholder="02-0000-0000">
+                <input type="text" name="store_tel">
             </div>
 
             <div class="form-group">

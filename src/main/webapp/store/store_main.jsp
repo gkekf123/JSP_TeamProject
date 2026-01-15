@@ -18,8 +18,6 @@
     if (sort == null) sort = "latest"; 
     
     String question = request.getParameter("q"); // 검색어
-
-    
     
     // 2. DB 데이터 가져오기 (가게 목록)
     StoreDAO dao = new StoreDAO();
@@ -78,7 +76,7 @@
     <title>맛집 추천 리스트</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=5">
+    <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=6">
 </head>
 <body>
 
@@ -86,7 +84,7 @@
 
     <div class="container">
         <div class="header">
-            <h1>맛집추천 메인메뉴</h1>
+            <h1>맛집추천</h1>
             
             <form action="store_main.jsp" method="post" class="search-box">
                 <input type="hidden" name="sort" value="<%= sort %>">
@@ -100,7 +98,6 @@
                 <% } %>
         
                 <select id="sortFilter" onchange="changeSort()">
-                    <option value="latest" <%= "latest".equals(sort) ? "selected" : "" %>>최신순</option>
                     <option value="rating" <%= "rating".equals(sort) ? "selected" : "" %>>별점 높은순</option>
                     <option value="review" <%= "review".equals(sort) ? "selected" : "" %>>리뷰 많은순</option>
                     <option value="view"   <%= "view".equals(sort) ? "selected" : "" %>>조회수순</option>
@@ -134,7 +131,7 @@
 
                     <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
                         <% if(hasImage) { %>
-                            <img src="<%= ctxPath %>/images/<%= imgPath %>" class="store-img" alt="가게사진">
+                            <img src="<%= ctxPath %>/images/store_image<%= imgPath %>" class="store-img" alt="가게사진">
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
                         <% } %>
