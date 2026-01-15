@@ -74,20 +74,22 @@
     		<div class="news-card">
     			
 	    		<div class="news-img">
-	    			<% if(dto.getNewsImg() !=null && !dto.getNewsImg().isEmpty()){%>
-	    				<img alt="" src="<%=ctxPath%>/images/noimage.png" alt="기본 이미지">
-	    			<%}else{%>
-	    				<img src="<%=dto.getNewsImg()%>" alt="뉴스 이미지">
-	    			<%}
-	    			%>
-	    		</div>
+				    <% if(dto.getNewsImg() != null && !dto.getNewsImg().isEmpty()) { %>
+				        <img src="<%= dto.getNewsImg() %>" alt="뉴스 이미지">
+				        
+				    <% } else { %>
+				        <div class="news-no-img">이미지 없음</div>
+				    <% } %>
+				</div>
 	    		
 	    		<div class="news-info">
 	    			<p class="news-title"  onclick="window.open('<%=dto.getNewsUrl()%>')" ><%=dto.getNewsTitle() %></p>
-	    			<p class="news-source"><%=dto.getNewsSource() %></p>
-	    			<span class="news-date">
-	    			<%= new SimpleDateFormat("yyyy-MM-dd HH:mm").format(dto.getNewsRegdate()) %>
-	    			</span>
+	    			<div class="news-sourcedate">
+		    			<p class="news-source"><%=dto.getNewsSource() %></p>
+		    			<span class="news-date">
+		    			<%= new SimpleDateFormat("yyyy-MM-dd HH:mm").format(dto.getNewsRegdate()) %>
+		    			</span>
+	    			</div>
 	    		</div>
     		</div>
         <%}

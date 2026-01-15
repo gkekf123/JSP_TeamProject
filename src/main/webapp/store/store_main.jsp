@@ -12,24 +12,17 @@
     // 0. 기본 설정
     request.setCharacterEncoding("UTF-8");
     String ctxPath = request.getContextPath();
-
     // 1. 파라미터 받기
     String sort = request.getParameter("sort");
     if (sort == null) sort = "latest"; 
-    
     String question = request.getParameter("q"); // 검색어
-
-    
-    
     // 2. DB 데이터 가져오기 (가게 목록)
     StoreDAO dao = new StoreDAO();
     List<StoreDTO> storeList = dao.selectStoreList(sort, question);
-    
     // 3. 로그인 및 관리자 권한 확인
     boolean isAdmin = false;
     String myId = null;
     Object loginObj = session.getAttribute("loginMember");
-    
     if (loginObj != null) {
         if (loginObj instanceof MemberDTO) {
             MemberDTO loginMember = (MemberDTO) loginObj;
@@ -43,14 +36,12 @@
             if ("admin".equals(myId)) isAdmin = true;
         }
     }
-
     // 4. 내가 찜한 가게 목록 가져오기
     Set<Integer> myBookmarkSet = new HashSet<>();
     if(myId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
         myBookmarkSet = bookmarkDao.getMyBookmarkStoreIdxSet(myId);
     }
-
     // 5. AI 답변 준비
     String answer = "";
     if(question != null && !question.trim().isEmpty()) {
@@ -71,7 +62,6 @@
         new SearchLogDAO().insertSearchLog(question, answer);
     }
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -81,24 +71,19 @@
     <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=5">
 </head>
 <body>
-
     <jsp:include page="/header/header.jsp" />
-
     <div class="container">
         <div class="header">
             <h1>맛집추천 메인메뉴</h1>
-            
             <form action="store_main.jsp" method="post" class="search-box">
                 <input type="hidden" name="sort" value="<%= sort %>">
                 <input type="text" name="q" placeholder="가게명, 주소 또는 메뉴 추천!" value="<%= (question != null) ? question : "" %>">
                 <button type="submit">검색</button>
             </form>
-    
             <div class="header-right">
                 <% if(isAdmin) { %>
                     <button type="button" class="write-btn" onclick="location.href='store_write.jsp'">✏️ 맛집등록</button>
                 <% } %>
-        
                 <select id="sortFilter" onchange="changeSort()">
                     <option value="latest" <%= "latest".equals(sort) ? "selected" : "" %>>최신순</option>
                     <option value="rating" <%= "rating".equals(sort) ? "selected" : "" %>>별점 높은순</option>
@@ -107,21 +92,18 @@
                 </select>
             </div>
         </div>
-    
         <% if(question != null && !answer.isEmpty()) { %>
             <div class="ai-result-box">
                 <div class="ai-question">Q. <%= question %></div>
                 <div class="ai-answer"><%= answer %></div>
             </div>
         <% } %>
-    
         <div class="store-grid">
             <% 
             if (storeList != null && !storeList.isEmpty()) {
                 for(StoreDTO store : storeList) { 
                     String imgPath = store.getStoreImg();
                     boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty());
-                    
                     // 내 찜 목록에 있는지 확인
                     boolean isBookmarked = myBookmarkSet.contains(store.getStoreIdx());
                     String heartShape = isBookmarked ? "♥" : "♡";
@@ -131,7 +113,6 @@
                             onclick="toggleBookmark(this, '<%= store.getStoreIdx() %>', '<%= store.getStoreName() %>', '<%= store.getStoreAddr() %>')">
                         <%= heartShape %>
                     </button>
-
                     <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
                         <% if(hasImage) { %>
                             <img src="<%= ctxPath %>/images/<%= imgPath %>" class="store-img" alt="가게사진">
@@ -139,7 +120,6 @@
                             <div class="no-img-box">이미지 없음</div>
                         <% } %>
                     </a>
-                    
                     <div class="store-info">
                         <div class="store-name"><%= store.getStoreName() %></div>
                         <div class="store-stats">
@@ -159,9 +139,7 @@
             <% } %>
         </div>
     </div>
-    
     <jsp:include page="/footer/footer.jsp" />
-
     <script>
         // 정렬 변경 함수
         function changeSort() {
@@ -169,12 +147,10 @@
             document.querySelector('input[name="sort"]').value = sortVal;
             document.querySelector('.search-box').submit();
         }
-
         // 찜하기 토글 함수
         function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
             var currentText = $(btn).text().trim();
             var isEmpty = (currentText === '♡');
-            
             // 1. 화면 먼저 변경
             if(isEmpty) {
                 $(btn).text('♥');
@@ -184,7 +160,6 @@
                 $(btn).text('♡');
                 $(btn).css("transform", "scale(1)");
             }
-
             // 2. 서버 요청 (비동기)
             $.ajax({
                 type: "POST",
@@ -197,7 +172,6 @@
                 success: function(response) {
                     var res = response.trim();
                     console.log("찜하기 응답: " + res);
-                    
                     if(res === "login_needed") {
                         alert("로그인이 필요한 서비스입니다.");
                         // 로그인 페이지 경로 확인 필요

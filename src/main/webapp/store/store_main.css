@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 body { font-family: 'Noto Sans KR', sans-serif; background-color: #f4f4f4; margin-top: 62px; }
-.container { max-width: 1200px; width: 90%; margin: 30px auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box; }
+.container { max-width: 1200px; width: 90%; margin: 100px auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box; }
 
 /* 헤더 */
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; flex-wrap: wrap; gap: 15px; }
