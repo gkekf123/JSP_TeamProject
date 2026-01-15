@@ -7,10 +7,13 @@
 </script>
 <link rel="stylesheet" href="<%= ctxPath %>/header/header.css">
 <script src="<%= ctxPath %>/header/header.js" defer></script>
-<!-- 로그인여부 변수 loginMember-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<!-- 로그인여부 임의변수 loginMember-->
 <!-- ===== 헤더 ===== -->
 <header>
-    <div class="header-logo" id="headerLogo">🍽 맛집리뷰</div>
+    <div class="header-logo" id="headerLogo">
+		맛집리뷰<img src="<%= ctxPath %>/images/logo.png" alt="로고" class="main-logo-img">     
+    </div>
 
     <nav>
         <ul>
@@ -32,7 +35,7 @@
 
 <!-- ===== 사이드바 ===== -->
 <div class="header-sidebar" id="headerSidebar">
-    <h6 id="headerCloseSidebar">X</h6>
+	<i class="bi bi-x-lg" id="headerCloseSidebar"></i>
     <ul>
     	<!-- 링크 수정 필요 전자-각각의 페이지 후자-로그인페이지  -->
     	<!-- 로그인 필요합니다 알림창 진행 추후 결정 -->
@@ -51,7 +54,7 @@
 
         <%-- 로그인 상태일 때만 로그아웃 메뉴 출력 --%>
         <% if(session.getAttribute("loginMember") != null) { %>
-            <li id="headerLogout">로그아웃</li>
+            <li><a href="#" id="headerLogout">로그아웃</a></li>
         <% } %>
     </ul>
 </div>
