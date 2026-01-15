@@ -184,12 +184,12 @@
 		    <% if (isAdmin) { %>
 			    <div class="menu-admin-btns">
 			        <button class="btn-edit"
-			            onclick="location.href='<%= ctxPath %>/menu/menu_edit.jsp?menuIdx=<%= m.getMenuIdx() %>'">
+			            onclick="openEditMenuModal(<%= m.getMenuIdx() %>,'<%= m.getMenuName() %>',<%= m.getMenuPrice() %>,'<%= m.getMenuImg() == null ? "" : m.getMenuImg() %>')">
 			            수정
 			        </button>
 			
 			        <button class="btn-delete"
-    				onclick="location.href='<%= ctxPath %>/menu/menu_delete.jsp?menuIdx=<%= m.getMenuIdx() %>&storeIdx=<%= storeIdx %>'">
+    				onclick="deleteMenu(<%= m.getMenuIdx() %>, <%= storeIdx %>)">
     				삭제
 					</button>
 
@@ -211,6 +211,20 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="text/javascript">
+
+//삭제
+function deleteMenu(menuIdx, storeIdx) {
+    if (confirm("정말로 이 메뉴를 삭제하시겠습니까?")) {
+        location.href =
+            "<%= request.getContextPath() %>/menu/menu_delete.jsp"
+            + "?menuIdx=" + menuIdx
+            + "&storeIdx=" + storeIdx;
+    }
+}
+
+</script>
 
 </body>
 </html>

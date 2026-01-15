@@ -73,6 +73,14 @@ public class MenuDAO {
 		
 		return list;
 	}
+	
+	
+	//oneselect
+	public MenuDTO oneselectMenu() {
+		MenuDTO dto=new MenuDTO();
+		
+		return dto;
+	}
 
 	//삭제
 	public boolean deleteMenu(int menuIdx) {
