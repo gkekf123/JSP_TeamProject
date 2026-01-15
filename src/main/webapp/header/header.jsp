@@ -12,7 +12,7 @@
 <!-- ===== 헤더 ===== -->
 <header>
     <div class="header-logo" id="headerLogo">
-		맛집리뷰<img src="<%= ctxPath %>/images/logo0.png" alt="로고" class="main-logo-img">     
+		맛집리뷰<img src="<%= ctxPath %>/images/logo.png" alt="로고" class="main-logo-img">     
     </div>
 
     <nav>
