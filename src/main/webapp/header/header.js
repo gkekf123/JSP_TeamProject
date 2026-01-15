@@ -25,7 +25,8 @@ window.addEventListener("load", () => {
 
 	// 3. 로그아웃 버튼 클릭 시 -> 로그아웃 처리 페이지로 이동
 	if (headerLogout) {
-		headerLogout.addEventListener('click', () => {
+		headerLogout.addEventListener('click', (e) => {
+			e.preventDefault(); // 링크 기본 동작 막기
 			if (confirm("로그아웃 하시겠습니까?")) {
 				location.href = contextPath + "/member/logout.jsp"; // 경로에 맞게 수정
 			}

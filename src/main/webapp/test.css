@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+.modal-content {
+	border: none;
+	border-radius: 25px;
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+	border-bottom: none;
+	padding-top: 30px;
+}
+
+.modal-footer {
+	border-top: none;
+	padding-bottom: 30px;
+}
+
+.btn-submit {
+	background: #f39c12;
+	border: none;
+	border-radius: 12px;
+	padding: 12px;
+	font-weight: 600;
+	color: white;
+}
+
+.btn-submit:hover {
+	background: #e67e22;
+}
+
+/* ================= 별점 ================= */
+
+.bs-stars {
+	font-size: 40px;
+	color: #e5e7eb;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.bs-stars span.active {
+	color: #fbbf24;
+	text-shadow: 0 0 10px rgba(251, 191, 36, .4);
+}
+
+/* 드래그 선택 방지 */
+.bs-stars,
+.bs-stars * {
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+/* 선택 완료 텍스트 */
+.star-selected {
+	color: #f39c12;
+	font-weight: 600;
+}
+
+/* ================= 업로드 ================= */
+
+.upload-box {
+	background: #f9fafb;
+	border: 2px dashed #e5e7eb;
+	border-radius: 15px;
+	padding: 20px;
+	cursor: pointer;
+}
+
+/* 미리보기 이미지 */
+.preview-item {
+	position: relative;
+}
+
+.preview-item img {
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	border-radius: 10px;
+}
+
+/* 삭제 버튼 */
+.preview-delete {
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	width: 24px;
+	height: 24px;
+	border: none;
+	border-radius: 50%;
+	background: #ff4757;
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+	box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s ease;
+}
+
+.preview-delete:hover {
+	background: #e84118;
+	transform: scale(1.1);
+}
+
+/* ================= 리뷰 순번 ================= */
+
+.review-order-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.review-order-badge {
+    background: #111;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* ================= 이미지 카운트 ================= */
+
+.image-count-text {
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 500;
+}

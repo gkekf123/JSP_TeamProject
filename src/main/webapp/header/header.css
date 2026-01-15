@@ -19,28 +19,40 @@ header {
 	height: 60px;
 	background: rgba(0, 0, 0, 0.6);
 	color: #fff;
-	display: flex;
-	align-items: center;
-	padding: 0 30px;
 	z-index: 100;
+    display: grid;
+    grid-template-columns: auto minmax(280px, 1fr) auto;
+    align-items: center;
+    padding: 0 clamp(16px, 4vw, 80px);
+    white-space: nowrap;
+	
 }
 
 .header-logo {
-	font-size: 22px;
-	font-weight: bold;
-	cursor: pointer;
+    display: flex;         /* 이미지와 글자를 가로로 배치 */
+    align-items: center;   /* 세로 중앙 정렬 */
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;    
+}
+
+/* 추가: 로고 이미지 스타일링 */
+.header-logo img {
+    height: 40px;          /* 헤더 높이가 60px이므로 40px 정도가 적당합니다 */
+    width: auto;           /* 비율 유지 */
+    object-fit: contain;   /* 이미지 찌그러짐 방지 */
+    display: block;   /* inline 이미지 기본 여백 제거 */
 }
 
 /* 메뉴 */
 header nav {
-	margin-top: 30px;
-	margin-left: 50px;
+    justify-self: center;
 }
 
 header nav ul {
 	list-style: none;
 	display: flex;
-	gap: 30px;
+    gap: clamp(14px, 7vw, 140px);
 }
 
 header nav ul li a {
@@ -48,8 +60,7 @@ header nav ul li a {
 	text-decoration: none;
 	color:  #fff;
 	display: block;
-	width: 100%;
-	height: 100%;
+	padding: 10px 0;
 }
 
 header nav ul li a:hover {
@@ -58,7 +69,6 @@ header nav ul li a:hover {
 
 /* 오른쪽 영역 */
 .header-right {
-	margin-left: auto;
 	display: flex;
 	align-items: center;
 	gap: 20px;
@@ -89,18 +99,21 @@ header nav ul li a:hover {
 	transition: right 0.4s ease;
 	padding: 30px;
 	z-index: 200;
+	
+	/* 추가: flex 적용 */
+	display: flex;
+	flex-direction: column; /* 세로 정렬 */
 }
 
 .header-sidebar.active {
 	right: 0;
 }
 
-.header-sidebar h6 {
-	margin-bottom: 20px;
-	margin-right: 10px;
-	text-align: right;
-	padding: 10px 15px;
+.header-sidebar i#headerCloseSidebar {
+	align-self: flex-end; /* 오른쪽 끝으로 배치 */
 	cursor: pointer;
+	font-size: 24px;
+	margin-bottom: 20px;
 }
 
 .header-sidebar ul {
@@ -114,8 +127,6 @@ header nav ul li a:hover {
 	text-decoration: none;
 	color:  #fff;
 	display: block;
-	width: 100%;
-	height: 100%;
 }
 
 .header-sidebar ul li a:hover {
