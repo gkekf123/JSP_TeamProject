@@ -45,6 +45,6 @@ NewsDAO dao = new NewsDAO();
 dao.insertNews(dto);
 
 // 7. 목록으로 이동
-response.sendRedirect("/news.jsp");
+response.sendRedirect(request.getContextPath() + "/news/news.jsp");
 
 %>

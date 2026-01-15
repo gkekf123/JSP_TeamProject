@@ -45,7 +45,7 @@ body {
 
 /* [추가] 관리자 글쓰기 버튼 스타일 */
 .write-btn {
-    background-color: #f39c12;
+    background-color: #e74c3c;
     color: white;
     border: none;
     padding: 8px 15px;
@@ -58,41 +58,49 @@ body {
 }
 
 .write-btn:hover {
-    background-color: #e67e22;
+    background-color: #c0392b;
 }
 
 /*뉴스 카드*/
 .news-card-wrap {
     display: grid;
-    margin-top: 30px;
+    grid-template-columns: repeat(3, 1fr); /* PC: 3열 */
+    gap: 20px;
 }
 
 .news-card {
-    background: #fff;
+    display: flex;
+    flex-direction: column;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: #fff;
     transition: transform 0.2s;
-    display: flex;
-    height: 110px;
 }
 
 .news-card:hover {
     transform: translateY(-5px);
 }
+.news-img {
+    width: 100%;        
+    overflow: hidden;  
+    padding: 20px 20px 0;   
+}
 
 .news-img img {
-    width: 100%;
-    height: 170px;
+	width: 100%;
+    height: 180px;
     object-fit: cover;
     border-radius: 6px;
-    margin: 20px 20px;
+    display: block;
 }
 
 .news-info {
     padding: 14px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     flex: 1;
-    position: relative;
 }
 
 .news-title {
@@ -102,15 +110,20 @@ body {
     cursor: pointer;
 }
 
+.news-sourcedate {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .news-source {
-    font-size: 13px;
-    color: #666;
+    font-size: 12px;
+    color: #999;
 }
 
 .news-date {
-	position: absolute;
-    right: 10px;
-    bottom: 10px;
+	position: static;
     font-size: 12px;
     color: #999;
 }
@@ -124,7 +137,7 @@ body {
 
 /* 반응형 (태블릿) */
 @media screen and (max-width: 900px) {
-    .news-card {
+    .news-card-wrap {
         grid-template-columns: repeat(2, 1fr);
     }
     .header {
@@ -138,8 +151,8 @@ body {
 
 /* 반응형 (모바일) */
 @media screen and (max-width: 600px) {
-    .news-card {
-        grid-template-columns: repeat(1, 1fr);
+    .news-card-wrap {
+        grid-template-columns: 1fr;
     }
     .container {
         width: 100%;

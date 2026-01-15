@@ -1,0 +1,307 @@
+@charset "UTF-8";
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f4f4;
+    margin-top: 62px;
+}
+.container{
+	max-width: 1200px;
+    width: 90%;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.info{
+	width: 100%;
+	margin: 0 auto;
+}
+
+.slider-container {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.custom-slider {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+/* 이미지 묶음 */
+.slides {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* 개별 이미지 */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+/* 좌우 버튼 */
+.slider-btn {
+    position: absolute;
+    top: 45%;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background-color: rgb(255,255,255,0.4);
+    border-radius: 50px;
+}
+
+.slider-btn.prev {
+    left: 15px;
+}
+
+.slider-btn.next {
+    right: 15px;
+}
+
+.caret{
+	font-size: 26px;
+    line-height: 1;
+    color: #333;
+    pointer-events: none;
+}
+
+/* 하단 점 */
+.slider-dots {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    z-index: 5;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: #f39c12;
+}
+
+/* 가게 정보*/
+.store-info {
+	width: 80%;
+	margin: 0 auto;
+    padding: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+.store-category {
+    font-size: 13px;
+    color: #999;
+}
+
+.store-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0 25px 0;
+    
+}
+
+.store-name {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.store-intro{
+	font-size: 14px;
+	font-weight: 400;
+	color: #666;	
+}
+
+.like-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.like-btn.active {
+    color: red;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;           /* 아이콘-텍스트 간격 */
+    margin-bottom: 6px;
+}
+
+.info-row i {
+    font-size: 16px;
+    min-width: 18px;    /* 아이콘 정렬 안정화 */
+}
+
+.info-row p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.bi-star-fill{
+	color: #FFCD12;
+}
+
+.store-jjim-btn {
+    background: none;
+    border: none;
+    color: #ff4757;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 20;
+    padding: 0;
+    line-height: 1;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.9);
+    transition: transform 0.2s;
+}
+.store-jjim-btn:hover { transform: scale(1.2); }
+
+/* 메뉴 전체 */
+.menu-section {
+    width: 80%;
+    margin: 40px auto;
+}
+
+/* 상단 */
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.menu-header h3 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.menu-add-btn {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* 메뉴 리스트 */
+.menu-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 20px;
+}
+
+/* 메뉴 아이템 */
+.menu-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 10px 32px 10px;
+}
+
+/* 이미지 */
+.menu-img {
+    width: 70px;
+    height: 70px;
+    background: #ddd;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.menu-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+/* 텍스트 */
+.menu-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-name {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.menu-price {
+    font-size: 14px;
+    color: #666;
+}
+
+.menu-admin-btns {
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+    display: flex;
+    gap: 6px;
+}
+
+.menu-admin-btns button {
+    font-size: 12px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+/* 수정 버튼 */
+.btn-edit {
+    background-color: #f1f3f5;
+    color: #333;
+}
+
+/* 삭제 버튼 */
+.btn-delete {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+/*모바일*/
+@media (max-width: 768px) {
+    .store-detail-wrap {
+        width: 95%;
+    }
+
+    .custom-slider {
+        height: 240px;
+    }
+    
+    .menu-section {
+        width: 95%;
+    }
+
+    .menu-list {
+        grid-template-columns: 1fr;
+    }
+}
