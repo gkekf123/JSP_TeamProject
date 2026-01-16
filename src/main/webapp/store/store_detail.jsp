@@ -1,3 +1,5 @@
+<%@page import="com.team.project.dto.ReviewDTO"%>
+<%@page import="com.team.project.dao.ReviewDAO"%>
 <%@page import="com.team.project.dto.MenuDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="com.team.project.dao.MenuDAO"%>
@@ -31,18 +33,25 @@
     
     //로그인할시 메뉴추가 보임
     boolean isAdmin = false;
+    MemberDTO loginMember = null;
     Object loginObj = session.getAttribute("loginMember");
 
-    if (loginObj != null && loginObj instanceof MemberDTO) {
-        MemberDTO m = (MemberDTO) loginObj;
-        if ("admin".equals(m.getMemberRole())) {
+    if (loginObj instanceof MemberDTO) {
+        loginMember = (MemberDTO) loginObj;
+        if ("admin".equals(loginMember.getMemberRole())) {
             isAdmin = true;
         }
     }
     
+    //메뉴 불러오기
     MenuDAO menuDao = new MenuDAO();
     List<MenuDTO> menuList = menuDao.selectMenu(storeIdx);
 
+    
+    //리뷰 불러오기
+    ReviewDAO reviewDao=new ReviewDAO();
+    List<ReviewDTO> reviewList=reviewDao.selectReview((int)storeIdx);
+    
 %>
 
 <!DOCTYPE html>
@@ -199,6 +208,91 @@
 	        <% } } %>
 	    </div>
 	</div>
+	
+	
+	<%-- 리뷰쓰기 --%>
+	
+	<!-- 리뷰 영역 -->
+<div class="review-section">
+
+    <div class="review-header">
+        <h3>리뷰</h3>
+
+        <% if (loginMember != null) { %>
+            <button class="review-write-btn" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                리뷰쓰기
+            </button>
+        <% } %>
+    </div>
+
+    <% if (reviewList == null || reviewList.isEmpty()) { %>
+        <p class="no-review">작성된 리뷰가 없습니다.</p>
+    <% } else { %>
+
+        <%  
+        	int index = 0; 
+        
+        	for (ReviewDTO r : reviewList) { 
+            	boolean isMyReview = (loginMember != null 
+                	&& loginMember.getMemberId().equals(r.getMemberId()));
+        %>
+		
+        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>">
+
+            <!-- 프로필 -->
+            <div class="review-profile">
+                <% if (r.getMemberImg() != null) { %>
+                    <img src="<%= ctxPath %>/images/profile/<%= r.getMemberImg() %>">
+                <% } else { %>
+                    <div class="profile-circle"><i class="bi bi-person-circle"></i></div>
+                <% } %>
+            </div>
+
+            <!-- 리뷰 본문 -->
+            <div class="review-content">
+
+                <div class="review-top">
+                    <span class="review-writer"><%= r.getMemberName() %></span>
+
+                    <span class="review-rating">
+                        평점 <%= r.getReviewRating() %>
+                        ★★★★★
+                    </span>
+                </div>
+
+                <p class="review-text">
+                    <%= r.getReviewContent() %>
+                </p>
+
+                <span class="review-date"><%= r.getReviewCreateAt() %></span>
+            </div>
+
+            <!-- 내 리뷰일 때만 -->
+            <% if (isMyReview) { %>
+                <div class="review-btns">
+                    <button class="btn-edit"
+                        onclick="openEditReview(<%= r.getReviewIdx() %>)">
+                        수정
+                    </button>
+                    <button class="btn-delete"
+                        onclick="deleteReview(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
+                        삭제
+                    </button>
+                </div>
+                
+            <% } %>
+
+        </div>
+		<% index++; } %>
+
+        <% } %>
+
+    <% if (reviewList != null && reviewList.size() > 5) { %>
+    	<button class="review-more-btn" onclick="showMoreReviews()">더보기</button>
+	<% } %>
+
+</div>
+	
     
 </div>
 
@@ -214,7 +308,7 @@
 
 <script type="text/javascript">
 
-//삭제
+//메뉴삭제
 function deleteMenu(menuIdx, storeIdx) {
     if (confirm("정말로 이 메뉴를 삭제하시겠습니까?")) {
         location.href =
@@ -224,6 +318,16 @@ function deleteMenu(menuIdx, storeIdx) {
     }
 }
 
+
+//리뷰삭제
+function deleteReview(reviewIdx, storeIdx) {
+    if (confirm("리뷰를 삭제하시겠습니까?")) {
+        location.href =
+            "<%= ctxPath %>/review/review_delete.jsp"
+            + "?reviewIdx=" + reviewIdx
+            + "&storeIdx=" + storeIdx;
+    }
+}
 </script>
 
 </body>
