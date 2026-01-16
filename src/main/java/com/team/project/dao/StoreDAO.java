@@ -21,7 +21,7 @@ public class StoreDAO {
 
         StringBuilder sql = new StringBuilder();
         
-        sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_addr ");
+        sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_view_count, store_addr ");
         sql.append("FROM store ");
         sql.append("WHERE 1=1 "); 
         
@@ -37,7 +37,7 @@ public class StoreDAO {
         
         if (hasSearch) {
             // (이름 OR 주소)
-            sql.append(" AND (store_name LIKE ? OR store_addr LIKE ?) ");
+        	sql.append(" AND (store_name LIKE ? OR store_addr LIKE ? OR store_category LIKE ?) ");
         }
         
         // 4. 정렬 조건 추가
@@ -64,8 +64,9 @@ public class StoreDAO {
             
             if (hasSearch) {
                 String keyword = "%" + searchWord + "%"; 
-                pstmt.setString(paramIndex++, keyword); // 검색어 1
-                pstmt.setString(paramIndex++, keyword); // 검색어 2
+                pstmt.setString(paramIndex++, keyword); // 이름 검사
+                pstmt.setString(paramIndex++, keyword); // 주소 검사
+                pstmt.setString(paramIndex++, keyword); // 카테고리 검사
             }
             
             rs = pstmt.executeQuery();
@@ -77,6 +78,8 @@ public class StoreDAO {
                 dto.setStoreImg(rs.getString("store_img"));
                 dto.setStoreRatingAvg(rs.getDouble("store_rating_avg"));
                 dto.setStoreRatingCount(rs.getInt("store_rating_count"));
+                // [수정 2] 조회수 세팅 (DTO에 setStoreViewCount 메서드가 있어야 함)
+                dto.setStoreViewCount(rs.getInt("store_view_count"));
                 dto.setStoreAddr(rs.getString("store_addr"));
                 
                 list.add(dto);
@@ -125,5 +128,27 @@ public class StoreDAO {
             DBConn.close(null, pstmt, conn);
         }
         return result;
+    }
+    
+    // 조회수 증가 메서드
+    public void updateReadCount(String storeIdx) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        // 기존 조회수에 +1을 더하는 쿼리
+        String sql = "UPDATE store SET store_view_count = store_view_count + 1 WHERE store_idx = ?";
+        
+        try {
+            conn = DBConn.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, storeIdx);
+            
+            pstmt.executeUpdate();
+            
+        } catch (Exception e) {
+            System.out.println("[DAO] 조회수 증가 실패");
+            e.printStackTrace();
+        } finally {
+            DBConn.close(null, pstmt, conn);
+        }
     }
 }
