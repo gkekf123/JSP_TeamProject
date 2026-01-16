@@ -24,9 +24,10 @@ String storeIdx = request.getParameter("storeIdx");
       enctype="multipart/form-data">
 
         <input type="hidden" name="storeIdx" value="<%= request.getParameter("storeIdx") %>">
+        <input type="hidden" name="menuIdx" value="" id="menuIdx">
 
         <div class="modal-header">
-          <h5 class="modal-title">메뉴 추가</h5>
+          <h5 class="modal-title" id="menuModalTitle">메뉴 추가</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
@@ -34,23 +35,23 @@ String storeIdx = request.getParameter("storeIdx");
 
           <div class="mb-3">
             <label class="form-label">메뉴명</label>
-            <input type="text" name="menuName" class="form-control" required>
+            <input type="text" name="menuName" id="menuName" class="form-control" required>
           </div>
 
           <div class="mb-3">
             <label class="form-label">가격</label>
-            <input type="text" name="menuPrice" class="form-control" required>
+            <input type="text" name="menuPrice" id="menuPrice" class="form-control" required>
           </div>
 
           <div class="mb-3">
             <label class="form-label">이미지</label>
-            <input type="file" name="menuImg" class="form-control">
+            <input type="file" name="menuImg" id="menuImg" class="form-control">
           </div>
 
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">등록</button>
+          <button type="submit" class="btn btn-primary" id="menuSubmitBtn">등록</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             취소
           </button>

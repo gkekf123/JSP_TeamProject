@@ -104,14 +104,29 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
     });
 	
 	
-	//메뉴 삭제
-	function deleteMenu(menuIdx, storeIdx) {
-	    if (confirm("정말로 이 메뉴를 삭제하시겠습니까?")) {
-	        location.href =
-	            "<%= request.getContextPath() %>/menu/menu_delete.jsp"
-	            + "?menuIdx=" + menuIdx
-	            + "&storeIdx=" + storeIdx;
+	//메뉴 수정
+	function openEditMenuModal(menuIdx, menuName, menuPrice, menuImg) {
+
+	    // hidden 값 세팅
+	    document.querySelector("input[name='menuIdx']").value = menuIdx;
+
+	    // 기존 값 채우기
+	    document.querySelector("input[name='menuName']").value = menuName;
+	    document.querySelector("input[name='menuPrice']").value = menuPrice;
+
+	    // 이미지 미리보기 (선택)
+	    if (menuImg) {
+	        document.getElementById("menuPreview").src =
+	            "<%= ctxPath %>/images/menu/" + menuImg;
+	        document.getElementById("menuPreview").style.display = "block";
 	    }
+
+	    // 제목 변경
+	    document.getElementById("menuModalTitle").innerText = "메뉴 수정";
+
+	    // 모달 열기
+	    new bootstrap.Modal(document.getElementById("menuAddModal")).show();
 	}
+	
 	
 }

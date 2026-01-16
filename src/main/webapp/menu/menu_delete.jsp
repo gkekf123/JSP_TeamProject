@@ -40,15 +40,6 @@ boolean result = dao.deleteMenu(menuIdx);
 if (result) {
 %>
 <script>
-function deleteMenu(menuIdx, storeIdx) {
-    if (confirm("정말로 이 메뉴를 삭제하시겠습니까?")) {
-        location.href =
-            "<%= request.getContextPath() %>/menu/menu_delete.jsp"
-            + "?menuIdx=" + menuIdx
-            + "&storeIdx=" + storeIdx;
-    }
-}
-
     alert("메뉴가 삭제되었습니다.");
     location.href = "<%= ctxPath %>/store/store_detail.jsp?idx=<%= storeIdx %>";
 </script>
