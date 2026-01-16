@@ -8,7 +8,7 @@
     request.setCharacterEncoding("UTF-8");
 
     // 1. 파일 업로드 설정
-    String savePath = application.getRealPath("/images"); 
+    String savePath = application.getRealPath("/images/store_image"); 
     int maxSize = 10 * 1024 * 1024; // 10MB 제한
     String encoding = "UTF-8";
 
