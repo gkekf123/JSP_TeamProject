@@ -11,8 +11,8 @@ import com.team.project.util.DBConn;
 
 public class StoreDAO {
     
-	// select
-    public List<StoreDTO> selectStoreList(String sortType, String searchWord) {
+    // 맛집 목록 조회 (정렬 + 검색 + 카테고리 필터)
+    public List<StoreDTO> selectStoreList(String sortType, String searchWord, String category) {
         List<StoreDTO> list = new ArrayList<>();
         
         Connection conn = null;
@@ -20,14 +20,27 @@ public class StoreDAO {
         ResultSet rs = null;
 
         StringBuilder sql = new StringBuilder();
+        
         sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_addr ");
         sql.append("FROM store ");
+        sql.append("WHERE 1=1 "); 
         
+        // 2. 조건 확인 변수 설정
         boolean hasSearch = (searchWord != null && !searchWord.trim().isEmpty());
-        if (hasSearch) {
-            sql.append("WHERE store_name LIKE ? OR store_addr LIKE ? ");
+        // 카테고리가 null이 아니고, "all"도 아니고, 빈 문자열도 아닐 때만 필터링
+        boolean hasCategory = (category != null && !category.equals("all") && !category.trim().isEmpty());
+
+        // 3. SQL 조건 추가
+        if (hasCategory) {
+            sql.append(" AND store_category = ? ");
         }
         
+        if (hasSearch) {
+            // (이름 OR 주소)
+            sql.append(" AND (store_name LIKE ? OR store_addr LIKE ?) ");
+        }
+        
+        // 4. 정렬 조건 추가
         if ("rating".equals(sortType)) {
             sql.append("ORDER BY store_rating_avg DESC, store_idx DESC ");
         } else if ("review".equals(sortType)) {
@@ -42,15 +55,21 @@ public class StoreDAO {
             conn = DBConn.getConnection(); 
             pstmt = conn.prepareStatement(sql.toString());
             
+            // 5. 물음표(?) 값 채우기
+            int paramIndex = 1; // 물음표 순서 카운터
+
+            if (hasCategory) {
+                pstmt.setString(paramIndex++, category); // 카테고리가 있으면 1번
+            }
+            
             if (hasSearch) {
                 String keyword = "%" + searchWord + "%"; 
-                pstmt.setString(1, keyword); // 첫 번째 ? (이름)
-                pstmt.setString(2, keyword); // 두 번째 ? (주소)
+                pstmt.setString(paramIndex++, keyword); // 검색어 1
+                pstmt.setString(paramIndex++, keyword); // 검색어 2
             }
             
             rs = pstmt.executeQuery();
 
-            int count = 0;
             while (rs.next()) {
                 StoreDTO dto = new StoreDTO();
                 dto.setStoreIdx(rs.getLong("store_idx"));
@@ -61,10 +80,9 @@ public class StoreDAO {
                 dto.setStoreAddr(rs.getString("store_addr"));
                 
                 list.add(dto);
-                count++;
             }
         } catch (Exception e) {
-            System.out.println("[DAO] ❌ 에러 발생!");
+            System.out.println("[DAO] 맛집 목록 조회 실패");
             e.printStackTrace();
         } finally {
            DBConn.close(rs, pstmt, conn);
@@ -73,7 +91,7 @@ public class StoreDAO {
         return list;
     }
     
-    // insert
+    // 맛집 등록
     public int insertStore(StoreDTO dto) {
         int result = 0;
         Connection conn = null;

@@ -69,5 +69,8 @@
             <div id="pagination"></div>
         </div>
     </main>
+    
+    <jsp:include page="/footer/footer.jsp" />
+    
 </body>
 </html>
