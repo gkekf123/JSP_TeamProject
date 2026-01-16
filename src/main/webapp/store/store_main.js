@@ -45,7 +45,7 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
         success: function(response) {
             var res = response.trim();
             if(res === "login_needed") {
-                alert("로그인이 필요한 서비스입니다.");
+                alert("로그인이 필요합니다.");
                 location.href = "/login/login.jsp";
                 $(btn).text(isEmpty ? '♡' : '♥'); // 실패 시 롤백
             } else if(res === "error") {
