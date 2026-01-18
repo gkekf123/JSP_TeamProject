@@ -1,3 +1,4 @@
+<%@page import="com.team.project.dao.BookmarkDAO"%>
 <%@page import="com.team.project.dto.ReviewDTO"%>
 <%@page import="com.team.project.dao.ReviewDAO"%>
 <%@page import="com.team.project.dto.MenuDTO"%>
@@ -52,6 +53,17 @@
     ReviewDAO reviewDao=new ReviewDAO();
     List<ReviewDTO> reviewList=reviewDao.selectReview((int)storeIdx);
     
+    //평점 불러오기
+    Double avgRating = reviewDao.avgReview((int)storeIdx);
+    int reviewCount = (reviewList != null) ? reviewList.size() : 0;
+    
+    //찜하기 여부 확인
+    boolean isBookmarked = false;
+    if (loginMember != null) {
+        BookmarkDAO bookmarkDao = new BookmarkDAO();
+        isBookmarked = bookmarkDao.isBookmarked(loginMember.getMemberId(), (int)storeIdx);
+    }
+    
 %>
 
 <!DOCTYPE html>
@@ -59,6 +71,9 @@
 <head>
 <meta charset="UTF-8">
 <title><%= dto.getStoreName() %></title>
+<script>
+    var ctxPath = '<%= ctxPath %>';
+</script>
 
 <link rel="stylesheet" href="<%= ctxPath %>/store/store_detail.css">
 
@@ -129,7 +144,7 @@
                 <!-- 찜 버튼 -->
                 <button type="button" class="store-jjim-btn"
                     onclick="toggleBookmark(this, '<%= dto.getStoreIdx() %>', '<%= dto.getStoreName() %>', '<%= dto.getStoreAddr() %>')">
-                    ♡
+                    <%= isBookmarked ? "♥" : "♡" %>
                 </button>
             </div>
 
@@ -137,11 +152,11 @@
             <div class="storeinfomation">
 
                 <div class="info-row">
-                    <i class="bi bi-star-fill"></i>
-                    <p class="store-rating">
-                        <%= dto.getStoreRatingAvg() %> (<%= dto.getStoreRatingCount() %>)
-                    </p>
-                </div>
+				    <i class="bi bi-star-fill"></i>
+				    <p class="store-rating">
+				        <%= String.format("%.1f", avgRating) %> (<%= reviewCount %>)
+				    </p>
+				</div>
 
                 <div class="info-row">
                     <i class="bi bi-telephone-fill"></i>
@@ -299,6 +314,10 @@
 <jsp:include page="/footer/footer.jsp" />
 
 <jsp:include page="../menu/menu_add.jsp">
+    <jsp:param name="storeIdx" value="<%= storeIdx %>" />
+</jsp:include>
+
+<jsp:include page="../review/review_write.jsp">
     <jsp:param name="storeIdx" value="<%= storeIdx %>" />
 </jsp:include>
 

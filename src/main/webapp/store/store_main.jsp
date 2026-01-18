@@ -87,6 +87,9 @@
 <html>
 <head>
     <title>맛집 추천 리스트</title>
+    <script>
+        var ctxPath = '<%= ctxPath %>'; // 전역 변수로 추가
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=8">
@@ -152,7 +155,7 @@
                 <div class="store-card">
                     <button type="button" class="store-jjim-btn" 
                             onclick="toggleBookmark(this, '<%= store.getStoreIdx() %>', '<%= store.getStoreName() %>', '<%= store.getStoreAddr() %>')">
-                        <%= heartShape %>
+                        <%= isBookmarked ? "♥" : "♡" %>
                     </button>
                     <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
                         <% if(hasImage) { %>
@@ -195,45 +198,6 @@
             document.getElementById("searchForm").submit();
         }
 
-        // 찜하기 토글 함수
-        function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
-            var currentText = $(btn).text().trim();
-            var isEmpty = (currentText === '♡');
-            // 1. 화면 먼저 변경
-            if(isEmpty) {
-                $(btn).text('♥');
-                $(btn).css({transform: "scale(1.5)", transition: "0.2s"});
-                setTimeout(() => $(btn).css("transform", "scale(1)"), 200);
-            } else {
-                $(btn).text('♡');
-                $(btn).css("transform", "scale(1)");
-            }
-            // 2. 서버 요청
-            $.ajax({
-                type: "POST",
-                url: "<%= ctxPath %>/bookmark/bookmark_action.jsp", 
-                data: {
-                    store_idx: storeIdx,
-                    place_name: storeName,
-                    place_addr: storeAddr
-                },
-                success: function(response) {
-                    var res = response.trim();
-                    if(res === "login_needed") {
-                        alert("로그인이 필요한 서비스입니다.");
-                        location.href = "<%= ctxPath %>/login/login.jsp"; 
-                        $(btn).text(isEmpty ? '♡' : '♥'); 
-                    } else if(res === "error") {
-                        alert("처리 실패: 잠시 후 다시 시도해주세요.");
-                        $(btn).text(isEmpty ? '♡' : '♥'); 
-                    }
-                },
-                error: function() {
-                    alert("서버 연결 실패");
-                    $(btn).text(isEmpty ? '♡' : '♥'); 
-                }
-            });
-        }
     </script>
 </body>
 </html>
