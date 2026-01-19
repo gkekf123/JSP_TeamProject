@@ -8,7 +8,7 @@ public class ReviewDTO {
 	private int memberId;
 	private String memberName;
 	private String memberImg;
-	private String reviewRating;
+	private int reviewRating;
 	private String reviewContent;
 	private String reviewimg;
 	private Timestamp reviewCreateAt;
@@ -43,10 +43,10 @@ public class ReviewDTO {
 	public void setMemberImg(String memberImg) {
 		this.memberImg = memberImg;
 	}
-	public String getReviewRating() {
+	public int getReviewRating() {
 		return reviewRating;
 	}
-	public void setReviewRating(String reviewRating) {
+	public void setReviewRating(int reviewRating) {
 		this.reviewRating = reviewRating;
 	}
 	public String getReviewContent() {

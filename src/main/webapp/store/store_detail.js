@@ -134,3 +134,39 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
 	    new bootstrap.Modal(document.getElementById("menuAddModal")).show();
 	}
 	
+	
+	//지도
+	var mapContainer = document.getElementById('map');
+	    var mapOption = {
+	        center: new kakao.maps.LatLng(37.5665, 126.9780), // 임시 서울
+	        level: 3
+	    };
+
+	    var map = new kakao.maps.Map(mapContainer, mapOption);
+	    var geocoder = new kakao.maps.services.Geocoder();
+
+	    // 가게 주소
+	    var storeAddr = "<%= dto.getStoreAddr() %>";
+	    var storeName = "<%= dto.getStoreName() %>";
+
+	    geocoder.addressSearch(storeAddr, function(result, status) {
+	        if (status === kakao.maps.services.Status.OK) {
+
+	            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+	            // 마커 생성
+	            var marker = new kakao.maps.Marker({
+	                map: map,
+	                position: coords
+	            });
+
+	            // 인포윈도우
+	            var infowindow = new kakao.maps.InfoWindow({
+	                content: '<div style="padding:5px;font-size:13px;">' + storeName + '</div>'
+	            });
+	            infowindow.open(map, marker);
+
+	            map.setCenter(coords);
+	        }
+	    });
+	

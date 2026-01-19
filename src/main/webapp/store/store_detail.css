@@ -187,7 +187,7 @@ body {
 /* 메뉴 전체 */
 .menu-section {
     width: 80%;
-    margin: 40px auto;
+    margin: 60px auto;
     border-bottom: 1px solid #ddd;
 }
 
@@ -292,7 +292,7 @@ body {
 
 .review-section {
     width: 80%;
-    margin: 40px auto;
+    margin: 60px auto;
     border-bottom: 1px solid #ddd;
 }
 
@@ -407,6 +407,24 @@ body {
 }
 
 
+/*지도*/
+.map-section{
+	width: 80%;
+    margin: 60px auto;
+    border-bottom: 1px solid #ddd;
+}
+
+.map-header{
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.map-header >h3{
+	font-size: 20px;
+    font-weight: bold;
+}
 
 /*모바일*/
 @media screen and (max-width: 768px) {
@@ -425,7 +443,7 @@ body {
 	}
 	
     .custom-slider {
-        height: 240px;
+        height: 340px;
     }
     
     .menu-section {
