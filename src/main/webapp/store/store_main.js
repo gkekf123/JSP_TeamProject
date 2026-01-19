@@ -47,7 +47,7 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
     // 2. 서버 요청
     $.ajax({
         type: "POST",
-        url: "/bookmark/bookmark_action.jsp", 
+        url: ctxPath + "/bookmark/bookmark_action.jsp", 
         data: {
             store_idx: storeIdx,
             place_name: storeName,
@@ -57,7 +57,7 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
             var res = response.trim();
             if(res === "login_needed") {
                 alert("로그인이 필요합니다.");
-                location.href = "/login/login.jsp";
+                location.href = ctxPath + "/login/login.jsp";
                 $(btn).text(isEmpty ? '♡' : '♥'); 
             } else if(res === "error") {
                 alert("처리 실패");

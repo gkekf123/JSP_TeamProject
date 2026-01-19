@@ -77,13 +77,11 @@
         {"카페/디저트", "cafe.png", "카페/디저트"}
     };
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>맛집 추천 리스트</title>
-    <script>
-        var ctxPath = '<%= ctxPath %>'; // 전역 변수로 추가
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=8">
@@ -148,17 +146,18 @@
                 for(StoreDTO store : storeList) { 
                     String imgPath = store.getStoreImg();
                     boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty());
-                    boolean isBookmarked = myBookmarkSet.contains(store.getStoreIdx());
+                    boolean isBookmarked =
+                    	    (store.getStoreIdx() > 0 && myBookmarkSet.contains(store.getStoreIdx()));
                     String heartShape = isBookmarked ? "♥" : "♡";
             %>
                 <div class="store-card">
                     <button type="button" class="store-jjim-btn" 
                             onclick="toggleBookmark(this, '<%= store.getStoreIdx() %>', '<%= store.getStoreName() %>', '<%= store.getStoreAddr() %>')">
-                        <%= isBookmarked ? "♥" : "♡" %>
+                        <%= heartShape %>
                     </button>
                     <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
                         <% if(hasImage) { %>
-                            <img src="<%= ctxPath %>/images/store_image<%= imgPath %>" class="store-img" alt="가게사진">
+                            <img src="<%= ctxPath %>/images/store_image/<%= imgPath %>" class="store-img" alt="가게사진">
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
                         <% } %>
@@ -183,25 +182,6 @@
         </div>
     </div>
     <jsp:include page="/footer/footer.jsp" />
-
-    <script>
-        // 정렬 변경 시 폼 전체 제출
-        function changeSort() {
-            var sortVal = document.getElementById("sortFilter").value;
-            document.querySelector('input[name="sort"]').value = sortVal;
-            document.getElementById("searchForm").submit();
-        }
-
-        // 카테고리 선택 함수
-        function selectCategory(catCode) {
-            document.getElementById("categoryInput").value = catCode;
-            document.getElementById("searchForm").submit();
-        }
-
-    </script>
-</body>
-
     
     </body>
-
 </html>

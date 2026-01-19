@@ -36,7 +36,26 @@
     }
     
     NewsDAO dao=new NewsDAO();
-    List<NewsDTO> list=dao.selectNews();
+    
+    //페이징
+    int perPage = 9;          // 한 페이지당 글 수
+    int perBlock = 5;         // 페이지 번호 개수
+
+    int currentPage = 1;
+    if (request.getParameter("page") != null) {
+        currentPage = Integer.parseInt(request.getParameter("page"));
+    }
+
+    int totalCount = dao.totalCount();
+
+    int totalPage = (int)Math.ceil((double)totalCount / perPage);
+    int start = (currentPage - 1) * perPage;
+
+    List<NewsDTO> paging = dao.selectNewsPaging(start, perPage);
+
+    int startPage = ((currentPage - 1) / perBlock) * perBlock + 1;
+    int endPage = startPage + perBlock - 1;
+    if (endPage > totalPage) endPage = totalPage;
 %>
 
 <!DOCTYPE html>
@@ -66,10 +85,10 @@
         </div>
         
         <div class="news-card-wrap">
-        	<% if(list == null || list.size() == 0) { %>
+        	<% if(paging == null || paging.size() == 0) { %>
     			<p class="no-data">등록된 뉴스가 없습니다.</p>
 			<%} else { 
-    			for(NewsDTO dto : list) {%>
+    			for(NewsDTO dto : paging) {%>
     		
     		<div class="news-card">
     			
@@ -97,6 +116,24 @@
     	</div>
     </div>
     
+    <%-- 페이징 --%>
+    <div class="paging">
+	    <% if (startPage > 1) { %>
+	        <a href="news.jsp?page=<%= startPage - 1 %>">◀ 이전</a>
+	    <% } %>
+	
+	    <% for (int i = startPage; i <= endPage; i++) { %>
+	        <% if (i == currentPage) { %>
+	            <span class="active"><%= i %></span>
+	        <% } else { %>
+	            <a href="news.jsp?page=<%= i %>"><%= i %></a>
+	        <% } %>
+	    <% } %>
+	
+	    <% if (endPage < totalPage) { %>
+	        <a href="news.jsp?page=<%= endPage + 1 %>">다음 ▶</a>
+	    <% } %>
+	</div>
     <jsp:include page="/footer/footer.jsp" />
 
 </body>
