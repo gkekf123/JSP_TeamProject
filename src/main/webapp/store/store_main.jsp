@@ -9,27 +9,22 @@
 <%@page import="com.team.project.util.GeminiUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-    // 0. 기본 설정
     request.setCharacterEncoding("UTF-8");
     String ctxPath = request.getContextPath();
     
-    // 1. 파라미터 받기
     String sort = request.getParameter("sort");
     if (sort == null) sort = "latest"; 
     
-    String question = request.getParameter("q"); // 검색어
+    String question = request.getParameter("q"); 
 
-    // 카테고리 파라미터 받기
     String category = request.getParameter("category");
     if (category == null || category.trim().isEmpty()) {
         category = "all";
     }
     
-    // 2. DB 데이터 가져오기
     StoreDAO dao = new StoreDAO();
     List<StoreDTO> storeList = dao.selectStoreList(sort, question, category);
     
-    // 3. 로그인 및 관리자 권한 확인
     boolean isAdmin = false;
     String myId = null;
     Object loginObj = session.getAttribute("loginMember");
@@ -46,15 +41,15 @@
         }
     }
     
-    // 4. 내가 찜한 가게 목록 가져오기
     Set<Integer> myBookmarkSet = new HashSet<>();
     if(myId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
         myBookmarkSet = bookmarkDao.getMyBookmarkStoreIdxSet(myId);
     }
     
-    // 5. AI 답변 준비
+    // AI 답변 로직 (검색어가 있을 때만 실행)
     String answer = "";
+    // 사용자가 명시적으로 검색했을 때만 AI 호출 (카테고리 클릭 시엔 q가 없으므로 호출 안됨)
     if(question != null && !question.trim().isEmpty()) {
         StringBuilder prompt = new StringBuilder();
         if (storeList != null && !storeList.isEmpty()) {
@@ -73,9 +68,8 @@
         new SearchLogDAO().insertSearchLog(question, answer);
     }
 
-    // 카테고리 배열 정의
     String[][] catArr = {
-        {"all", "allCategory.png", "전체"},
+   		{"all", "allCategory.png", "전체"},
         {"한식", "korean.png", "한식"},
         {"중식", "chinese.png", "중식"},
         {"일식", "japanese.png", "일식"},
@@ -93,6 +87,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=8">
+    
+    <script>
+        const ctxPath = "<%= ctxPath %>";
+    </script>
+    
+    <script src="<%= ctxPath %>/store/store_main.js?v=<%= System.currentTimeMillis() %>"></script>
 </head>
 <body>
     <jsp:include page="/header/header.jsp" />
@@ -125,7 +125,6 @@
                 String cCode = cat[0];
                 String cImg = cat[1];
                 String cName = cat[2];
-                // 현재 선택된 카테고리인지 확인
                 String activeClass = category.equals(cCode) ? "active" : "";
             %>
             <div class="category-item <%= activeClass %>" onclick="selectCategory('<%= cCode %>')">
@@ -184,6 +183,7 @@
         </div>
     </div>
     <jsp:include page="/footer/footer.jsp" />
+
     <script>
         // 정렬 변경 시 폼 전체 제출
         function changeSort() {
@@ -200,4 +200,8 @@
 
     </script>
 </body>
+
+    
+    </body>
+
 </html>

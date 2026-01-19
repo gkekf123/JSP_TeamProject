@@ -1,20 +1,31 @@
-/* * store_main.js 
- * 카테고리 선택, 정렬 변경, 찜하기 기능
- */
+/* store_main.js */
 
-// 카테고리 선택 함수
+// 카테고리 선택 함수 (검색어 초기화 기능 추가)
 function selectCategory(catCode) {
-    // 1. hidden input에 선택한 카테고리 값 넣기
-    document.getElementById("categoryInput").value = catCode;
-    // 2. 폼 제출 (화면 새로고침)
-    document.getElementById("searchForm").submit();
+    // 1. 선택한 카테고리 값(hidden input) 설정
+    var catInput = document.getElementById("categoryInput");
+    if(catInput) {
+        catInput.value = catCode;
+    }
+
+    // 2. 검색어 빈칸으로 초기화
+    var searchInput = document.querySelector('input[name="q"]');
+    if (searchInput) {
+        searchInput.value = "";
+		searchInput.setAttribute("value", "");
+    }
+
+    // 3. 폼 제출 (화면 이동)
+    var form = document.getElementById("searchForm");
+    if(form) {
+        form.submit();
+    }
 }
 
 // 정렬 변경 함수
 function changeSort() {
     var sortVal = document.getElementById("sortFilter").value;
     document.querySelector('input[name="sort"]').value = sortVal;
-    
     document.getElementById("searchForm").submit();
 }
 
@@ -36,7 +47,7 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
     // 2. 서버 요청
     $.ajax({
         type: "POST",
-        url: "/bookmark/bookmark_action.jsp",
+        url: "/bookmark/bookmark_action.jsp", 
         data: {
             store_idx: storeIdx,
             place_name: storeName,
@@ -45,18 +56,17 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
         success: function(response) {
             var res = response.trim();
             if(res === "login_needed") {
-                alert("로그인이 필요한 서비스입니다.");
+                alert("로그인이 필요합니다.");
                 location.href = "/login/login.jsp";
-                $(btn).text(isEmpty ? '♡' : '♥'); // 실패 시 롤백
+                $(btn).text(isEmpty ? '♡' : '♥'); 
             } else if(res === "error") {
-                alert("처리 실패: 잠시 후 다시 시도해주세요.");
-                $(btn).text(isEmpty ? '♡' : '♥'); // 실패 시 롤백
+                alert("처리 실패");
+                $(btn).text(isEmpty ? '♡' : '♥'); 
             }
         },
         error: function() {
             console.log("AJAX Error");
-            alert("서버 통신 오류");
-            $(btn).text(isEmpty ? '♡' : '♥'); // 실패 시 롤백
+            $(btn).text(isEmpty ? '♡' : '♥'); 
         }
     });
 }
