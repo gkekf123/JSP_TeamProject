@@ -64,44 +64,50 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-//찜 버튼
+//찜 버튼 (ctxPath는 전역 변수로 사용)
 function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
-
+    console.log("찜 버튼 클릭");
+    
     var isEmpty = $(btn).text().trim() === '♡';
-
-    // UI 먼저 변경
-    if (isEmpty) {
-        $(btn).text('♥').css("transform", "scale(1.4)");
-        setTimeout(() => $(btn).css("transform", "scale(1)"), 200);
-    } else {
-        $(btn).text('♡');
-    }
 
     // 서버 요청
     $.ajax({
         type: "POST",
-        url: "<%= ctxPath %>/bookmark/bookmark_action.jsp",
+        url: ctxPath + "/bookmark/bookmark_action.jsp",
         data: {
             store_idx: storeIdx,
             place_name: storeName,
             place_addr: storeAddr
         },
         success: function(res) {
+            console.log("서버 응답:", res);
             res = res.trim();
+            
             if (res === "login_needed") {
                 alert("로그인이 필요합니다.");
-                location.href = "<%= ctxPath %>/login/login.jsp";
-                $(btn).text(isEmpty ? '♡' : '♥');
+                location.href = ctxPath + "/login/login.jsp";
+            } else if (res === "added") {
+                // 찜 추가 성공
+                $(btn).text('♥').css("transform", "scale(1.4)");
+                setTimeout(() => $(btn).css("transform", "scale(1)"), 200);
+                console.log("찜 추가됨");
+            } else if (res === "removed") {
+                // 찜 제거 성공
+                $(btn).text('♡');
+                console.log("찜 제거됨");
             } else if (res === "error") {
                 alert("처리 실패");
-                $(btn).text(isEmpty ? '♡' : '♥');
+            } else {
+                console.log("알 수 없는 응답:", res);
             }
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+            console.error("Response:", xhr.responseText);
             alert("서버 오류");
-            $(btn).text(isEmpty ? '♡' : '♥');
         }
     });
+}
 	
 	
 	//메뉴 수정
@@ -128,5 +134,3 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
 	    new bootstrap.Modal(document.getElementById("menuAddModal")).show();
 	}
 	
-	
-}
