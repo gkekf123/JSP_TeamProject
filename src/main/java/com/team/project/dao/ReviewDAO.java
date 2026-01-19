@@ -130,4 +130,32 @@ public class ReviewDAO {
 		
 		return dto;
 	}
+	
+	public Double avgReview(int storeIdx) {
+		Double avgRating=null;
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String sql="select avg(review_rating) as avg from review where store_idx=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, storeIdx);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				avgRating=rs.getDouble("avg");
+				if(rs.wasNull()) {
+					avgRating=0.0;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			db.close(rs, pstmt, conn);
+		}
+		return avgRating;
+	}
 }

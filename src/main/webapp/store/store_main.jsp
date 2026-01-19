@@ -77,6 +77,7 @@
         {"카페/디저트", "cafe.png", "카페/디저트"}
     };
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -145,7 +146,8 @@
                 for(StoreDTO store : storeList) { 
                     String imgPath = store.getStoreImg();
                     boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty());
-                    boolean isBookmarked = myBookmarkSet.contains(store.getStoreIdx());
+                    boolean isBookmarked =
+                    	    (store.getStoreIdx() > 0 && myBookmarkSet.contains(store.getStoreIdx()));
                     String heartShape = isBookmarked ? "♥" : "♡";
             %>
                 <div class="store-card">
@@ -155,7 +157,7 @@
                     </button>
                     <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
                         <% if(hasImage) { %>
-                            <img src="<%= ctxPath %>/images/store_image<%= imgPath %>" class="store-img" alt="가게사진">
+                            <img src="<%= ctxPath %>/images/store_image/<%= imgPath %>" class="store-img" alt="가게사진">
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
                         <% } %>
