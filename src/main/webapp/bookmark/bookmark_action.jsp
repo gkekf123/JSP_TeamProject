@@ -4,7 +4,7 @@
 <%@page import="com.team.project.dao.BookmarkDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%
-    // 1. 세션 체크 (기존과 동일)
+    // 1. 세션 체크
     Object loginObj = session.getAttribute("loginMember");
     String member_id = null;
 
@@ -36,9 +36,8 @@
     boolean isExist = false;
 
     // 내부 가게(Store)와 외부 가게(Map) 구분 로직
-    
     if(storeIdx > 0) {
-        // Store 기능 (기존 로직 유지 - 안전함)
+        // Store 기능
         isExist = dao.isBookmarked(member_id, storeIdx);
         
         if(isExist) {
@@ -52,7 +51,7 @@
         }
         
     } else {
-        // Map 기능 (URL 기준으로 처리)
+        // Map 기능
         // DAO를 고치지 않고 JSP에서 직접 URL 중복 확인 및 삭제 처리
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -76,7 +75,7 @@
             
             // 2-2. 토글 실행
             if(isExist) {
-                // 이미 있으므로 삭제 (URL 기준 DELETE)
+                // 이미 있으므로 삭제
                 String delSql = "DELETE FROM bookmark WHERE member_id=? AND place_url=?";
                 pstmt = conn.prepareStatement(delSql);
                 pstmt.setString(1, member_id);
@@ -87,7 +86,7 @@
                 else out.print("error");
                 
             } else {
-                // 없으므로 추가 (기존 DAO 재활용 - storeIdx가 0으로 들어감)
+                // 없으므로 추가
                 int result = dao.addBookmark(member_id, 0, name, addr, url, phone);
                 if(result > 0) out.print("added");
                 else out.print("error");
