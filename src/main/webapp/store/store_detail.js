@@ -85,7 +85,7 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
             
             if (res === "login_needed") {
                 alert("로그인이 필요합니다.");
-                location.href = ctxPath + "/login/login.jsp";
+                location.href = ctxPath + "/login/login_form.jsp";
             } else if (res === "added") {
                 // 찜 추가 성공
                 $(btn).text('♥').css("transform", "scale(1.4)");

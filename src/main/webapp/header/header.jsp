@@ -49,9 +49,9 @@
             ? (ctxPath + "/") : (ctxPath + "/") %>">내 리뷰</a>
         </li>
 
-         <%-- 로그인 상태일 때만 로그아웃 메뉴 출력 --%>
+        <%-- 로그인 상태일 때만 로그아웃 메뉴 출력 --%>
         <% if(session.getAttribute("loginok") != null) { %>
-            <li id="headerLogout">로그아웃</li>
+            <li><a href="#" id="headerLogout">로그아웃</a></li>
         <% } %>
 	</ul>
 </div>
