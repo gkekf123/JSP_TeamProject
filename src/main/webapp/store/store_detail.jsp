@@ -318,6 +318,15 @@
 	<% } %>
 
 </div>
+
+<!-- 지도 -->
+<div class="map-section">
+	<div class="map-header">
+		<h3>지도</h3>
+	</div>
+
+	<div id="map" style="width:100%; height:350px; border-radius:10px;"></div>
+</div>
 	
     
 </div>
