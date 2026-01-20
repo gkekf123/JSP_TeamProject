@@ -11,6 +11,46 @@ import com.team.project.util.DBConn;
 
 public class StoreDAO {
     
+    // 맛집 등록 (수정됨: 좌표 및 카카오 데이터 추가)
+    public int insertStore(StoreDTO dto) {
+        int result = 0;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        
+        try {
+            conn = DBConn.getConnection();
+            StringBuilder sql = new StringBuilder();
+            
+            sql.append("INSERT INTO store ");
+            sql.append("(store_name, store_category, store_addr, store_img, store_img2, store_img3, store_intro, store_tel, latitude, longitude, kakao_id, place_url) ");
+            sql.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            
+            pstmt = conn.prepareStatement(sql.toString());
+            
+            pstmt.setString(1, dto.getStoreName());
+            pstmt.setString(2, dto.getStoreCategory());
+            pstmt.setString(3, dto.getStoreAddr());
+            pstmt.setString(4, dto.getStoreImg());
+            pstmt.setString(5, dto.getStoreImg2());
+            pstmt.setString(6, dto.getStoreImg3());
+            pstmt.setString(7, dto.getStoreIntro());
+            pstmt.setString(8, dto.getStoreTel());
+            pstmt.setDouble(9, dto.getLatitude());   // 위도
+            pstmt.setDouble(10, dto.getLongitude()); // 경도
+            pstmt.setString(11, dto.getKakaoId());   // 카카오 ID
+            pstmt.setString(12, dto.getPlaceUrl());  // URL
+            
+            result = pstmt.executeUpdate();
+            
+        } catch (Exception e) {
+            System.out.println("[DAO] 맛집 등록 실패");
+            e.printStackTrace();
+        } finally {
+            DBConn.close(null, pstmt, conn);
+        }
+        return result;
+    }
+    
     // 맛집 목록 조회 (정렬 + 검색 + 카테고리 필터)
     public List<StoreDTO> selectStoreList(String sortType, String searchWord, String category) {
         List<StoreDTO> list = new ArrayList<>();
@@ -21,13 +61,12 @@ public class StoreDAO {
 
         StringBuilder sql = new StringBuilder();
         
-        sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_view_count, store_addr ");
+        sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_view_count, store_addr, latitude, longitude, kakao_id, place_url ");
         sql.append("FROM store ");
         sql.append("WHERE 1=1 "); 
         
         // 2. 조건 확인 변수 설정
         boolean hasSearch = (searchWord != null && !searchWord.trim().isEmpty());
-        // 카테고리가 null이 아니고, "all"도 아니고, 빈 문자열도 아닐 때만 필터링
         boolean hasCategory = (category != null && !category.equals("all") && !category.trim().isEmpty());
 
         // 3. SQL 조건 추가
@@ -36,8 +75,8 @@ public class StoreDAO {
         }
         
         if (hasSearch) {
-            // (이름 OR 주소)
-        	sql.append(" AND (store_name LIKE ? OR store_addr LIKE ? OR store_category LIKE ?) ");
+            // (이름 OR 주소 OR 카테고리)
+            sql.append(" AND (store_name LIKE ? OR store_addr LIKE ? OR store_category LIKE ?) ");
         }
         
         // 4. 정렬 조건 추가
@@ -59,14 +98,14 @@ public class StoreDAO {
             int paramIndex = 1; // 물음표 순서 카운터
 
             if (hasCategory) {
-                pstmt.setString(paramIndex++, category); // 카테고리가 있으면 1번
+                pstmt.setString(paramIndex++, category);
             }
             
             if (hasSearch) {
                 String keyword = "%" + searchWord + "%"; 
-                pstmt.setString(paramIndex++, keyword); // 이름 검사
-                pstmt.setString(paramIndex++, keyword); // 주소 검사
-                pstmt.setString(paramIndex++, keyword); // 카테고리 검사
+                pstmt.setString(paramIndex++, keyword); 
+                pstmt.setString(paramIndex++, keyword); 
+                pstmt.setString(paramIndex++, keyword); 
             }
             
             rs = pstmt.executeQuery();
@@ -78,9 +117,14 @@ public class StoreDAO {
                 dto.setStoreImg(rs.getString("store_img"));
                 dto.setStoreRatingAvg(rs.getDouble("store_rating_avg"));
                 dto.setStoreRatingCount(rs.getInt("store_rating_count"));
-                // [수정 2] 조회수 세팅 (DTO에 setStoreViewCount 메서드가 있어야 함)
                 dto.setStoreViewCount(rs.getInt("store_view_count"));
                 dto.setStoreAddr(rs.getString("store_addr"));
+                
+                // [추가] 새로 생긴 컬럼들도 DTO에 담기
+                dto.setLatitude(rs.getDouble("latitude"));
+                dto.setLongitude(rs.getDouble("longitude"));
+                dto.setKakaoId(rs.getString("kakao_id"));
+                dto.setPlaceUrl(rs.getString("place_url"));
                 
                 list.add(dto);
             }
@@ -94,47 +138,10 @@ public class StoreDAO {
         return list;
     }
     
-    // 맛집 등록
-    public int insertStore(StoreDTO dto) {
-        int result = 0;
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        
-        try {
-            conn = DBConn.getConnection();
-            StringBuilder sql = new StringBuilder();
-            
-            sql.append("INSERT INTO store ");
-            sql.append("(store_name, store_category, store_addr, store_img, store_img2, store_img3, store_intro, store_tel) ");
-            sql.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            
-            pstmt = conn.prepareStatement(sql.toString());
-            
-            pstmt.setString(1, dto.getStoreName());
-            pstmt.setString(2, dto.getStoreCategory());
-            pstmt.setString(3, dto.getStoreAddr());
-            pstmt.setString(4, dto.getStoreImg());
-            pstmt.setString(5, dto.getStoreImg2());
-            pstmt.setString(6, dto.getStoreImg3());
-            pstmt.setString(7, dto.getStoreIntro());
-            pstmt.setString(8, dto.getStoreTel());
-            
-            result = pstmt.executeUpdate();
-            
-        } catch (Exception e) {
-            System.out.println("[DAO] 맛집 등록 실패");
-            e.printStackTrace();
-        } finally {
-            DBConn.close(null, pstmt, conn);
-        }
-        return result;
-    }
-    
     // 조회수 증가 메서드
     public void updateReadCount(String storeIdx) {
         Connection conn = null;
         PreparedStatement pstmt = null;
-        // 기존 조회수에 +1을 더하는 쿼리
         String sql = "UPDATE store SET store_view_count = store_view_count + 1 WHERE store_idx = ?";
         
         try {

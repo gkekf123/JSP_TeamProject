@@ -27,11 +27,14 @@
     
     boolean isAdmin = false;
     String myId = null;
+    
     Object loginObj = session.getAttribute("loginMember");
+    
     if (loginObj != null) {
         if (loginObj instanceof MemberDTO) {
             MemberDTO loginMember = (MemberDTO) loginObj;
-            myId = loginMember.getMemberId(); 
+            myId = loginMember.getMemberId();
+            
             if ("admin".equals(loginMember.getMemberRole())) { 
                 isAdmin = true;
             }
@@ -41,7 +44,8 @@
         }
     }
     
-    Set<Integer> myBookmarkSet = new HashSet<>();
+    Set<Long> myBookmarkSet = new HashSet<>(); 
+
     if(myId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
         myBookmarkSet = bookmarkDao.getMyBookmarkStoreIdxSet(myId);
@@ -49,6 +53,7 @@
     
     // AI 답변 로직 (검색어가 있을 때만 실행)
     String answer = "";
+    
     // 사용자가 명시적으로 검색했을 때만 AI 호출 (카테고리 클릭 시엔 q가 없으므로 호출 안됨)
     if(question != null && !question.trim().isEmpty()) {
         StringBuilder prompt = new StringBuilder();
