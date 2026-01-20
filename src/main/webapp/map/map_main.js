@@ -94,24 +94,27 @@ function getListItem(index, places) {
     var el = document.createElement('li');
     var spriteOffset = 10 + (index * 46);
     
-    // 특수문자 처리
+    // 특수문자 처리 (따옴표 이스케이프)
     var safeName = places.place_name.replace(/'/g, "\\'");
     var safeAddr = places.road_address_name ? places.road_address_name.replace(/'/g, "\\'") : "";
+    var safeUrl = places.place_url ? places.place_url : "";
+    var safePhone = places.phone ? places.phone : "";
+    var safeId = places.id; // 카카오 장소 ID
     
-    // 1. 내 찜 목록(Set)에 해당 ID가 있는지 확인
+    // 1. 내 찜 목록(Set)에 해당 Kakao ID가 있는지 확인
     var isBookmarked = false;
     if(typeof myJjimSet !== 'undefined') {
-        isBookmarked = myJjimSet.has(places.id);
+        isBookmarked = myJjimSet.has(safeId);
     }
     var heartShape = isBookmarked ? '♥' : '♡';
 
     // 2. 토글 버튼 생성
-    var saveBtn = '<button class="jjim-btn" onclick="toggleBookmark(this, \'' + 
+    var saveBtn = '<button type="button" class="jjim-btn" onclick="toggleBookmark(this, \'' + 
                   safeName + '\', \'' + 
                   safeAddr + '\', \'' + 
-                  places.place_url + '\', \'' + 
-                  places.phone + '\', \'' + 
-                  places.id + '\'); event.stopPropagation();">' + heartShape + '</button>';
+                  safeUrl + '\', \'' + 
+                  safePhone + '\', \'' + 
+                  safeId + '\'); event.stopPropagation();">' + heartShape + '</button>';
 
     var itemStr = '<span class="markerbg" style="background-position: 0 -' + spriteOffset + 'px;"></span>' +
                 '<div class="info">' +
@@ -134,12 +137,12 @@ function getListItem(index, places) {
     return el;
 }
 
-// 찜하기 토글 함수 (카카오 ID 처리 추가)
+// 찜하기 토글 함수 (서버 통신)
 function toggleBookmark(btn, name, addr, url, phone, kakaoId) {
     var currentText = $(btn).text().trim();
     var isEmpty = (currentText === '♡');
     
-    // 1. 화면 먼저 변경 (UX)
+    // 1. 화면 먼저 변경 (UX) - 빠르게 반응
     if(isEmpty) {
         $(btn).text('♥');
         $(btn).css({transform: "scale(1.3)", transition: "0.2s"});
@@ -158,7 +161,7 @@ function toggleBookmark(btn, name, addr, url, phone, kakaoId) {
             place_addr: addr,
             place_url: url,
             place_phone: phone,
-            kakao_id: kakaoId // ★ 필수 전송
+            kakao_id: kakaoId
         },
         success: function(response) {
             var res = response.trim();
@@ -166,18 +169,18 @@ function toggleBookmark(btn, name, addr, url, phone, kakaoId) {
             if(res === "login_needed") {
                 alert("로그인이 필요합니다.");
                 location.href = ctxPath + "/login/login_form.jsp";
-                $(btn).text(isEmpty ? '♡' : '♥'); // 실패 시 롤백
+                $(btn).text(isEmpty ? '♡' : '♥'); // 원래대로 복구
             } 
             else if(res === "added") {
-                // 성공: Set에도 ID 추가 (새로고침 없이 상태 유지)
+                // 성공 시 Set에도 추가 (새로고침 전까지 유지)
                 if(typeof myJjimSet !== 'undefined') myJjimSet.add(kakaoId);
             }
             else if(res === "removed") {
-                // 성공: Set에서 ID 제거
+                // 삭제 시 Set에서 제거
                 if(typeof myJjimSet !== 'undefined') myJjimSet.delete(kakaoId);
             }
             else if(res === "error") {
-                alert("오류가 발생했습니다.");
+                alert("처리 중 오류가 발생했습니다.");
                 $(btn).text(isEmpty ? '♡' : '♥'); // 롤백
             }
         },

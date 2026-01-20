@@ -1,22 +1,15 @@
 <%@page import="com.team.project.dto.BookmarkDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="com.team.project.dao.BookmarkDAO"%>
-<%@page import="com.team.project.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     String ctxPath = request.getContextPath();
     request.setCharacterEncoding("UTF-8");
 
     // 1. 로그인 확인
-    String myId = null;
-    Object loginObj = session.getAttribute("loginMember");
-    if (loginObj instanceof MemberDTO) {
-        myId = ((MemberDTO) loginObj).getMemberId();
-    } else if (loginObj instanceof String) {
-        myId = (String) loginObj;
-    }
+    String myId = (String) session.getAttribute("member_id");
 
-    // 2. 내 찜 목록 가져오기 (수정됨)
+    // 2. 내 찜 목록 가져오기 (카카오 ID 수집용)
     StringBuilder myBookmarkIds = new StringBuilder();
     
     if (myId != null) {
@@ -37,15 +30,16 @@
     <meta charset="UTF-8">
     <title>맛집지도 - 검색</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="<%= ctxPath %>/map/map_main.css?v=3">
+    <link rel="stylesheet" href="<%= ctxPath %>/map/map_main.css?v=4">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d6ec00692a6f465a841ee2f2e06d862&libraries=services"></script>
-    <script src="<%= ctxPath %>/map/map_main.js?v=<%= System.currentTimeMillis() %>" defer></script>
     
     <script>
-        // 서버에서 가져온 찜 목록(Kakao ID)을 JS Set으로 변환
+        // 서버 데이터를 JS 변수로 변환
         const myJjimSet = new Set([<%= myBookmarkIds.toString() %>]);
         const ctxPath = "<%= ctxPath %>"; 
     </script>
+    
+    <script src="<%= ctxPath %>/map/map_main.js?v=<%= System.currentTimeMillis() %>" defer></script>
 </head>
 <body>
     <jsp:include page="/header/header.jsp" />
@@ -57,7 +51,7 @@
             <div class="option">
                 <div>
                     <form onsubmit="searchPlaces(); return false;">
-                        <b>키워드 : </b><input type="text" value="강남" id="keyword" size="15"> 
+                        <b>키워드 : </b><input type="text" value="강남 맛집" id="keyword" size="15"> 
                         <button type="submit">검색하기</button>
                     </form>
                 </div>
