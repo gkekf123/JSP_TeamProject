@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import com.team.project.dto.MemberDTO;
 import com.team.project.util.DBConn;
 
-public class MemberDAO {
+public class MemberDAO_old {
 
     DBConn db = new DBConn();
     
