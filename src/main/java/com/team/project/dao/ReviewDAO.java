@@ -26,7 +26,7 @@ public class ReviewDAO {
 			pstmt.setString(3, dto.getMemberName());
 			pstmt.setString(4, dto.getMemberImg());
 			pstmt.setString(5, dto.getReviewContent());
-			pstmt.setString(6, dto.getReviewRating());
+			pstmt.setInt(6, dto.getReviewRating());
 			pstmt.setTimestamp(7, dto.getReviewCreateAt());
 			
 			pstmt.execute();
@@ -61,7 +61,7 @@ public class ReviewDAO {
 				dto.setMemberName(rs.getString("member_name"));
 				dto.setMemberImg(rs.getString("member_img"));
 				dto.setReviewContent(rs.getString("review_content"));
-				dto.setReviewRating(rs.getString("review_rating"));
+				dto.setReviewRating(rs.getInt("review_rating"));
 				dto.setReviewCreateAt(rs.getTimestamp("review_create_at"));
 				
 				list.add(dto);
@@ -118,7 +118,7 @@ public class ReviewDAO {
 				dto.setMemberName(rs.getString("member_name"));
 				dto.setMemberImg(rs.getString("member_img"));
 				dto.setReviewContent(rs.getString("review_content"));
-				dto.setReviewRating(rs.getString("review_rating"));
+				dto.setReviewRating(rs.getInt("review_rating"));
 				dto.setReviewUpdateAt(rs.getTimestamp("review_update_at"));
 			}
 		} catch (SQLException e) {

@@ -86,6 +86,10 @@
 
 <!-- 슬라이더 JS -->
 <script src="<%= ctxPath %>/store/store_detail.js" defer></script>
+
+<!-- 지도 -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d6ec00692a6f465a841ee2f2e06d862&libraries=services"></script>
+
 </head>
 
 <body>
@@ -306,6 +310,16 @@
     	<button class="review-more-btn" onclick="showMoreReviews()">더보기</button>
 	<% } %>
 
+</div>
+
+
+<!-- 지도 -->
+<div class="map-section">
+	<div class="map-header">
+		<h3>지도</h3>
+	</div>
+	
+	<div id="map" style="width:100%; height:350px; border-radius:10px;"></div>
 </div>
 	
     
