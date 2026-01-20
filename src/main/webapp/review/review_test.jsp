@@ -6,10 +6,14 @@ String ctxPath = request.getContextPath();
 String loginId = (String)session.getAttribute("login_id");
 //int storeIdx = request.getParameter("storeIdx");
 int storeIdx = 5; // 예시: DB에서 가져온 가게 번호
-ReviewDAO dao = new ReviewDAO();
-int reviewCount = dao.countReview(storeIdx) +1 ; 
-request.setAttribute("reviewCount", reviewCount);
+ReviewDAO reviewDao = new ReviewDAO();
+int reviewCount = reviewDao.countReview(storeIdx);
+int reviewOrder = reviewCount +1 ; 
+request.setAttribute("reviewOrder", reviewOrder);
+
 %>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -22,7 +26,7 @@ request.setAttribute("reviewCount", reviewCount);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <style type="text/css">
-	.btn{
+	.review-write-btn{
 		margin-top: 60px;
 	}
 </style>
@@ -31,7 +35,7 @@ request.setAttribute("reviewCount", reviewCount);
 <body>
     <jsp:include page="/header/header.jsp" />
 
-	<button class="btn btn-dark"
+	<button class="review-write-btn"
 		id="reviewBtn"
 		data-bs-toggle="modal"
         data-bs-target="#reviewModal"
@@ -42,6 +46,9 @@ request.setAttribute("reviewCount", reviewCount);
 	<!-- data-login="%= (loginId != null) %>"  -->
 	
 	<jsp:include page="/review/review_write.jsp"/>
+	
+	<div id="reviewCount"><%=reviewCount%></div>
+
 
     <jsp:include page="/footer/footer.jsp" />
 </body>

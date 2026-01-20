@@ -15,13 +15,14 @@
     request.setCharacterEncoding("UTF-8");
     String ctxPath = request.getContextPath();
 
-    String storeIdxParam = request.getParameter("idx");
+	String storeIdxParam = request.getParameter("idx");
     if (storeIdxParam == null) {
         response.sendRedirect(ctxPath + "/main.jsp");
         return;
     }
 
     long storeIdx = Long.parseLong(storeIdxParam);
+    
 
     StoreDetailDAO dao = new StoreDetailDAO();
     StoreDTO dto = dao.selectDetailIntro(storeIdx);
@@ -31,7 +32,7 @@
         return;
     }
     
-    
+
     //로그인할시 메뉴추가 보임
     boolean isAdmin = false;
     MemberDTO loginMember = null;
@@ -51,11 +52,11 @@
     
     //리뷰 불러오기
     ReviewDAO reviewDao=new ReviewDAO();
-    List<ReviewDTO> reviewList=reviewDao.selectReview((int)storeIdx);
+    List<ReviewDTO> reviewList=reviewDao.selectReview(storeIdx);
     
     //평점 불러오기
-    Double avgRating = reviewDao.avgReview((int)storeIdx);
-    int reviewCount = (reviewList != null) ? reviewList.size() : 0;
+    Double avgRating = reviewDao.avgReview(storeIdx);
+    int reviewCount = reviewDao.countReview(storeIdx);
     
     //찜하기 여부 확인
     boolean isBookmarked = false;
@@ -64,6 +65,9 @@
         isBookmarked = bookmarkDao.isBookmarked(loginMember.getMemberId(), (int)storeIdx);
     }
     
+	//리뷰
+    int reviewOrder = reviewCount +1 ; 
+	request.setAttribute("reviewOrder", reviewOrder);
 %>
 
 <!DOCTYPE html>
@@ -154,7 +158,7 @@
                 <div class="info-row">
 				    <i class="bi bi-star-fill"></i>
 				    <p class="store-rating">
-				        <%= String.format("%.1f", avgRating) %> (<%= reviewCount %>)
+				        <%= String.format("%.1f", avgRating) %> <span id="reviewCount">(<%= reviewCount %>)</span> 
 				    </p>
 				</div>
 
@@ -233,11 +237,17 @@
     <div class="review-header">
         <h3>리뷰</h3>
 
-        <% if (loginMember != null) { %>
-            <button class="review-write-btn" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                리뷰쓰기
-            </button>
-        <% } %>
+		<button class="review-write-btn"
+			id="reviewBtn"
+			data-bs-toggle="modal"
+        	data-bs-target="#reviewModal"
+        	data-store-idx="<%=storeIdx%>">
+        	<!-- data-login="< = (loginId != null) %>"  -->
+    		리뷰 쓰기
+		</button>
+		
+		<jsp:include page="/review/review_write.jsp"/>
+
     </div>
 
     <% if (reviewList == null || reviewList.isEmpty()) { %>
@@ -279,7 +289,7 @@
                     <%= r.getReviewContent() %>
                 </p>
 
-                <span class="review-date"><%= r.getReviewCreateAt() %></span>
+                <span class="review-date"><%= r.getReviewCreatedAt() %></span>
             </div>
 
             <!-- 내 리뷰일 때만 -->
@@ -317,10 +327,6 @@
     <jsp:param name="storeIdx" value="<%= storeIdx %>" />
 </jsp:include>
 
-<jsp:include page="../review/review_write.jsp">
-    <jsp:param name="storeIdx" value="<%= storeIdx %>" />
-</jsp:include>
-
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -349,5 +355,14 @@ function deleteReview(reviewIdx, storeIdx) {
 }
 </script>
 
+<!-- ===== Toast 메시지 ===== -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999">
+  <div id="msgToast" class="toast align-items-center border-0" role="alert">
+    <div class="d-flex">
+      <div id="toastBody" class="toast-body"></div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

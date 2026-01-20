@@ -24,7 +24,7 @@ public class ReviewDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, dto.getStoreIdx());
+			pstmt.setLong(1, dto.getStoreIdx());
 			pstmt.setString(2, dto.getMemberId());
 			pstmt.setString(3, dto.getMemberName());
 			pstmt.setString(4, dto.getMemberImg());
@@ -47,7 +47,7 @@ public class ReviewDAO {
 		return reviewResult;
 	}
 	
-	public List<ReviewDTO> selectReview(int storeIdx){
+	public List<ReviewDTO> selectReview(long storeIdx){
 		List<ReviewDTO> list=new ArrayList<ReviewDTO>();
 		
 		Connection conn=db.getConnection();
@@ -58,14 +58,14 @@ public class ReviewDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, storeIdx);
+			pstmt.setLong(1, storeIdx);
 			rs=pstmt.executeQuery();
 			
 			while(rs.next()) {
 				ReviewDTO dto=new ReviewDTO();
 				
 				dto.setReviewIdx(rs.getLong("review_idx"));
-				dto.setStoreIdx(rs.getInt("store_idx"));
+				dto.setStoreIdx(rs.getLong("store_idx"));
 				dto.setMemberId(rs.getString("member_id"));
 				dto.setMemberName(rs.getString("member_name"));
 				dto.setMemberImg(rs.getString("member_img"));
@@ -90,7 +90,7 @@ public class ReviewDAO {
 		return list;
 	}
 	
-	public void deleteReview(long reviewIdx, int memberId) {
+	public void deleteReview(long reviewIdx, String memberId) {
 		
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
@@ -100,7 +100,7 @@ public class ReviewDAO {
 		try {
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setLong(1, reviewIdx);
-			pstmt.setInt(2, memberId);
+			pstmt.setString(2, memberId);
 			
 			pstmt.execute();
 		} catch (SQLException e) {
@@ -127,7 +127,7 @@ public class ReviewDAO {
 			
 			if(rs.next()) {
 				dto.setReviewIdx(rs.getLong("review_idx"));
-				dto.setStoreIdx(rs.getInt("store_idx"));
+				dto.setStoreIdx(rs.getLong("store_idx"));
 				dto.setMemberId(rs.getString("member_id"));
 				dto.setMemberName(rs.getString("member_name"));
 				dto.setMemberImg(rs.getString("member_img"));
@@ -150,7 +150,7 @@ public class ReviewDAO {
 		return dto;
 	}
 	
-	public Double avgReview(int storeIdx) {
+	public Double avgReview(long storeIdx) {
 		Double avgRating=null;
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
@@ -160,7 +160,7 @@ public class ReviewDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, storeIdx);
+			pstmt.setLong(1, storeIdx);
 			rs=pstmt.executeQuery();
 			
 			if(rs.next()) {
@@ -178,7 +178,7 @@ public class ReviewDAO {
 		return avgRating;
 	}
 	
-	public int countReview(int storeIdx) {
+	public int countReview(long storeIdx) {
 		
 		int reviewCount=0;
 		
@@ -190,7 +190,7 @@ public class ReviewDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, storeIdx);
+			pstmt.setLong(1, storeIdx);
 			rs=pstmt.executeQuery();
 			
 			if(rs.next()) {

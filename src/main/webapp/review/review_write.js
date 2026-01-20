@@ -1,8 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
 	
+	function showToast(message, type = "success") {
+	    const toastEl = document.getElementById("msgToast");
+	    const body = document.getElementById("toastBody");
 
-/*	
-	// ================== 로그인 확인 ==================
+	    toastEl.className = "toast align-items-center border-0";
+
+	    if (type === "success") toastEl.classList.add("text-bg-success");
+	    if (type === "error") toastEl.classList.add("text-bg-danger");
+	    if (type === "warn") toastEl.classList.add("text-bg-warning");
+
+	    body.innerText = message;
+
+	    const toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+	    toast.show();
+	}
+	
+	// ================== 로그인 확인 - 프론트 ==================
+	/*	
 	const reviewBtn = document.getElementById("reviewBtn");
 
 	reviewBtn.addEventListener("click", function (e) {
@@ -11,11 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	    if (!isLogin) {
 	        e.preventDefault(); // 모달 안 열리게
 	        alert("로그인이 필요합니다.");
-	        location.href = ctxPath + "/login/login.jsp"; // 원하면 이동
+	        location.href = ctxPath + "/login/login_form.jsp"; 
 	        return;
 	    }
 	});
-*/
+	*/
+	
 
 	// ================== 모달 열기==================
     const reviewModal = document.getElementById('reviewModal');
@@ -212,30 +228,48 @@ document.addEventListener("DOMContentLoaded", () => {
         	contentType: false, // 폼 데이터의 Content-Type을 자동 설정
         	dataType: "json",  
         	success: function (res) {
-								
-				/*
-				if (res.reviewResult === "login_required") {
-				    alert("로그인이 필요합니다.");
-				    location.href = "/login/login.jsp"; // 로그인 페이지 경로 맞게 수정
-				    return;
-				}
-				*/
 				
 
             	if (res.reviewResult === "success") {
-                	// 최신 리뷰 수 반영
-                	$("#reviewCount").text(res.reviewCount);
-                	alert("리뷰 등록 완료!");
+					
+					//로그인 확인 - 프론트(서버 결과 처리)
+					/*					
+					if (res.reviewResult === "login_required") {
+					    showToast("로그인이 필요합니다.", "warn");
+					    setTimeout(() => {
+					        location.href = ctxPath + "/login/login_form.jsp";
+					    }, 1200);
+					    return;
+					}
+					*/
+
+					document.getElementById('reviewCount').innerText = res.reviewCount;
+					document.getElementById('reviewOrder').innerText = res.reviewOrder;
+					
+					// ⭐ 평균 평점 갱신
+					const ratingEl = document.querySelector(".store-rating");
+					ratingEl.innerText =
+					    res.avgRating.toFixed(1) + " (" + res.reviewCount + ")";
+					
+					// 리뷰 목록 맨 위에 추가
+					const reviewSection = document.querySelector(".review-section");
+					const header = reviewSection.querySelector(".review-header");
+
+					header.insertAdjacentHTML("afterend", res.reviewHtml);
 					
 					allowClose = true;
+					
+					showToast("리뷰가 등록되었습니다 😊", "success");
 
-                	const modal = bootstrap.Modal.getInstance(
-                    	document.getElementById("reviewModal"));
-						
-                	modal.hide();
+					// 모달 닫기
+					const modal = bootstrap.Modal.getInstance(
+					    document.getElementById("reviewModal"));
+					modal.hide();
+					
+
 
             	} else {
-                	alert("리뷰 등록 실패");
+                	showToast("리뷰 등록 실패", "error");
             	}
         	},
         	error: function () {

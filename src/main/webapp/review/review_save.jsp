@@ -16,13 +16,16 @@ request.setCharacterEncoding("UTF-8");
 JSONObject ob = new JSONObject();
 
 
-/* String  memberId = (String) session.getAttribute("login_id"); // logina_action에서 login_id 사용
+/* 
+	//로그인 확인 - 서버
+	String loginOk = (String) session.getAttribute("loginok");
+	String memberId = (String) session.getAttribute("member_id");
 
-if(memberId == null){
-    ob.put("reviewResult", "login_required");
-    out.print(ob.toString());
-    return;
-}   
+	if (!"yes".equals(loginOk) || memberId == null) {
+    	ob.put("reviewResult", "login_required");
+    	out.print(ob.toString());
+    	return;
+	}
 */
 
 
@@ -60,10 +63,20 @@ try{
     // ===== DTO =====
     ReviewDTO dto = new ReviewDTO();
     dto.setStoreIdx(storeIdx);
-    dto.setMemberId("admin"); //임의지정
     
+    //테스트용
+    dto.setMemberId("admin"); //임의지정
 	dto.setMemberName("테스트"); //임의지정
-	dto.setMemberImg("/images/logo.png"); //임의지정
+	dto.setMemberImg("logo.png"); //임의지정
+	
+	/* 	
+	MemberDAO mdao = new MemberDAO();
+	MemberDTO mdto = mdao.getMyInfo(memberId);
+	dto.setMemberId(memberId);
+	dto.setMemberName(mdto.getMember_name());
+	dto.setMemberImg(mdto.getMember_img());
+	*/
+
 	
     dto.setReviewRating(reviewRating);
     dto.setReviewContent(reviewContent);
@@ -84,9 +97,42 @@ try{
     int reviewResult = dao.insertReview(dto);
 
     if (reviewResult > 0) {
-        int reviewCount = dao.countReview(storeIdx) + 1;
+    	int reviewCount = dao.countReview(storeIdx);
+        double avgRating = dao.avgReview(storeIdx);
+        
+        String profileHtml;
+
+        if(dto.getMemberImg() != null && !dto.getMemberImg().isEmpty()) {
+            profileHtml =
+                "<img src='" + request.getContextPath() + "/images/profile/" + dto.getMemberImg() + "'>";
+        } else {
+            profileHtml =
+                "<div class='profile-circle'><i class='bi bi-person-circle'></i></div>";
+        }
+    	
+    	String reviewHtml =
+    		    "<div class='review-item'>" +
+
+    		    " <div class='review-profile'>" +
+    		          profileHtml +
+    		    " </div>" +
+
+    	        " <div class='review-content'>" +
+    	        "   <div class='review-top'>" +
+    	        "     <span class='review-writer'>" + dto.getMemberName() + "</span>" +
+    	        "     <span class='review-rating'>평점 " + dto.getReviewRating() + " ★★★★★</span>" +
+    	        "   </div>" +
+    	        "   <p class='review-text'>" + dto.getReviewContent() + "</p>" +
+    	        "   <span class='review-date'>방금 전</span>" +
+    	        " </div>" +
+
+    	        "</div>";
+    	       
         ob.put("reviewResult", "success");
         ob.put("reviewCount", reviewCount);
+        ob.put("reviewOrder", reviewCount +1 );
+        ob.put("reviewHtml", reviewHtml);
+        ob.put("avgRating", avgRating);
     } else {
         ob.put("reviewResult", "fail");
     }
@@ -96,6 +142,5 @@ try{
     ob.put("reviewResult", "fail");
 	
 }
-
 %>
 <%=ob.toString()%>

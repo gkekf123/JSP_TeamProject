@@ -1,8 +1,9 @@
+<%@page import="com.team.project.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
 String ctxPath = request.getContextPath();
-Integer reviewCount = (Integer)request.getAttribute("reviewCount");
+MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");
 %>
 
 <script>
@@ -65,9 +66,9 @@ Integer reviewCount = (Integer)request.getAttribute("reviewCount");
                     </div>
 
                     <!-- 리뷰 순서 -->
-                    <div class="review-count-wrapper">
-                        <span class="review-count-text">
-                            😊 이 매장의 <span id="reviewCount"><%=reviewCount%></span>번째 리뷰입니다
+                    <div class="review-order-wrapper">
+                        <span class="review-order-text">
+                            😊 이 매장의 <span id="reviewOrder"><%=request.getAttribute("reviewOrder")%></span>번째 리뷰입니다
                         </span>
                     </div>
                 </div>

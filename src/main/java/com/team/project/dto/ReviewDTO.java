@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class ReviewDTO {
 	private long reviewIdx;
-	private int storeIdx;
+	private long storeIdx;
 	private String memberId;
 	private String memberName;
 	private String memberImg;
@@ -23,10 +23,10 @@ public class ReviewDTO {
 	public void setReviewIdx(long reviewIdx) {
 		this.reviewIdx = reviewIdx;
 	}
-	public int getStoreIdx() {
+	public long getStoreIdx() {
 		return storeIdx;
 	}
-	public void setStoreIdx(int storeIdx) {
+	public void setStoreIdx(long storeIdx) {
 		this.storeIdx = storeIdx;
 	}
 	public String getMemberId() {

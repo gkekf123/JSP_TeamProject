@@ -15,7 +15,7 @@ public class StoreDetailDAO {
 	DBConn db=new DBConn();
 	
 	//가게 정보 출력
-	public StoreDTO selectDetailIntro(Long storeIdx) {
+	public StoreDTO selectDetailIntro(long storeIdx) {
 		StoreDTO dto=new StoreDTO();
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
