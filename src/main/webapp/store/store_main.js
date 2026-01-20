@@ -57,7 +57,7 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
             var res = response.trim();
             if(res === "login_needed") {
                 alert("로그인이 필요합니다.");
-                location.href = ctxPath + "/login/login.jsp";
+                location.href = ctxPath + "/login/login_form.jsp";
                 $(btn).text(isEmpty ? '♡' : '♥'); 
             } else if(res === "error") {
                 alert("처리 실패");

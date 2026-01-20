@@ -31,15 +31,15 @@ request.setCharacterEncoding("UTF-8");
 
         // DTO 세팅
         MemberDTO dto = new MemberDTO();
-        dto.setMember_name(member_name);
-        dto.setMember_id(member_id);
-        dto.setMember_pw(member_pw);
-        dto.setMember_hp(member_hp);
-        dto.setMember_addr(member_addr);
-        dto.setMember_email(member_email);
-        dto.setMember_img(member_img);
+        dto.setMemberName(member_name);
+        dto.setMemberId(member_id);
+        dto.setMemberPw(member_pw);
+        dto.setMemberHp(member_hp);
+        dto.setMemberAddr(member_addr);
+        dto.setMemberEmail(member_email);
+        dto.setMemberImg(member_img);
 
-        dto.setMember_role("USER");
+        dto.setMemberRole("USER");
         
         // DB insert
         MemberDAO dao = new MemberDAO();

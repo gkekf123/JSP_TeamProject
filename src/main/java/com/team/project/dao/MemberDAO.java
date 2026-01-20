@@ -64,10 +64,10 @@ public class MemberDAO {
 
   	        if (rs.next()) {
   	            dto = new MemberDTO();
-  	            dto.setMember_id(rs.getString("member_id"));
-  	            dto.setMember_pw(rs.getString("member_pw"));
-  	            dto.setMember_role(rs.getString("member_role"));
-  	            dto.setMember_name(rs.getString("member_name"));
+  	            dto.setMemberId(rs.getString("member_id"));
+  	            dto.setMemberPw(rs.getString("member_pw"));
+  	            dto.setMemberRole(rs.getString("member_role"));
+  	            dto.setMemberName(rs.getString("member_name"));
   	        }
 
   	    } catch (SQLException e) {
@@ -93,21 +93,21 @@ public class MemberDAO {
   	    try {
   	        pstmt = conn.prepareStatement(sql);
 
-  	        pstmt.setString(1, dto.getMember_id());
-  	        pstmt.setString(2, dto.getMember_pw());
-  	        pstmt.setString(3, dto.getMember_name());
+  	        pstmt.setString(1, dto.getMemberId());
+  	        pstmt.setString(2, dto.getMemberPw());
+  	        pstmt.setString(3, dto.getMemberName());
 
   	        // role이 없으면 USER로 강제
-  	        String role = dto.getMember_role();
+  	        String role = dto.getMemberRole();
   	        if (role == null || role.trim().isEmpty()) {
   	            role = "USER";
   	        }
   	        pstmt.setString(4, role);
 
-  	        pstmt.setString(5, dto.getMember_email());
-  	        pstmt.setString(6, dto.getMember_hp());
-  	        pstmt.setString(7, dto.getMember_addr());
-  	        pstmt.setString(8, dto.getMember_img());
+  	        pstmt.setString(5, dto.getMemberEmail());
+  	        pstmt.setString(6, dto.getMemberHp());
+  	        pstmt.setString(7, dto.getMemberAddr());
+  	        pstmt.setString(8, dto.getMemberImg());
 
   	        pstmt.executeUpdate();
 
@@ -139,13 +139,13 @@ public class MemberDAO {
             if (rs.next()) {
                 dto = new MemberDTO();
             	dto = new MemberDTO();
-                dto.setMember_id(rs.getString("member_id"));
-                dto.setMember_pw(rs.getString("member_pw"));
-                dto.setMember_name(rs.getString("member_name"));
-                dto.setMember_email(rs.getString("member_email"));
-                dto.setMember_hp(rs.getString("member_hp"));
-                dto.setMember_addr(rs.getString("member_addr"));
-                dto.setMember_joinday(rs.getTimestamp("member_joinday"));
+                dto.setMemberId(rs.getString("member_id"));
+                dto.setMemberPw(rs.getString("member_pw"));
+                dto.setMemberName(rs.getString("member_name"));
+                dto.setMemberEmail(rs.getString("member_email"));
+                dto.setMemberHp(rs.getString("member_hp"));
+                dto.setMemberAddr(rs.getString("member_addr"));
+                dto.setMemberJoinday(rs.getTimestamp("member_joinday"));
             }
 
         } catch (SQLException e) {
@@ -177,12 +177,12 @@ public class MemberDAO {
         try {
             pstmt = conn.prepareStatement(sql);
 
-            pstmt.setString(1, dto.getMember_pw());
-            pstmt.setString(2, dto.getMember_name());
-            pstmt.setString(3, dto.getMember_email());
-            pstmt.setString(4, dto.getMember_hp());
-            pstmt.setString(5, dto.getMember_addr());
-            pstmt.setString(6, dto.getMember_id());
+            pstmt.setString(1, dto.getMemberPw());
+            pstmt.setString(2, dto.getMemberName());
+            pstmt.setString(3, dto.getMemberEmail());
+            pstmt.setString(4, dto.getMemberHp());
+            pstmt.setString(5, dto.getMemberAddr());
+            pstmt.setString(6, dto.getMemberId());
 
             pstmt.executeUpdate();
 

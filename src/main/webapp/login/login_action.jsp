@@ -14,8 +14,8 @@ MemberDTO dto = dao.loginCheck(member_id, member_pw); // ⭐ DTO 리턴
 if (dto != null) {
     // 로그인 성공
     session.setAttribute("loginok", "yes");
-    session.setAttribute("member_id", dto.getMember_id());
-    session.setAttribute("member_role", dto.getMember_role()); 
+    session.setAttribute("member_id", dto.getMemberId());
+    session.setAttribute("member_role", dto.getMemberRole()); 
 
     response.sendRedirect(request.getContextPath() + "/login/logout_form.jsp");
     return;

@@ -194,10 +194,10 @@ function resetForm() {
     const form = document.getElementById("updateForm");
     // 각 input에 기본값을 세팅
     form.member_pw.value = "";
-    form.member_name.value = "<%=dto.getMember_name()%>";
-    form.member_email.value = "<%=dto.getMember_email()%>";
-    form.member_hp.value = "<%=dto.getMember_hp()%>";
-    form.member_addr.value = "<%=dto.getMember_addr()%>";
+    form.member_name.value = "<%=dto.getMemberName()%>";
+    form.member_email.value = "<%=dto.getMemberEmail()%>";
+    form.member_hp.value = "<%=dto.getMemberHp()%>";
+    form.member_addr.value = "<%=dto.getMemberAddr()%>";
     // 비밀번호 확인도 초기화
     form.member_pw_confirm.value = "";
     
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="form-row">
                 <div class="form-group">
                     <label>아이디</label>
-                    <input type="text" value="<%=dto.getMember_id()%>" readonly>
+                    <input type="text" value="<%=dto.getMemberId()%>" readonly>
                 </div>
             </div>
 
@@ -277,25 +277,25 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="form-row">
                 <div class="form-group">
                     <label>사용자명</label>
-                    <input type="text" name="member_name" value="<%=dto.getMember_name()%>">
+                    <input type="text" name="member_name" value="<%=dto.getMemberName()%>">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>전화번호</label>
-                    <input type="text" name="member_hp" value="<%=dto.getMember_hp()%>">
+                    <input type="text" name="member_hp" value="<%=dto.getMemberHp()%>">
                 </div>
                 <div class="form-group">
                     <label>이메일</label>
-                    <input type="text" name="member_email" value="<%=dto.getMember_email()%>">
+                    <input type="text" name="member_email" value="<%=dto.getMemberEmail()%>">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>주소</label>
-                    <input type="text" name="member_addr" value="<%=dto.getMember_addr()%>">
+                    <input type="text" name="member_addr" value="<%=dto.getMemberAddr()%>">
                 </div>
             </div>
 
