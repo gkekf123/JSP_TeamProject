@@ -59,11 +59,9 @@
         dto.setKakaoId(kakaoId);
         dto.setPlaceUrl(placeUrl);
         
-        // 이미지 경로 세팅 (파일명 앞에 '/' 붙여서 저장 권장)
-        // 실제 저장된 파일명만 DB에 저장
-        if(img1 != null) dto.setStoreImg("/" + img1);
-        if(img2 != null) dto.setStoreImg2("/" + img2);
-        if(img3 != null) dto.setStoreImg3("/" + img3);
+        if(img1 != null) dto.setStoreImg(img1);
+        if(img2 != null) dto.setStoreImg2(img2);
+        if(img3 != null) dto.setStoreImg3(img3);
 
         // 6. DAO 호출
         StoreDAO dao = new StoreDAO();

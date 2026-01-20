@@ -1,23 +1,13 @@
 <%@page import="java.util.List"%>
 <%@page import="com.team.project.dao.BookmarkDAO"%>
 <%@page import="com.team.project.dto.BookmarkDTO"%>
-<%@page import="com.team.project.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     request.setCharacterEncoding("UTF-8");
     String ctxPath = request.getContextPath();
 
     // 1. 로그인 체크
-    String memberId = null;
-    Object loginObj = session.getAttribute("loginMember");
-
-    if (loginObj != null) {
-        if (loginObj instanceof MemberDTO) {
-            memberId = ((MemberDTO) loginObj).getMemberId();
-        } else if (loginObj instanceof String) {
-            memberId = (String) loginObj;
-        }
-    }
+    String memberId = (String) session.getAttribute("member_id");
 
     // 비로그인 상태면 로그인 페이지로 리다이렉트
     if (memberId == null) {

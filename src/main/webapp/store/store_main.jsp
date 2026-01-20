@@ -12,6 +12,7 @@
     request.setCharacterEncoding("UTF-8");
     String ctxPath = request.getContextPath();
     
+    // 1. 파라미터 수신
     String sort = request.getParameter("sort");
     if (sort == null) sort = "latest"; 
     
@@ -22,28 +23,21 @@
         category = "all";
     }
     
+    // 2. 맛집 목록 조회
     StoreDAO dao = new StoreDAO();
     List<StoreDTO> storeList = dao.selectStoreList(sort, question, category);
     
+    // 로그인 세션 처리 로직
     boolean isAdmin = false;
-    String myId = null;
+    String myId = (String) session.getAttribute("member_id");   // 아이디 가져오기
+    String myRole = (String) session.getAttribute("member_role"); // 권한(admin) 가져오기
     
-    Object loginObj = session.getAttribute("loginMember");
-    
-    if (loginObj != null) {
-        if (loginObj instanceof MemberDTO) {
-            MemberDTO loginMember = (MemberDTO) loginObj;
-            myId = loginMember.getMemberId();
-            
-            if ("admin".equals(loginMember.getMemberRole())) { 
-                isAdmin = true;
-            }
-        } else if (loginObj instanceof String) {
-            myId = (String)loginObj;
-            if ("admin".equals(myId)) isAdmin = true;
-        }
+    // 관리자 여부 확인 (권한이 'admin'이면 true)
+    if (myRole != null && "admin".equals(myRole)) {
+        isAdmin = true;
     }
     
+    // 3. 찜 목록 조회 (로그인 한 경우에만)
     Set<Long> myBookmarkSet = new HashSet<>(); 
 
     if(myId != null) {
@@ -51,10 +45,9 @@
         myBookmarkSet = bookmarkDao.getMyBookmarkStoreIdxSet(myId);
     }
     
-    // AI 답변 로직 (검색어가 있을 때만 실행)
+    // 4. AI 답변 로직 (검색어가 있을 때만 실행)
     String answer = "";
     
-    // 사용자가 명시적으로 검색했을 때만 AI 호출 (카테고리 클릭 시엔 q가 없으므로 호출 안됨)
     if(question != null && !question.trim().isEmpty()) {
         StringBuilder prompt = new StringBuilder();
         if (storeList != null && !storeList.isEmpty()) {
@@ -69,7 +62,10 @@
         } else {
             prompt.append("사용자가 '" + question + "'에 대해 검색했는데, 우리 DB에는 관련 정보가 없어. 추천해줘.");
         }
+        
         answer = GeminiUtil.getGeminiResponse(prompt.toString());
+        
+        // 검색 로그 저장
         new SearchLogDAO().insertSearchLog(question, answer);
     }
 
@@ -99,6 +95,7 @@
 </head>
 <body>
     <jsp:include page="/header/header.jsp" />
+    
     <div class="container">
         <div class="header">
             <h1>맛집추천</h1>
@@ -112,9 +109,11 @@
             </form>
             
             <div class="header-right">
+                <%-- 관리자일 경우에만 등록 버튼 표시 --%>
                 <% if(isAdmin) { %>
                     <button type="button" class="write-btn" onclick="location.href='store_write.jsp'">맛집등록</button>
                 <% } %>
+                
                 <select id="sortFilter" onchange="changeSort()">
                     <option value="rating" <%= "rating".equals(sort) ? "selected" : "" %>>별점 높은순</option>
                     <option value="review" <%= "review".equals(sort) ? "selected" : "" %>>리뷰 많은순</option>
@@ -138,6 +137,7 @@
             </div>
             <% } %>
         </div>
+        
         <% if(question != null && !answer.isEmpty()) { %>
             <div class="ai-result-box">
                 <div class="ai-question">Q. <%= question %></div>
@@ -186,6 +186,7 @@
             <% } %>
         </div>
     </div>
+    
     <jsp:include page="/footer/footer.jsp" />
     
     </body>

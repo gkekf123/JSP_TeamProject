@@ -14,7 +14,6 @@ body {
 }
 .container {
     flex: 1;
-    
     max-width: 1000px;
     width: 90%;
     margin: 50px auto;
@@ -62,6 +61,7 @@ body {
 }
 .badge.internal { background-color: #e3f2fd; color: #1976d2; }
 .badge.external { background-color: #fff3e0; color: #f57c00; }
+
 .place-name {
     font-size: 18px;
     font-weight: bold;
@@ -103,7 +103,6 @@ body {
     cursor: pointer;
     transition: transform 0.2s;
 }
-
 .delete-btn:hover {
     transform: scale(1.2);
 }
@@ -114,6 +113,11 @@ body {
     color: #999;
     font-size: 16px;
 }
+.no-data p {
+    margin: 5px 0;
+}
+
+/* 반응형 스타일 */
 @media screen and (max-width: 900px) {
     .bookmark-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -125,17 +129,14 @@ body {
         margin: 20px auto;
         padding: 0 15px;
     }
-
     .page-title {
         font-size: 22px;
         margin-bottom: 20px;
     }
-
     .bookmark-grid {
         grid-template-columns: 1fr;
         gap: 15px;
     }
-
     .bookmark-card {
         height: auto;
         min-height: 150px;

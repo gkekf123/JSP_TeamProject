@@ -1,23 +1,14 @@
-<%@page import="com.team.project.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     // 1. 관리자 권한 체크
+    String member_role = (String) session.getAttribute("member_role");
     boolean isAdmin = false;
-    Object loginObj = session.getAttribute("loginMember");
-    
-    if (loginObj != null) {
-        if (loginObj instanceof MemberDTO) {
-            MemberDTO loginMember = (MemberDTO) loginObj;
-            if ("admin".equals(loginMember.getMemberRole())) {
-                isAdmin = true;
-            }
-        } else if (loginObj instanceof String) {
-            if ("admin".equals((String)loginObj)) {
-                isAdmin = true;
-            }
-        }
+
+    if (member_role != null && "admin".equals(member_role)) {
+        isAdmin = true;
     }
 
+    // 관리자 검증
     if (!isAdmin) {
 %>
     <script>
@@ -49,10 +40,12 @@
 </style>
 
 <script>
+    // 카카오 지도 팝업 열기
     function goKakaoPopup() {
         window.open("kakao_map_popup.jsp", "pop", "width=600,height=700,scrollbars=yes"); 
     }
 
+    // 팝업에서 데이터 받아오는 콜백 함수
     function kakaoCallBack(name, addr, tel, lat, lng, id, url) {
         document.querySelector('input[name="store_name"]').value = name;
         document.querySelector('input[name="store_addr"]').value = addr;
