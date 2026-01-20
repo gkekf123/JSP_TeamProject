@@ -25,7 +25,7 @@ String loginOk = (String) session.getAttribute("loginok");
     String ctxPath = request.getContextPath();
 
     // 비밀번호 길이에 맞춰 별표 생성
-    String memberPw = dto.getMember_pw(); 
+    String memberPw = dto.getMemberPw(); 
     String maskedPw = "*".repeat(memberPw.length());
 %>
 
@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="form-row">
             <div class="form-group">
                 <label>아이디</label>
-                <input type="text" value="<%=dto.getMember_id()%>" readonly>
+                <input type="text" value="<%=dto.getMemberId()%>" readonly>
             </div>
             
      </div>
@@ -248,29 +248,29 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="form-row">
             <div class="form-group">
                 <label>사용자명</label>
-                <input type="text" value="<%=dto.getMember_name()%>" readonly>
+                <input type="text" value="<%=dto.getMemberName()%>" readonly>
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>전화번호</label>
-                <input type="text" value="<%=dto.getMember_hp()%>" readonly>
+                <input type="text" value="<%=dto.getMemberHp()%>" readonly>
             </div>
             <div class="form-group">
                 <label>이메일</label>
-                <input type="text" value="<%=dto.getMember_email()%>" readonly>
+                <input type="text" value="<%=dto.getMemberEmail()%>" readonly>
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>주소</label>
-                <input type="text" value="<%=dto.getMember_addr()%>" readonly>
+                <input type="text" value="<%=dto.getMemberAddr()%>" readonly>
             </div>
             <div class="form-group">
                 <label>가입일</label>
-                <input type="text" value="<%=dto.getMember_joinday()%>" readonly>
+                <input type="text" value="<%=dto.getMemberJoinday()%>" readonly>
             </div>
         </div>
 

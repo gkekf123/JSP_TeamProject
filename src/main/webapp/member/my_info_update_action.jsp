@@ -20,12 +20,12 @@ request.setCharacterEncoding("utf-8");
 	String member_addr = request.getParameter("member_addr");
 	
 	MemberDTO dto = new MemberDTO();
-	dto.setMember_id(member_id);
-	dto.setMember_pw(member_pw);
-	dto.setMember_name(member_name);
-	dto.setMember_email(member_email);
-	dto.setMember_hp(member_hp);
-	dto.setMember_addr(member_addr);
+	dto.setMemberId(member_id);
+	dto.setMemberPw(member_pw);
+	dto.setMemberName(member_name);
+	dto.setMemberEmail(member_email);
+	dto.setMemberHp(member_hp);
+	dto.setMemberAddr(member_addr);
 	
 	MemberDAO dao = new MemberDAO();
 	dao.updateMyInfo(dto);

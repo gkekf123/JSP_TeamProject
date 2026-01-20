@@ -165,7 +165,7 @@ function toggleBookmark(btn, name, addr, url, phone, kakaoId) {
             
             if(res === "login_needed") {
                 alert("로그인이 필요합니다.");
-                location.href = ctxPath + "/login/login.jsp";
+                location.href = ctxPath + "/login/login_form.jsp";
                 $(btn).text(isEmpty ? '♡' : '♥'); // 실패 시 롤백
             } 
             else if(res === "added") {

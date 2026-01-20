@@ -77,7 +77,7 @@ body {
     <div class="login-title">로그인 상태</div>
 
     <div style="text-align:center; margin-bottom:25px;">
-        <b><%=dto.getMember_name()%></b> 님이 로그인 중입니다
+        <b><%=dto.getMemberName()%></b> 님이 로그인 중입니다
     </div>
 
     <button class="login-btn"
