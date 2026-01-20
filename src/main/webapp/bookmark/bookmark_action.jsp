@@ -29,6 +29,9 @@
     String addr = request.getParameter("place_addr");
     String url = request.getParameter("place_url");   
     String phone = request.getParameter("place_phone"); 
+    
+    // 카카오 ID 수신
+    String kakaoId = request.getParameter("kakao_id");
 
     int storeIdx = (storeIdxStr != null && !storeIdxStr.isEmpty()) ? Integer.parseInt(storeIdxStr) : 0;
 
@@ -37,7 +40,7 @@
 
     // 내부 가게(Store)와 외부 가게(Map) 구분 로직
     if(storeIdx > 0) {
-        // Store 기능
+        // Store 기능 (이미 내부 가게로 등록된 경우)
         isExist = dao.isBookmarked(member_id, storeIdx);
         
         if(isExist) {
@@ -45,14 +48,13 @@
             if(result > 0) out.print("removed");
             else out.print("error");
         } else {
-            int result = dao.addBookmark(member_id, storeIdx, name, addr, url, phone);
+            int result = dao.addBookmark(member_id, storeIdx, name, addr, url, phone, kakaoId);
             if(result > 0) out.print("added");
             else out.print("error");
         }
         
     } else {
-        // Map 기능
-        // DAO를 고치지 않고 JSP에서 직접 URL 중복 확인 및 삭제 처리
+        // Map 기능 (지도에서 클릭한 경우)
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -60,7 +62,7 @@
         try {
             conn = DBConn.getConnection();
             
-            // 2-1. URL로 이미 찜했는지 확인
+            // 2-1. URL로 이미 찜했는지 확인 (외부 가게는 store_idx가 없거나 0이므로 URL로 중복 체크)
             String checkSql = "SELECT count(*) FROM bookmark WHERE member_id=? AND place_url=?";
             pstmt = conn.prepareStatement(checkSql);
             pstmt.setString(1, member_id);
@@ -86,8 +88,8 @@
                 else out.print("error");
                 
             } else {
-                // 없으므로 추가
-                int result = dao.addBookmark(member_id, 0, name, addr, url, phone);
+                int result = dao.addBookmark(member_id, 0, name, addr, url, phone, kakaoId);
+                
                 if(result > 0) out.print("added");
                 else out.print("error");
             }

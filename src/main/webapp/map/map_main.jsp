@@ -16,17 +16,17 @@
         myId = (String) loginObj;
     }
 
-    // 2. 내 찜 목록(외부 가게) 가져오기 -> JS에서 쓰기 위해 문자열 생성
-    StringBuilder myBookmarkUrls = new StringBuilder();
+    // 2. 내 찜 목록 가져오기 (수정됨)
+    StringBuilder myBookmarkIds = new StringBuilder();
+    
     if (myId != null) {
         BookmarkDAO dao = new BookmarkDAO();
         List<BookmarkDTO> list = dao.selectMyBookmarkList(myId);
         
         for (BookmarkDTO dto : list) {
-            // 외부 가게(store_idx == 0)이고 URL이 있는 경우
-            if (dto.getStoreIdx() == 0 && dto.getPlaceUrl() != null) {
-                if (myBookmarkUrls.length() > 0) myBookmarkUrls.append(",");
-                myBookmarkUrls.append("\"").append(dto.getPlaceUrl()).append("\"");
+            if (dto.getKakaoId() != null && !dto.getKakaoId().isEmpty()) {
+                if (myBookmarkIds.length() > 0) myBookmarkIds.append(",");
+                myBookmarkIds.append("\"").append(dto.getKakaoId()).append("\"");
             }
         }
     }
@@ -39,16 +39,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="<%= ctxPath %>/map/map_main.css?v=3">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d6ec00692a6f465a841ee2f2e06d862&libraries=services"></script>
-    <script src="<%= ctxPath %>/map/map_main.js?v=4" defer></script>
+    <script src="<%= ctxPath %>/map/map_main.js?v=<%= System.currentTimeMillis() %>" defer></script>
     
     <script>
-        // 서버에서 가져온 찜 목록(URL)을 JS Set으로 변환 (O(1) 검색용)
-        const myJjimSet = new Set([<%= myBookmarkUrls.toString() %>]);
-        const ctxPath = "<%= ctxPath %>"; // JS에서 경로 사용
+        // 서버에서 가져온 찜 목록(Kakao ID)을 JS Set으로 변환
+        const myJjimSet = new Set([<%= myBookmarkIds.toString() %>]);
+        const ctxPath = "<%= ctxPath %>"; 
     </script>
 </head>
 <body>
-
     <jsp:include page="/header/header.jsp" />
 
     <main class="map_wrap">
@@ -58,7 +57,7 @@
             <div class="option">
                 <div>
                     <form onsubmit="searchPlaces(); return false;">
-                        <b>키워드 : </b><input type="text" value="강남 맛집" id="keyword" size="15"> 
+                        <b>키워드 : </b><input type="text" value="강남" id="keyword" size="15"> 
                         <button type="submit">검색하기</button>
                     </form>
                 </div>
@@ -71,6 +70,5 @@
     </main>
     
     <jsp:include page="/footer/footer.jsp" />
-    
 </body>
 </html>

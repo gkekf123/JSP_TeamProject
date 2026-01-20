@@ -89,7 +89,7 @@ function displayPlaces(places) {
     map.setBounds(bounds); 
 }
 
-// [리스트 아이템 생성 및 하트 표시]
+// 리스트 아이템 생성 및 하트 표시 (ID 기준)
 function getListItem(index, places) {
     var el = document.createElement('li');
     var spriteOffset = 10 + (index * 46);
@@ -98,20 +98,20 @@ function getListItem(index, places) {
     var safeName = places.place_name.replace(/'/g, "\\'");
     var safeAddr = places.road_address_name ? places.road_address_name.replace(/'/g, "\\'") : "";
     
-    // 1. 내 찜 목록(Set)에 해당 URL이 있는지 확인하여 하트 모양 결정
-    // (map_main.jsp의 script에서 정의한 myJjimSet 사용)
+    // 1. 내 찜 목록(Set)에 해당 ID가 있는지 확인
     var isBookmarked = false;
     if(typeof myJjimSet !== 'undefined') {
-        isBookmarked = myJjimSet.has(places.place_url);
+        isBookmarked = myJjimSet.has(places.id);
     }
     var heartShape = isBookmarked ? '♥' : '♡';
 
-    // 2. 토글 버튼 생성 (event.stopPropagation()으로 부모 클릭 방지)
+    // 2. 토글 버튼 생성
     var saveBtn = '<button class="jjim-btn" onclick="toggleBookmark(this, \'' + 
                   safeName + '\', \'' + 
                   safeAddr + '\', \'' + 
                   places.place_url + '\', \'' + 
-                  places.phone + '\'); event.stopPropagation();">' + heartShape + '</button>';
+                  places.phone + '\', \'' + 
+                  places.id + '\'); event.stopPropagation();">' + heartShape + '</button>';
 
     var itemStr = '<span class="markerbg" style="background-position: 0 -' + spriteOffset + 'px;"></span>' +
                 '<div class="info">' +
@@ -134,12 +134,12 @@ function getListItem(index, places) {
     return el;
 }
 
-// [찜하기 토글 함수]
-function toggleBookmark(btn, name, addr, url, phone) {
+// 찜하기 토글 함수 (카카오 ID 처리 추가)
+function toggleBookmark(btn, name, addr, url, phone, kakaoId) {
     var currentText = $(btn).text().trim();
     var isEmpty = (currentText === '♡');
     
-    // 1. 화면 먼저 변경
+    // 1. 화면 먼저 변경 (UX)
     if(isEmpty) {
         $(btn).text('♥');
         $(btn).css({transform: "scale(1.3)", transition: "0.2s"});
@@ -148,16 +148,17 @@ function toggleBookmark(btn, name, addr, url, phone) {
         $(btn).text('♡');
     }
 
-    // 2. 서버 요청 (ctxPath 변수는 JSP에서 설정됨)
+    // 2. 서버 요청
     $.ajax({
         type: "POST",
         url: ctxPath + "/bookmark/bookmark_action.jsp",
         data: {
-            store_idx: 0, // 맵 검색 결과는 외부 가게이므로 0
+            store_idx: 0,
             place_name: name,
             place_addr: addr,
             place_url: url,
-            place_phone: phone
+            place_phone: phone,
+            kakao_id: kakaoId // ★ 필수 전송
         },
         success: function(response) {
             var res = response.trim();
@@ -165,15 +166,15 @@ function toggleBookmark(btn, name, addr, url, phone) {
             if(res === "login_needed") {
                 alert("로그인이 필요합니다.");
                 location.href = ctxPath + "/login/login.jsp";
-                $(btn).text(isEmpty ? '♡' : '♥'); // 롤백
+                $(btn).text(isEmpty ? '♡' : '♥'); // 실패 시 롤백
             } 
             else if(res === "added") {
-                // 성공: Set에도 추가 (새로고침 없이 상태 유지 위해)
-                if(typeof myJjimSet !== 'undefined') myJjimSet.add(url);
+                // 성공: Set에도 ID 추가 (새로고침 없이 상태 유지)
+                if(typeof myJjimSet !== 'undefined') myJjimSet.add(kakaoId);
             }
             else if(res === "removed") {
-                // 성공: Set에서 제거
-                if(typeof myJjimSet !== 'undefined') myJjimSet.delete(url);
+                // 성공: Set에서 ID 제거
+                if(typeof myJjimSet !== 'undefined') myJjimSet.delete(kakaoId);
             }
             else if(res === "error") {
                 alert("오류가 발생했습니다.");

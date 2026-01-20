@@ -11,6 +11,7 @@ public class BookmarkDTO {
     private String placeUrl;    // place_url
     private String placePhone;  // place_phone
     private Timestamp likeDate; // like_date
+    private String kakaoId;     // kakao_id
 
     public BookmarkDTO() {}
 
@@ -62,9 +63,14 @@ public class BookmarkDTO {
     public void setLikeDate(Timestamp likeDate) {
         this.likeDate = likeDate;
     }
-
+    public String getKakaoId() {
+        return kakaoId;
+    }
+    public void setKakaoId(String kakaoId) {
+        this.kakaoId = kakaoId;
+    }
     @Override
     public String toString() {
-        return "BookmarkDTO [likeIdx=" + likeIdx + ", placeName=" + placeName + "]";
+        return "BookmarkDTO [likeIdx=" + likeIdx + ", placeName=" + placeName + ", kakaoId=" + kakaoId + "]";
     }
 }

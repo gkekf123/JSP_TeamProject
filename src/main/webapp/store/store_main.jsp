@@ -44,8 +44,8 @@
         }
     }
     
-    Set<Integer> myBookmarkSet = new HashSet<>();
-    
+    Set<Long> myBookmarkSet = new HashSet<>(); 
+
     if(myId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
         myBookmarkSet = bookmarkDao.getMyBookmarkStoreIdxSet(myId);
