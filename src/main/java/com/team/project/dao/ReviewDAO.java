@@ -13,32 +13,41 @@ import com.team.project.util.DBConn;
 public class ReviewDAO {
 	DBConn db=new DBConn();
 	
-	public void insertReview(ReviewDTO dto) {
+	public int insertReview(ReviewDTO dto) {
+		int reviewResult=0;
+		
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
 		
-		String sql="insert into review (store_idx, member_id, member_name, member_img, review_content, review_rating, review_create_at) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+		String sql="insert into review (store_idx, member_id, member_name, member_img, review_rating, review_content, "
+				+ "review_img1, review_img2, review_img3, review_img4, review_img5, review_created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, dto.getStoreIdx());
-			pstmt.setInt(2, dto.getMemberId());
+			pstmt.setLong(1, dto.getStoreIdx());
+			pstmt.setString(2, dto.getMemberId());
 			pstmt.setString(3, dto.getMemberName());
 			pstmt.setString(4, dto.getMemberImg());
-			pstmt.setString(5, dto.getReviewContent());
-			pstmt.setInt(6, dto.getReviewRating());
-			pstmt.setTimestamp(7, dto.getReviewCreateAt());
+			pstmt.setInt(5, dto.getReviewRating());
+			pstmt.setString(6, dto.getReviewContent());			
+			pstmt.setString(7, dto.getReviewImg1());
+			pstmt.setString(8, dto.getReviewImg2());
+			pstmt.setString(9, dto.getReviewImg3());
+			pstmt.setString(10, dto.getReviewImg4());
+			pstmt.setString(11, dto.getReviewImg5());
 			
-			pstmt.execute();
+			reviewResult = pstmt.executeUpdate();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			db.close(pstmt, conn);
-		}
+		} 
+		return reviewResult;
 	}
 	
-	public List<ReviewDTO> selectReview(int storeIdx){
+	public List<ReviewDTO> selectReview(long storeIdx){
 		List<ReviewDTO> list=new ArrayList<ReviewDTO>();
 		
 		Connection conn=db.getConnection();
@@ -49,20 +58,25 @@ public class ReviewDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, storeIdx);
+			pstmt.setLong(1, storeIdx);
 			rs=pstmt.executeQuery();
 			
 			while(rs.next()) {
 				ReviewDTO dto=new ReviewDTO();
 				
 				dto.setReviewIdx(rs.getLong("review_idx"));
-				dto.setStoreIdx(rs.getInt("store_idx"));
-				dto.setMemberId(rs.getInt("member_id"));
+				dto.setStoreIdx(rs.getLong("store_idx"));
+				dto.setMemberId(rs.getString("member_id"));
 				dto.setMemberName(rs.getString("member_name"));
 				dto.setMemberImg(rs.getString("member_img"));
-				dto.setReviewContent(rs.getString("review_content"));
 				dto.setReviewRating(rs.getInt("review_rating"));
-				dto.setReviewCreateAt(rs.getTimestamp("review_create_at"));
+				dto.setReviewContent(rs.getString("review_content"));
+				dto.setReviewImg1(rs.getString("review_img1"));
+				dto.setReviewImg2(rs.getString("review_img2"));
+				dto.setReviewImg3(rs.getString("review_img3"));
+				dto.setReviewImg4(rs.getString("review_img4"));
+				dto.setReviewImg5(rs.getString("review_img5"));
+				dto.setReviewCreatedAt(rs.getTimestamp("review_created_at"));
 				
 				list.add(dto);
 			}
@@ -76,7 +90,7 @@ public class ReviewDAO {
 		return list;
 	}
 	
-	public void deleteReview(long reviewIdx, int memberId) {
+	public void deleteReview(long reviewIdx, String memberId) {
 		
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
@@ -86,7 +100,7 @@ public class ReviewDAO {
 		try {
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setLong(1, reviewIdx);
-			pstmt.setInt(2, memberId);
+			pstmt.setString(2, memberId);
 			
 			pstmt.execute();
 		} catch (SQLException e) {
@@ -112,14 +126,19 @@ public class ReviewDAO {
 			rs=pstmt.executeQuery();
 			
 			if(rs.next()) {
-				dto.setReviewIdx(reviewIdx);
-				dto.setStoreIdx(rs.getInt("store_idx"));
-				dto.setMemberId(rs.getInt("member_id"));
+				dto.setReviewIdx(rs.getLong("review_idx"));
+				dto.setStoreIdx(rs.getLong("store_idx"));
+				dto.setMemberId(rs.getString("member_id"));
 				dto.setMemberName(rs.getString("member_name"));
 				dto.setMemberImg(rs.getString("member_img"));
-				dto.setReviewContent(rs.getString("review_content"));
 				dto.setReviewRating(rs.getInt("review_rating"));
-				dto.setReviewUpdateAt(rs.getTimestamp("review_update_at"));
+				dto.setReviewContent(rs.getString("review_content"));
+				dto.setReviewImg1(rs.getString("review_img1"));
+				dto.setReviewImg2(rs.getString("review_img2"));
+				dto.setReviewImg3(rs.getString("review_img3"));
+				dto.setReviewImg4(rs.getString("review_img4"));
+				dto.setReviewImg5(rs.getString("review_img5"));
+				dto.setReviewCreatedAt(rs.getTimestamp("review_created_at"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -131,7 +150,7 @@ public class ReviewDAO {
 		return dto;
 	}
 	
-	public Double avgReview(int storeIdx) {
+	public Double avgReview(long storeIdx) {
 		Double avgRating=null;
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
@@ -141,7 +160,7 @@ public class ReviewDAO {
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, storeIdx);
+			pstmt.setLong(1, storeIdx);
 			rs=pstmt.executeQuery();
 			
 			if(rs.next()) {
@@ -157,5 +176,35 @@ public class ReviewDAO {
 			db.close(rs, pstmt, conn);
 		}
 		return avgRating;
+	}
+	
+	public int countReview(long storeIdx) {
+		
+		int reviewCount=0;
+		
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String sql="select count(*) as review_count from review where store_idx=?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setLong(1, storeIdx);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				reviewCount=rs.getInt("review_count");
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			db.close(rs, pstmt, conn);
+		}
+		
+		return reviewCount;
+		
 	}
 }

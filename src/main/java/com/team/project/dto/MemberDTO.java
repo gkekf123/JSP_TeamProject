@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class MemberDTO {
 
-	private int member_idx;
+	private int memberIdx;
     private String memberId;
     private String memberPw;
     private String memberName;
@@ -14,11 +14,12 @@ public class MemberDTO {
     private String memberAddr;
     private String memberImg;
     private Timestamp memberJoinday;
-	public int getMember_idx() {
-		return member_idx;
+    
+	public int getMemberIdx() {
+		return memberIdx;
 	}
-	public void setMember_idx(int member_idx) {
-		this.member_idx = member_idx;
+	public void setMemberIdx(int memberIdx) {
+		this.memberIdx = memberIdx;
 	}
 	public String getMemberId() {
 		return memberId;

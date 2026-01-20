@@ -145,6 +145,7 @@ public class MemberDAO {
                 dto.setMemberEmail(rs.getString("member_email"));
                 dto.setMemberHp(rs.getString("member_hp"));
                 dto.setMemberAddr(rs.getString("member_addr"));
+                dto.setMemberImg(rs.getString("member_img"));
                 dto.setMemberJoinday(rs.getTimestamp("member_joinday"));
             }
 
