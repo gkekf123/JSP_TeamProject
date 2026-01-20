@@ -1,18 +1,82 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% String ctxPath = request.getContextPath(); %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<%
+String ctxPath = request.getContextPath();
+Integer reviewCount = (Integer)request.getAttribute("reviewCount");
+%>
+
+<script>
+    const ctxPath = "<%= ctxPath %>";
+</script>
+
 <link rel="stylesheet" href="<%= ctxPath %>/review/review_write.css">
 <script src="<%= ctxPath %>/review/review_write.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-</head>
-<body>
+<div class="modal fade" id="reviewModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
 
-</body>
-</html>
+            <form action="review_save.jsp" method="post" enctype="multipart/form-data">
+
+                <input type="hidden" name="store_idx" id="storeIdx">
+                <input type="hidden" name="review_rating" id="reviewRating">
+
+                <!-- 모달 헤더 -->
+                <div class="review-modal-header">
+                    <h2 class="review-modal-title">리뷰 작성하기</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- 모달 본문 -->
+                <div class="review-modal-body">
+
+                    <!-- 별점 -->
+                    <div class="review-stars">
+                        <div class="star-group" id="starGroup">
+                            <span data-star-rating="1">★</span>
+                            <span data-star-rating="2">★</span>
+                            <span data-star-rating="3">★</span>
+                            <span data-star-rating="4">★</span>
+                            <span data-star-rating="5">★</span>
+                        </div>
+                        
+                        <small id="starText" class="star-text">
+                            별을 드래그하여 점수를 매겨주세요
+                        </small>
+                    </div>
+
+                    <!-- 이미지 업로드 -->
+                    <div class="review-upload">
+                    	<div class="upload-box" onclick="document.getElementById('reviewImg').click()">
+                        	📷 사진을 클릭해서 선택하세요
+                            <input type="file" id="reviewImg" name="reviewImg" hidden multiple accept="image/*">
+                        </div>
+                        <!-- 미리보기  -->
+                        <div id="reviewImgPreview" class="review-img-preview"></div>
+                        <!-- 선택된 이미지 수  -->
+                        <div class="image-count-wrapper">
+                            <span id="imgCount">0</span> / 5 장
+                        </div>
+                    </div>
+
+                    <!-- 리뷰 내용-->
+                    <div class="review-content-wrapper">
+                        <textarea name="review_content" class="review-content" rows="6" placeholder="리뷰를 입력해주세요"></textarea>
+                    </div>
+
+                    <!-- 리뷰 순서 -->
+                    <div class="review-count-wrapper">
+                        <span class="review-count-text">
+                            😊 이 매장의 <span id="reviewCount"><%=reviewCount%></span>번째 리뷰입니다
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 모달 푸터 -->
+                <div class="review-modal-footer">
+                    <button type="submit" class="btn btn-submit w-100">리뷰 등록하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
