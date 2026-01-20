@@ -134,7 +134,7 @@
 	        <a href="news.jsp?page=<%= endPage + 1 %>">다음 ▶</a>
 	    <% } %>
 	</div>
+	
     <jsp:include page="/footer/footer.jsp" />
-
 </body>
 </html>

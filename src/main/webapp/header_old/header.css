@@ -129,3 +129,17 @@ header nav ul li a:hover {
 .header-sidebar ul li a:hover {
 	color: #e67e22;
 }
+
+.headerLogout {
+	padding: 12px 0;
+	border-bottom: 1px solid #444;
+	cursor: pointer;
+	text-decoration: none;
+	color:  #fff;
+	display: block;
+}
+
+.headerLogout :hover {
+	color: #e67e22;
+}
+

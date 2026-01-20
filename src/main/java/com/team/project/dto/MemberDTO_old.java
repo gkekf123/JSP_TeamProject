@@ -2,18 +2,18 @@ package com.team.project.dto;
 
 import java.sql.Timestamp;
 
-public class MemberDTO {
+public class MemberDTO_old {
+
 	private int memberIdx;
     private String memberId;
     private String memberPw;
     private String memberName;
-    private String memberRole;   // admin or null
+    private String memberRole;   
     private String memberEmail;
     private String memberHp;
     private String memberAddr;
     private String memberImg;
     private Timestamp memberJoinday;
-    
     
 	public int getMemberIdx() {
 		return memberIdx;
@@ -75,7 +75,4 @@ public class MemberDTO {
 	public void setMemberJoinday(Timestamp memberJoinday) {
 		this.memberJoinday = memberJoinday;
 	}
-    
-    
-	
 }

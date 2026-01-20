@@ -28,6 +28,7 @@ public class ReviewDAO {
 			pstmt.setString(2, dto.getMemberId());
 			pstmt.setString(3, dto.getMemberName());
 			pstmt.setString(4, dto.getMemberImg());
+
 			pstmt.setInt(5, dto.getReviewRating());
 			pstmt.setString(6, dto.getReviewContent());			
 			pstmt.setString(7, dto.getReviewImg1());
@@ -139,6 +140,7 @@ public class ReviewDAO {
 				dto.setReviewImg4(rs.getString("review_img4"));
 				dto.setReviewImg5(rs.getString("review_img5"));
 				dto.setReviewCreatedAt(rs.getTimestamp("review_created_at"));
+
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
