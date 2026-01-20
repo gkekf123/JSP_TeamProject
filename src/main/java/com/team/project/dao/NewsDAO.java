@@ -34,39 +34,71 @@ public class NewsDAO {
 			DBConn.close(pstmt, conn);
 		}
 	}
+
 	
-	public List<NewsDTO> selectNews(){
-		List<NewsDTO> list=new ArrayList<NewsDTO>();
+	//count
+	public int totalCount() {
+		int count=0;
 		
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="select * from news order by news_idx desc";
+		String sql="select count(*) from news";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()) {
+				count=rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			db.close(rs, pstmt, conn);
+		}
+		
+		return count;
+	}
+	
+	
+	//페이징
+	public List<NewsDTO> selectNewsPaging(int start, int perPage){
+		List<NewsDTO> paging=new ArrayList<NewsDTO>();
+		
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String sql="select * from news order by news_regdate desc limit ?, ?";
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, perPage);
 			rs=pstmt.executeQuery();
 			
 			while(rs.next()) {
 				NewsDTO dto=new NewsDTO();
 				dto.setNewsIdx(rs.getLong("news_idx"));
 				dto.setNewsTitle(rs.getString("news_title"));
-				dto.setNewsUrl(rs.getString("news_url"));
 				dto.setNewsImg(rs.getString("news_img"));
-				dto.setNewsSource(rs.getString("news_source"));
-				dto.setNewsRegdate(rs.getTimestamp("news_regdate"));
-				
-				list.add(dto);
+	            dto.setNewsUrl(rs.getString("news_url"));
+	            dto.setNewsSource(rs.getString("news_source"));
+	            dto.setNewsRegdate(rs.getTimestamp("news_regdate"));
+	            
+	            paging.add(dto);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			DBConn.close(rs, pstmt, conn);
+			db.close(rs, pstmt, conn);
 		}
 		
-		return list;
+		
+		return paging;
 	}
-	
 }

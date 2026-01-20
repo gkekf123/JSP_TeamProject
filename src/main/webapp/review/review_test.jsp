@@ -4,7 +4,7 @@
 <%
 String ctxPath = request.getContextPath();
 String loginId = (String)session.getAttribute("login_id");
-
+//int storeIdx = request.getParameter("storeIdx");
 int storeIdx = 5; // 예시: DB에서 가져온 가게 번호
 ReviewDAO dao = new ReviewDAO();
 int reviewCount = dao.countReview(storeIdx) +1 ; 

@@ -27,11 +27,14 @@
     
     boolean isAdmin = false;
     String myId = null;
+    
     Object loginObj = session.getAttribute("loginMember");
+    
     if (loginObj != null) {
         if (loginObj instanceof MemberDTO) {
             MemberDTO loginMember = (MemberDTO) loginObj;
-            myId = loginMember.getMemberId(); 
+            myId = loginMember.getMemberId();
+            
             if ("admin".equals(loginMember.getMemberRole())) { 
                 isAdmin = true;
             }
@@ -41,7 +44,8 @@
         }
     }
     
-    Set<Integer> myBookmarkSet = new HashSet<>();
+    Set<Long> myBookmarkSet = new HashSet<>(); 
+
     if(myId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
         myBookmarkSet = bookmarkDao.getMyBookmarkStoreIdxSet(myId);
@@ -49,6 +53,7 @@
     
     // AI 답변 로직 (검색어가 있을 때만 실행)
     String answer = "";
+    
     // 사용자가 명시적으로 검색했을 때만 AI 호출 (카테고리 클릭 시엔 q가 없으므로 호출 안됨)
     if(question != null && !question.trim().isEmpty()) {
         StringBuilder prompt = new StringBuilder();
@@ -77,6 +82,7 @@
         {"카페/디저트", "cafe.png", "카페/디저트"}
     };
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -145,7 +151,8 @@
                 for(StoreDTO store : storeList) { 
                     String imgPath = store.getStoreImg();
                     boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty());
-                    boolean isBookmarked = myBookmarkSet.contains(store.getStoreIdx());
+                    boolean isBookmarked =
+                    	    (store.getStoreIdx() > 0 && myBookmarkSet.contains(store.getStoreIdx()));
                     String heartShape = isBookmarked ? "♥" : "♡";
             %>
                 <div class="store-card">
@@ -155,7 +162,7 @@
                     </button>
                     <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
                         <% if(hasImage) { %>
-                            <img src="<%= ctxPath %>/images/store_image<%= imgPath %>" class="store-img" alt="가게사진">
+                            <img src="<%= ctxPath %>/images/store_image/<%= imgPath %>" class="store-img" alt="가게사진">
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
                         <% } %>

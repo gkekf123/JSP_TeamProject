@@ -14,30 +14,29 @@ import com.team.project.util.DBConn;
 public class BookmarkDAO {
 
     // 1. 내가 찜한 '내부 가게(store_idx)' 목록만 빠르게 조회
-    public Set<Integer> getMyBookmarkStoreIdxSet(String memberId) {
-        Set<Integer> set = new HashSet<>();
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        
-        try {
-            conn = DBConn.getConnection();
-            // store_idx가 NULL이 아닌(우리 DB에 있는 가게) 것만 조회
-            String sql = "SELECT store_idx FROM bookmark WHERE member_id = ? AND store_idx IS NOT NULL";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, memberId);
-            rs = pstmt.executeQuery();
-            
-            while(rs.next()) {
-                set.add(rs.getInt("store_idx"));
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            DBConn.close(rs, pstmt, conn);
-        }
-        return set;
-    }
+	public Set<Long> getMyBookmarkStoreIdxSet(String memberId) {
+	    Set<Long> set = new HashSet<>();
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    
+	    try {
+	        conn = DBConn.getConnection();
+	        String sql = "SELECT store_idx FROM bookmark WHERE member_id = ? AND store_idx IS NOT NULL";
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, memberId);
+	        rs = pstmt.executeQuery();
+	        
+	        while(rs.next()) {
+	            set.add(rs.getLong("store_idx"));
+	        }
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DBConn.close(rs, pstmt, conn);
+	    }
+	    return set;
+	}
 
     // 2. 찜 여부 단건 확인 (특정 가게를 찜했는지?)
     public boolean isBookmarked(String memberId, int storeIdx) {
@@ -66,20 +65,52 @@ public class BookmarkDAO {
     }
 
     // 3. 찜 추가 (INSERT) - 내부 가게/외부 가게 공용
-    public int addBookmark(String memberId, int storeIdx, String name, String addr, String url, String phone) {
-        int result = 0;
+    public int addBookmark(String memberId, int storeIdx, String name, String addr, String url, String phone, String kakaoId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int result = 0;
         
         try {
             conn = DBConn.getConnection();
-            String sql = "INSERT INTO bookmark (member_id, store_idx, place_name, place_addr, place_url, place_phone) VALUES (?, ?, ?, ?, ?, ?)";
             
-            pstmt = conn.prepareStatement(sql);
+            if (storeIdx == 0 && kakaoId != null && !kakaoId.isEmpty()) {
+                String checkSql = "SELECT store_idx FROM store WHERE kakao_id = ?";
+                pstmt = conn.prepareStatement(checkSql);
+                pstmt.setString(1, kakaoId);
+                rs = pstmt.executeQuery();
+                
+                if (rs.next()) {
+                    storeIdx = rs.getInt("store_idx");
+                }
+                rs.close();
+                pstmt.close();
+            }
+
+            if (storeIdx > 0 && (kakaoId == null || kakaoId.isEmpty())) {
+                 String infoSql = "SELECT kakao_id, place_url FROM store WHERE store_idx = ?";
+                 pstmt = conn.prepareStatement(infoSql);
+                 pstmt.setInt(1, storeIdx);
+                 rs = pstmt.executeQuery();
+                 if(rs.next()) {
+                     kakaoId = rs.getString("kakao_id");
+                     if(url == null || url.isEmpty()) url = rs.getString("place_url");
+                 }
+                 rs.close();
+                 pstmt.close();
+            }
+
+            // 3. 찜 저장
+            StringBuilder sql = new StringBuilder();
+            sql.append("INSERT INTO bookmark ");
+            sql.append("(member_id, store_idx, place_name, place_addr, place_url, place_phone, kakao_id) ");
+            sql.append("VALUES (?, ?, ?, ?, ?, ?, ?)");
+            
+            pstmt = conn.prepareStatement(sql.toString());
+            
             pstmt.setString(1, memberId);
             
-            // storeIdx가 0보다 크면 값 저장, 아니면(외부가게) NULL 저장
-            if(storeIdx > 0) {
+            if (storeIdx > 0) {
                 pstmt.setInt(2, storeIdx);
             } else {
                 pstmt.setNull(2, java.sql.Types.INTEGER);
@@ -89,13 +120,14 @@ public class BookmarkDAO {
             pstmt.setString(4, addr);
             pstmt.setString(5, url);
             pstmt.setString(6, phone);
+            pstmt.setString(7, kakaoId);
             
             result = pstmt.executeUpdate();
             
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DBConn.close(null, pstmt, conn);
+            DBConn.close(rs, pstmt, conn);
         }
         return result;
     }
@@ -143,15 +175,14 @@ public class BookmarkDAO {
                 
                 dto.setLikeIdx(rs.getLong("like_idx"));
                 dto.setMemberId(rs.getString("member_id"));
-                
-                // store_idx가 NULL이면 0으로 들어옴 (int 기본값)
                 dto.setStoreIdx(rs.getInt("store_idx")); 
-                
                 dto.setPlaceName(rs.getString("place_name"));
                 dto.setPlaceAddr(rs.getString("place_addr"));
                 dto.setPlaceUrl(rs.getString("place_url"));
                 dto.setPlacePhone(rs.getString("place_phone"));
                 dto.setLikeDate(rs.getTimestamp("like_date"));
+                
+                dto.setKakaoId(rs.getString("kakao_id"));
                 
                 list.add(dto);
             }

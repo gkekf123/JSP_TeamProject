@@ -134,6 +134,25 @@ body {
     color: #777;
 }
 
+/*페이징*/
+.paging {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.paging a, .paging span {
+    display: inline-block;
+    padding: 0px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+}
+
+.paging .active {
+    font-weight: bold;
+    cursor: pointer;
+}
+
 
 /* 반응형 (태블릿) */
 @media screen and (max-width: 900px) {
