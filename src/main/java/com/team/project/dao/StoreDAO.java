@@ -156,4 +156,104 @@ public class StoreDAO {
             DBConn.close(null, pstmt, conn);
         }
     }
+    
+ // [추가] 수정을 위한 단건 조회 (idx로 가게 정보 가져오기)
+    public StoreDTO selectStoreOne(String storeIdx) {
+        StoreDTO dto = null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM store WHERE store_idx = ?";
+
+        try {
+            conn = DBConn.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, storeIdx);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                dto = new StoreDTO();
+                dto.setStoreIdx(rs.getLong("store_idx"));
+                dto.setStoreName(rs.getString("store_name"));
+                dto.setStoreCategory(rs.getString("store_category"));
+                dto.setStoreAddr(rs.getString("store_addr"));
+                dto.setStoreTel(rs.getString("store_tel"));
+                dto.setStoreIntro(rs.getString("store_intro"));
+                dto.setStoreImg(rs.getString("store_img"));
+                dto.setStoreImg2(rs.getString("store_img2"));
+                dto.setStoreImg3(rs.getString("store_img3"));
+                dto.setLatitude(rs.getDouble("latitude"));
+                dto.setLongitude(rs.getDouble("longitude"));
+                dto.setKakaoId(rs.getString("kakao_id"));
+                dto.setPlaceUrl(rs.getString("place_url"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBConn.close(rs, pstmt, conn);
+        }
+        return dto;
+    }
+
+ // 가게 정보 수정 (UPDATE)
+    public int updateStore(StoreDTO dto) {
+        int result = 0;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        
+        // 주소(addr), 위도, 경도, 카카오ID, URL도 수정 대상에 포함
+        String sql = "UPDATE store SET "
+                   + "store_name=?, store_category=?, store_tel=?, store_intro=?, "
+                   + "store_addr=?, latitude=?, longitude=?, kakao_id=?, place_url=?, "
+                   + "store_img=?, store_img2=?, store_img3=?, store_update_at=NOW() "
+                   + "WHERE store_idx=?";
+        try {
+            conn = DBConn.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            
+            pstmt.setString(1, dto.getStoreName());
+            pstmt.setString(2, dto.getStoreCategory());
+            pstmt.setString(3, dto.getStoreTel());
+            pstmt.setString(4, dto.getStoreIntro());
+            
+            // 새로 추가된 위치 정보 매핑
+            pstmt.setString(5, dto.getStoreAddr());
+            pstmt.setDouble(6, dto.getLatitude());
+            pstmt.setDouble(7, dto.getLongitude());
+            pstmt.setString(8, dto.getKakaoId());
+            pstmt.setString(9, dto.getPlaceUrl());
+            
+            pstmt.setString(10, dto.getStoreImg());
+            pstmt.setString(11, dto.getStoreImg2());
+            pstmt.setString(12, dto.getStoreImg3());
+            pstmt.setLong(13, dto.getStoreIdx());
+            
+            result = pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBConn.close(null, pstmt, conn);
+        }
+        return result;
+    }
+
+    // 가게 삭제 (DELETE)
+    public int deleteStore(String storeIdx) {
+        int result = 0;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        String sql = "DELETE FROM store WHERE store_idx = ?";
+
+        try {
+            conn = DBConn.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, storeIdx);
+            result = pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBConn.close(null, pstmt, conn);
+        }
+        return result;
+    }
 }

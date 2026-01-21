@@ -29,10 +29,19 @@
     <meta charset="UTF-8">
     <title>내 찜 목록</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="<%= ctxPath %>/bookmark/bookmark_list.css?v=4">
+    <link rel="stylesheet" href="<%= ctxPath %>/bookmark/bookmark_list.css?v=6">
     
     <script>
         const ctxPath = "<%= ctxPath %>";
+        
+        // 카드 클릭 시 이동 함수 (내부/외부 구분)
+        function goDetail(url, isNewWindow) {
+            if(isNewWindow) {
+                window.open(url, '_blank');
+            } else {
+                location.href = url;
+            }
+        }
     </script>
     <script src="<%= ctxPath %>/bookmark/bookmark_list.js"></script>
 </head>
@@ -49,15 +58,16 @@
                 for (BookmarkDTO dto : list) {
                     boolean isInternal = (dto.getStoreIdx() > 0); 
                     String detailLink = "";
-                    String target = "_self";
+                    boolean isNewWindow = false; // 새 창 열기 여부
+                    
                     String badgeClass = isInternal ? "internal" : "external";
                     String badgeText = isInternal ? "등록된 맛집" : "카카오 장소";
                     
                     boolean hasImage = false;
                     String imgSrc = "";
 
+                    // 이미지 처리
                     if (isInternal) {
-                        // 내부 가게: DB에 이미지가 있는지 확인
                         String dbImg = dto.getStoreImg();
                         if (dbImg != null && !dbImg.trim().isEmpty()) {
                             if(!dbImg.startsWith("/")) dbImg = "/" + dbImg;
@@ -65,7 +75,6 @@
                             hasImage = true;
                         }
                     } else {
-                        // 외부(카카오) 가게: 지도 아이콘을 이미지로 사용
                         imgSrc = ctxPath + "/images/map_icon.png";
                         hasImage = true;
                     }
@@ -75,39 +84,39 @@
                         detailLink = ctxPath + "/store/store_detail.jsp?idx=" + dto.getStoreIdx();
                     } else {
                         detailLink = dto.getPlaceUrl();
-                        target = "_blank"; 
+                        isNewWindow = true; // 외부 링크는 새 창으로
                     }
                     
                     String kakaoId = (dto.getKakaoId() == null) ? "" : dto.getKakaoId();
                     String placeUrl = (dto.getPlaceUrl() == null) ? "" : dto.getPlaceUrl();
                     
-                    // 전화번호 처리
                     String phone = dto.getPlacePhone();
                     if(phone == null || phone.trim().isEmpty()) {
                         phone = "전화번호 없음";
                     }
             %>
-                <div class="bookmark-card">
+                <div class="bookmark-card" onclick="goDetail('<%= detailLink %>', <%= isNewWindow %>)">
+                    
                     <button type="button" class="delete-btn" title="찜 해제"
-                            onclick="deleteBookmark(this, <%= dto.getStoreIdx() %>, '<%= kakaoId %>', '<%= placeUrl %>')">
+                            onclick="event.stopPropagation(); deleteBookmark(this, <%= dto.getStoreIdx() %>, '<%= kakaoId %>', '<%= placeUrl %>')">
                         ♥
                     </button>
 
-                    <a href="<%= detailLink %>" target="<%= target %>" class="card-left">
+                    <div class="card-left">
                         <% if(hasImage) { %>
                             <img src="<%= imgSrc %>" alt="가게 이미지" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div class="no-img-box" style="display:none;">이미지 없음</div>
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
                         <% } %>
-                    </a>
+                    </div>
 
                     <div class="card-right">
                         <span class="badge <%= badgeClass %>"><%= badgeText %></span>
                         
-                        <a href="<%= detailLink %>" target="<%= target %>" class="place-name">
+                        <div class="place-name">
                             <%= dto.getPlaceName() %>
-                        </a>
+                        </div>
                         
                         <div class="place-addr"><%= dto.getPlaceAddr() %></div>
                         
