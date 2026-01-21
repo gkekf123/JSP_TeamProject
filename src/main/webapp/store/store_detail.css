@@ -426,6 +426,29 @@ body {
     font-weight: bold;
 }
 
+
+
+.review-images {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.review-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.review-img:hover {
+    opacity: 0.8;
+}
+
+
+
 /*모바일*/
 @media screen and (max-width: 768px) {
 	.container{

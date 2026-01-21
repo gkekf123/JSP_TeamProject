@@ -97,6 +97,12 @@
     cursor: pointer;
     text-align: center;
     margin-bottom: 0.5rem;
+    transition: all 0.3s ease; /* 추가 */
+}
+
+.upload-box:hover { /* 추가 */
+    background: #f3f4f6;
+    border-color: #f39c12;
 }
 
 .review-img-preview {

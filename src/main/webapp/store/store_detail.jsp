@@ -289,6 +289,7 @@
                 <p class="review-text">
                     <%= r.getReviewContent() %>
                 </p>
+ 
 
                 <span class="review-date"><%= r.getReviewCreatedAt() %></span>
             </div>

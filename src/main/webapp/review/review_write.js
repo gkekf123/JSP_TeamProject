@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("mouseup", () => starDrag  = false);
 
     // ================== 이미지 업로드 ==================
-	const reviewImg = document.getElementById("reviewImg");
 	const reviewImgPreview = document.getElementById("reviewImgPreview");
 	const imgCount = document.getElementById("imgCount");
 	const MAX_IMAGES = 5;
@@ -63,86 +62,145 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateImgCount() {
         imgCount.innerText = reviewImgFiles.length;
     }
+	
+	// 미리보기 재렌더링 함수 (순서 보장)
+	function renderPreviews() {
+	    reviewImgPreview.innerHTML = ""; 
+	    
+	    if (reviewImgFiles.length === 0) {
+	        updateImgCount();
+	        return;
+	    }
 
-    function createImgPreview(file) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const wrapper = document.createElement("div");
-            wrapper.className = "preview-item";
+	    // 순차적으로 이미지를 읽기 위한 내부 함수
+	    function readAndPreview(index) {
+	        if (index >= reviewImgFiles.length) {
+	            updateImgCount();
+	            return;
+	        }
 
-            const img = document.createElement("img");
-            img.src = e.target.result;
+	        const reader = new FileReader(); 
+	        const file = reviewImgFiles[index]; ////////
 
-            const delBtn = document.createElement("button");
-            delBtn.className = "preview-delete";
-            delBtn.innerText = "✕";
-            delBtn.onclick = () => {
-                reviewImgFiles = reviewImgFiles.filter(existFile => existFile !== file);
-                wrapper.remove();
-                updateImgCount();
-            };
+	        reader.onload = function(e) {
+	            const wrapper = document.createElement("div"); 
+	            wrapper.className = "preview-item";
 
-            wrapper.appendChild(img);
-            wrapper.appendChild(delBtn);
-            reviewImgPreview.appendChild(wrapper);
-        };
-        reader.readAsDataURL(file);
-    }
+	            const img = document.createElement("img");
+	            img.src = e.target.result;
 
-	reviewImg.addEventListener("change", function () {
-    	const selectedFiles = Array.from(this.files);
-		
-		// 중복 파일 존재 여부
-    	let hasDuplicate = false;
-		// 검사 후 유효한 파일만 모은 배열
-    	let validFiles = [];
+	            const delBtn = document.createElement("button"); 
+	            delBtn.type = "button";
+	            delBtn.className = "preview-delete";
+	            delBtn.innerText = "✕";
+	            
+	            delBtn.onclick = function() {
+	                reviewImgFiles.splice(index, 1); // 특정위치에 있는 요소를 제거, 교체
+	                updateInputs();
+	                renderPreviews();
+	            };
 
-		// 1. 중복 제거
-    	selectedFiles.forEach(selectFile  => {
-			// 1️.이미지 타입 체크
-        	if (!selectFile.type.startsWith("image/")) {
-				alert("이미지 파일만 업로드 가능합니다!");
-				return;
+	            wrapper.appendChild(img);
+	            wrapper.appendChild(delBtn);
+	            reviewImgPreview.appendChild(wrapper);
+
+	            // 다음 이미지 읽기
+	            readAndPreview(index + 1);
+	        };
+
+	        reader.readAsDataURL(file);
+	    }
+
+	    readAndPreview(0);
+	}
+
+	  // input에 파일 재할당 함수(순서대로)
+	  function updateInputs() {
+	      // 모든 input 초기화
+	      for (let i = 1; i <= MAX_IMAGES; i++) {
+	          const input = document.getElementById('reviewImg' + i);
+	          if (input) 
+				input.value = "";
+	      }
+	      
+	      // 배열 순서대로 input에 할당
+	      reviewImgFiles.forEach((file, index) => {
+	          const input = document.getElementById('reviewImg' + (index + 1));
+	          if (input) {
+	              const dataTransfer = new DataTransfer();
+	              dataTransfer.items.add(file);
+	              input.files = dataTransfer.files;
+	          }
+	      });
+	  }
+	  
+	  // 사진 추가 버튼
+	  window.addPhoto = function() {
+	      if (reviewImgFiles.length >= MAX_IMAGES) {
+	          alert('최대 5장까지 업로드 가능합니다.');
+	          return;
+	      }
+	      
+	      // multiple input 클릭
+	      document.getElementById('reviewImgMultiple').click();
+	  };
+
+	// 파일 검사
+	window.checkFiles = function(multiInput) {
+	    const selectedFiles = Array.from(multiInput.files);
+	    
+	    let validFiles = [];
+		let hasDuplicate = false;
+	    
+	    // 각 파일 검증
+	    for (let file of selectedFiles) {
+	        // 이미지 타입 체크
+	        if (!file.type.startsWith("image/")) {
+	            alert(`"${file.name}"은(는) 이미지 파일이 아닙니다!`);
+	            continue;
+	        }
+	    
+	        // 용량 체크
+	        if (file.size > MAX_FILE_SIZE) {
+	            alert(`"${file.name}"은(는) 5MB를 초과합니다! (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+	            continue;
+	        }
+	      
+	        // 중복 체크
+	        const isDuplicate = reviewImgFiles.some(existFile => 
+	            existFile.name === file.name && existFile.size === file.size
+	        );
+	        
+			if (isDuplicate) {
+				hasDuplicate = true; // 중복이 있음을 기록
+			    continue;            // 중복된 파일은 validFiles에 넣지 않고 건너뜀
 			}
+	        
+	        validFiles.push(file);
+	    }
 		
-			// 2️.용량 체크
-			if (selectFile .size > MAX_FILE_SIZE) {
-		    	alert(`"${selectFile.name}"은(는) 5MB를 초과합니다! (${(selectFile.size / 1024 / 1024).toFixed(2)}MB)`);
-		    	return;
-			}
-		
-			// 3️.중복 체크
-        	const isDuplicate = reviewImgFiles.some(existFile => 
-				existFile.name === selectFile.name && existFile.size === selectFile.size);
-
-        	if (isDuplicate) {
-            	hasDuplicate = true;
-        	} else {
-            	validFiles.push(selectFile);
-        	}
-    	});
-
-    	if (hasDuplicate) {
-        	alert("이미 등록된 사진이 포함되어 있습니다!");
-    	}
-
-    	// 2. 장수 초과면 전부 취소
-    	if (reviewImgFiles.length + validFiles.length > MAX_IMAGES) {
-        	const remain = MAX_IMAGES - reviewImgFiles.length;
-        	alert(`📸 추가로 넣을 수 있는 사진은 ${remain}장입니다.`);
-        	this.value = "";
-        	return;
-    	}
-
-    	// 3. 정상일 때만 추가
-    	validFiles.forEach(selectFile  => {
-        	reviewImgFiles.push(selectFile);
-        	createImgPreview(selectFile);
-    	});
-
-    	updateImgCount();
-    	this.value = "";
-	});
+		// 중복 알림
+		if (hasDuplicate) {
+			alert("이미 등록된 사진이 선택 항목에 포함되어 제외되었습니다.");
+		}		
+	    
+		// 개수 체크
+		if (reviewImgFiles.length + validFiles.length > MAX_IMAGES) {
+			const remain = MAX_IMAGES - reviewImgFiles.length;
+		    alert(`📸 추가 가능한 사진은 ${remain}장입니다.\n선택하신 사진(${validFiles.length}장)이 개수를 초과하여 추가되지 않았습니다.`);
+		    multiInput.value = "";
+		    return;
+		}
+	    
+		// 개수가 적절할 때만 배열에 추가 및 화면 갱신
+		if (validFiles.length > 0) {
+			reviewImgFiles.push(...validFiles);
+		    updateInputs();    // input들에 파일 재할당
+		    renderPreviews();  // 미리보기 렌더링
+		}
+	    
+	    multiInput.value = "";
+	};
 
     // ================== 리뷰 폼 초기화 ==================
     function hasInput() {
@@ -166,8 +224,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 이미지 초기화
         reviewImgFiles = [];
+		
+		for (let i = 1; i <= MAX_IMAGES; i++) {
+		    const input = document.getElementById('reviewImg' + i);
+		    if (input) input.value = "";
+		}
+		document.getElementById('reviewImgMultiple').value = "";
         reviewImgPreview.innerHTML = "";
-        reviewImg.value = "";
+/*        reviewImg.value = "";*/
         updateImgCount();
     }
 
@@ -197,9 +261,6 @@ document.addEventListener("DOMContentLoaded", () => {
     	}
 
     	const formData = new FormData(this);
-    	reviewImgFiles.forEach((file, idx) => {
-        	formData.append("reviewImg"+(idx + 1), file);
-    	});
 
     	$.ajax({
         	url: ctxPath +"/review/review_save.jsp",
@@ -252,6 +313,69 @@ document.addEventListener("DOMContentLoaded", () => {
         	}
     	});
 	});
+	
+	// ================== 리뷰 수정용 함수 ==================
+	window.openEditReview = function(reviewIdx) {
+	    // 1. 수정 모드임을 알리기 위한 변수 설정 (필요 시)
+	    const form = document.querySelector("#reviewModal form");
+	    form.dataset.mode = "edit";
+	    form.dataset.editIdx = reviewIdx;
+
+	    // 2. 서버에서 기존 리뷰 데이터 가져오기
+	    $.ajax({
+	        url: ctxPath + "/review/get_review_json.jsp", // 아까 만든 JSON 반환 페이지
+	        type: "GET",
+	        data: { "reviewIdx": reviewIdx },
+	        dataType: "json",
+	        success: function(res) {
+	            // (1) 별점 세팅
+	            updateStars(res.rating); 
+	            
+	            // (2) 내용 세팅
+	            form.querySelector("textarea[name='review_content']").value = res.content;
+	            
+	            // (3) 기존 이미지 미리보기 세팅
+	            const previewContainer = document.getElementById("reviewImgPreview");
+	            previewContainer.innerHTML = ""; // 기존 미리보기 비우기
+	            reviewImgFiles = []; // 파일 배열 초기화 (수정 시 새로 올릴 파일들을 담기 위함)
+	            
+	            const existingImgs = [res.img1, res.img2, res.img3, res.img4, res.img5];
+	            
+	            existingImgs.forEach((path, index) => {
+	                if(path && path !== "") {
+	                    const wrapper = document.createElement("div");
+	                    wrapper.className = "preview-item existing-item";
+	                    // 기존 이미지는 서버에 이미 있으므로 삭제 시 서버 파일도 지워야 함을 표시
+	                    wrapper.innerHTML = `
+	                        <img src="${ctxPath}${path}">
+	                        <button type="button" class="preview-delete" onclick="removeExistingImg(this, '${path}')">✕</button>
+	                        <input type="hidden" name="existing_img${index+1}" value="${path}">
+	                    `;
+	                    previewContainer.appendChild(wrapper);
+	                }
+	            });
+
+	            // (4) 모달 띄우기
+	            const modalElement = document.getElementById('reviewModal');
+	            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+	            modalInstance.show();
+	        },
+	        error: function() {
+	            alert("리뷰 정보를 가져오는데 실패했습니다.");
+	        }
+	    });
+	};
+
+	// 기존 이미지를 미리보기에서 제거하는 함수
+	window.removeExistingImg = function(btn, path) {
+	    if(confirm("기존 이미지를 삭제하시겠습니까? 등록 시 실제 파일이 삭제됩니다.")) {
+	        const wrapper = btn.parentElement;
+	        // hidden input의 값을 비워서 서버에 삭제 대상임을 알림
+	        const hiddenInput = wrapper.querySelector("input[type='hidden']");
+	        if(hiddenInput) hiddenInput.value = ""; 
+	        wrapper.style.display = "none"; // 화면에서만 숨김 (제출 시 데이터 처리를 위해)
+	    }
+	};
 	
 
 });
