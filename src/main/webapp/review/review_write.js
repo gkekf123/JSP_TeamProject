@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	        }
 
 	        const reader = new FileReader(); 
-	        const file = reviewImgFiles[index]; ////////
+	        const file = reviewImgFiles[index];
 
 	        reader.onload = function(e) {
 	            const wrapper = document.createElement("div"); 
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	            delBtn.innerText = "✕";
 	            
 	            delBtn.onclick = function() {
-	                reviewImgFiles.splice(index, 1); // 특정위치에 있는 요소를 제거, 교체
+	                reviewImgFiles.splice(index, 1);
 	                updateInputs();
 	                renderPreviews();
 	            };
@@ -172,8 +172,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	        );
 	        
 			if (isDuplicate) {
-				hasDuplicate = true; // 중복이 있음을 기록
-			    continue;            // 중복된 파일은 validFiles에 넣지 않고 건너뜀
+				hasDuplicate = true; 
+			    continue;            
 			}
 	        
 	        validFiles.push(file);
@@ -195,8 +195,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		// 개수가 적절할 때만 배열에 추가 및 화면 갱신
 		if (validFiles.length > 0) {
 			reviewImgFiles.push(...validFiles);
-		    updateInputs();    // input들에 파일 재할당
-		    renderPreviews();  // 미리보기 렌더링
+		    updateInputs();    
+		    renderPreviews();  
 		}
 	    
 	    multiInput.value = "";
@@ -231,7 +231,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 		document.getElementById('reviewImgMultiple').value = "";
         reviewImgPreview.innerHTML = "";
-/*        reviewImg.value = "";*/
         updateImgCount();
     }
 
@@ -313,8 +312,4 @@ document.addEventListener("DOMContentLoaded", () => {
         	}
     	});
 	});
-	
-
-	
-
 });

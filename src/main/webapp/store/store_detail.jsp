@@ -292,7 +292,7 @@
 		        <!-- 오른쪽 : 대표 이미지 -->
 		        	<% if (r.getReviewImg1() != null && !r.getReviewImg1().equals("")) { %>
 						<div class="review-img-thumb">
-		        			<img src="<%= ctxPath %><%= r.getReviewImg1() %>">
+		        			<img src="<%= ctxPath %>/images/review_upload/<%= r.getReviewImg1() %>">
 		        		</div>
 		        	<% } %>
             </div>
