@@ -29,25 +29,22 @@
     
     // 로그인 세션 처리 로직
     boolean isAdmin = false;
-    String myId = (String) session.getAttribute("member_id");   // 아이디 가져오기
-    String myRole = (String) session.getAttribute("member_role"); // 권한(admin) 가져오기
+    String myId = (String) session.getAttribute("member_id");   
+    String myRole = (String) session.getAttribute("member_role"); 
     
-    // 관리자 여부 확인 (권한이 'admin'이면 true)
     if (myRole != null && "admin".equals(myRole)) {
         isAdmin = true;
     }
     
-    // 3. 찜 목록 조회 (로그인 한 경우에만)
+    // 3. 찜 목록 조회
     Set<Long> myBookmarkSet = new HashSet<>(); 
-
     if(myId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
         myBookmarkSet = bookmarkDao.getMyBookmarkStoreIdxSet(myId);
     }
     
-    // 4. AI 답변 로직 (검색어가 있을 때만 실행)
+    // 4. AI 답변 로직
     String answer = "";
-    
     if(question != null && !question.trim().isEmpty()) {
         StringBuilder prompt = new StringBuilder();
         if (storeList != null && !storeList.isEmpty()) {
@@ -64,13 +61,11 @@
         }
         
         answer = GeminiUtil.getGeminiResponse(prompt.toString());
-        
-        // 검색 로그 저장
         new SearchLogDAO().insertSearchLog(question, answer);
     }
 
     String[][] catArr = {
-   		{"all", "allCategory.png", "전체"},
+        {"all", "allCategory.png", "전체"},
         {"한식", "korean.png", "한식"},
         {"중식", "chinese.png", "중식"},
         {"일식", "japanese.png", "일식"},
@@ -85,12 +80,10 @@
     <title>맛집 추천 리스트</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=8">
-    
+    <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=10">
     <script>
         const ctxPath = "<%= ctxPath %>";
     </script>
-    
     <script src="<%= ctxPath %>/store/store_main.js?v=<%= System.currentTimeMillis() %>"></script>
 </head>
 <body>
@@ -109,7 +102,6 @@
             </form>
             
             <div class="header-right">
-                <%-- 관리자일 경우에만 등록 버튼 표시 --%>
                 <% if(isAdmin) { %>
                     <button type="button" class="write-btn" onclick="location.href='store_write.jsp'">맛집등록</button>
                 <% } %>
@@ -150,10 +142,18 @@
             if (storeList != null && !storeList.isEmpty()) {
                 for(StoreDTO store : storeList) { 
                     String imgPath = store.getStoreImg();
+                    // 경로 보정: null이 아니고, /로 시작하지 않으면 붙여줌
+                    if (imgPath != null && !imgPath.startsWith("/") && !imgPath.trim().isEmpty()) {
+                        imgPath = "/" + imgPath;
+                    }
+                    
                     boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty());
-                    boolean isBookmarked =
-                    	    (store.getStoreIdx() > 0 && myBookmarkSet.contains(store.getStoreIdx()));
+                    boolean isBookmarked = (store.getStoreIdx() > 0 && myBookmarkSet.contains(store.getStoreIdx()));
                     String heartShape = isBookmarked ? "♥" : "♡";
+                    
+                    // 전화번호 null 처리
+                    String tel = store.getStoreTel();
+                    if(tel == null || tel.trim().isEmpty()) tel = "전화번호 없음";
             %>
                 <div class="store-card">
                     <button type="button" class="store-jjim-btn" 
@@ -162,7 +162,9 @@
                     </button>
                     <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
                         <% if(hasImage) { %>
-                            <img src="<%= ctxPath %>/images/store_image/<%= imgPath %>" class="store-img" alt="가게사진">
+                            <img src="<%= ctxPath %>/images/store_image<%= imgPath %>" class="store-img" alt="가게사진"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="no-img-box" style="display:none;">이미지 없음</div>
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
                         <% } %>
@@ -170,10 +172,12 @@
                     <div class="store-info">
                         <div class="store-name"><%= store.getStoreName() %></div>
                         <div class="store-stats">
-                            <span class="star-icon">★</span> <%= store.getStoreRatingAvg() %> 
+                            <span class="star-icon">★</span> <%= String.format("%.1f", store.getStoreRatingAvg()) %> 
+                            <span style="color:#999; font-size:0.9em;">/ 5</span>
                             (리뷰 <%= store.getStoreRatingCount() %>)
                         </div>
                         <div class="store-addr"><%= store.getStoreAddr() %></div>
+                        <div class="store-tel"><%= tel %></div>
                     </div>
                 </div>
             <% 
@@ -189,5 +193,5 @@
     
     <jsp:include page="/footer/footer.jsp" />
     
-    </body>
+</body>
 </html>
