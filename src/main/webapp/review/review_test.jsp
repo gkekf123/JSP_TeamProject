@@ -40,6 +40,8 @@ request.setAttribute("reviewOrder", reviewOrder);
     	리뷰 작성
 	</button>
 	
+	<%= application.getRealPath("/images/review_upload") %>
+	
 	<!-- data-login="%= (loginId != null) %>"  -->
 	
 	<jsp:include page="/review/review_write.jsp"/>

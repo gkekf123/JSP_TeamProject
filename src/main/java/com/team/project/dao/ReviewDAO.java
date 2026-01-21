@@ -39,7 +39,6 @@ public class ReviewDAO {
 			reviewResult = pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			db.close(pstmt, conn);
@@ -81,7 +80,6 @@ public class ReviewDAO {
 				list.add(dto);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			db.close(rs, pstmt, conn);
@@ -90,7 +88,9 @@ public class ReviewDAO {
 		return list;
 	}
 	
-	public void deleteReview(long reviewIdx, String memberId) {
+	public int deleteReview(long reviewIdx, String memberId) {
+		
+		int deleteResult = 0;
 		
 		Connection conn=db.getConnection();
 		PreparedStatement pstmt=null;
@@ -102,13 +102,14 @@ public class ReviewDAO {
 			pstmt.setLong(1, reviewIdx);
 			pstmt.setString(2, memberId);
 			
-			pstmt.execute();
+			deleteResult=pstmt.executeUpdate();
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			db.close(pstmt, conn);
 		}
+		return deleteResult;
 	}
 	
 	public ReviewDTO oneSelectReview(long reviewIdx) {
@@ -141,7 +142,6 @@ public class ReviewDAO {
 				dto.setReviewCreatedAt(rs.getTimestamp("review_created_at"));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			db.close(rs, pstmt, conn);
@@ -170,7 +170,6 @@ public class ReviewDAO {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			db.close(rs, pstmt, conn);
@@ -198,7 +197,6 @@ public class ReviewDAO {
 
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			db.close(rs, pstmt, conn);

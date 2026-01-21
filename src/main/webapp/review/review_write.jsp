@@ -47,16 +47,25 @@ String ctxPath = request.getContextPath();
 
                     <!-- 이미지 업로드 -->
                     <div class="review-upload">
-                    	<div class="upload-box" onclick="document.getElementById('reviewImg').click()">
+                    	<div class="upload-box" onclick="addPhoto()">
                         	📷 사진을 클릭해서 선택하세요
-                            <input type="file" id="reviewImg" name="reviewImg" hidden multiple accept="image/*">
+                        	<input type="file" id="reviewImg1" name="review_img1" hidden accept="image/*">
+    						<input type="file" id="reviewImg2" name="review_img2" hidden accept="image/*">
+    						<input type="file" id="reviewImg3" name="review_img3" hidden accept="image/*">
+    						<input type="file" id="reviewImg4" name="review_img4" hidden accept="image/*">
+    						<input type="file" id="reviewImg5" name="review_img5" hidden accept="image/*">
+    
+    						<input type="file" id="reviewImgMultiple" hidden multiple accept="image/*" 
+    						onchange="checkFiles(this)">
                         </div>
+
                         <!-- 미리보기  -->
                         <div id="reviewImgPreview" class="review-img-preview"></div>
                         <!-- 선택된 이미지 수  -->
                         <div class="image-count-wrapper">
                             <span id="imgCount">0</span> / 5 장
                         </div>
+                
                     </div>
 
                     <!-- 리뷰 내용-->

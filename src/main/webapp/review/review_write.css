@@ -97,6 +97,12 @@
     cursor: pointer;
     text-align: center;
     margin-bottom: 0.5rem;
+    transition: all 0.3s ease; 
+}
+
+.upload-box:hover { 
+    background: #f3f4f6;
+    border-color: #e67e22;
 }
 
 .review-img-preview {

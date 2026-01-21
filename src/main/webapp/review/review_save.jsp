@@ -28,7 +28,7 @@ if (!"yes".equals(loginOk) || memberId == null) {
 }
 
 //================= 업로드 설정 =================
-String savePath= application.getRealPath("/images/review_upload");
+String savePath = application.getRealPath("/images/review_upload");
 int maxSize = 25 * 1024 * 1024;
 
 try{
@@ -47,15 +47,6 @@ try{
     int storeIdx = Integer.parseInt(multi.getParameter("store_idx"));
     int reviewRating = Integer.parseInt(multi.getParameter("review_rating"));
     String reviewContent = multi.getParameter("review_content");
-    
- // ===== 여러 이미지 파일명 모으기 =====
-    List<String> reviewImgList = new ArrayList<>();
-    Enumeration reviewImgfiles = multi.getFileNames();
-    while (reviewImgfiles.hasMoreElements()) {
-        String paramName = (String) reviewImgfiles.nextElement();
-        String filename = multi.getFilesystemName(paramName);
-        if (filename != null) reviewImgList.add(filename);
-    }
 
     // ===== DTO =====
     ReviewDTO dto = new ReviewDTO();
@@ -70,22 +61,28 @@ try{
 	dto.setMemberImg("logo.png"); //임의지정
 	//dto.setMemberImg(mdto.getMemberImg());
 
-
-	
     dto.setReviewRating(reviewRating);
     dto.setReviewContent(reviewContent);
-
-
     
-    for (int i = 0; i < reviewImgList.size() && i < 5; i++) {
-        switch (i) {
-            case 0: dto.setReviewImg1(reviewImgList.get(i)); break;
-            case 1: dto.setReviewImg2(reviewImgList.get(i)); break;
-            case 2: dto.setReviewImg3(reviewImgList.get(i)); break;
-            case 3: dto.setReviewImg4(reviewImgList.get(i)); break;
-            case 4: dto.setReviewImg5(reviewImgList.get(i)); break;
-        }
-    }
+    // 모든 이미지 null로 초기화
+    dto.setReviewImg1(null);
+    dto.setReviewImg2(null);
+    dto.setReviewImg3(null);
+    dto.setReviewImg4(null);
+    dto.setReviewImg5(null);
+
+    // 각 input에서 파일 가져오기
+    String reviewImg1 = multi.getFilesystemName("review_img1");
+    String reviewImg2 = multi.getFilesystemName("review_img2");
+    String reviewImg3 = multi.getFilesystemName("review_img3");
+    String reviewImg4 = multi.getFilesystemName("review_img4");
+    String reviewImg5 = multi.getFilesystemName("review_img5");
+
+    if (reviewImg1 != null && !reviewImg1.isEmpty()) dto.setReviewImg1(reviewImg1);
+    if (reviewImg2 != null && !reviewImg2.isEmpty()) dto.setReviewImg2(reviewImg2);
+    if (reviewImg3 != null && !reviewImg3.isEmpty()) dto.setReviewImg3(reviewImg3);
+    if (reviewImg4 != null && !reviewImg4.isEmpty()) dto.setReviewImg4(reviewImg4);
+    if (reviewImg5 != null && !reviewImg5.isEmpty()) dto.setReviewImg5(reviewImg5);
 
     ReviewDAO dao = new ReviewDAO();
     int reviewResult = dao.insertReview(dto);
@@ -103,15 +100,35 @@ try{
             profileHtml =
                 "<div class='profile-circle'><i class='bi bi-person-circle'></i></div>";
         }
-    	
-        String reviewImgHtml = "";
-
-        if (dto.getReviewImg1() != null && !dto.getReviewImg1().isEmpty()) {
-            reviewImgHtml =
-                "<div class='review-img-thumb'>" +
-                "<img src='" + request.getContextPath() +
-                "/images/review_upload/" + dto.getReviewImg1() + "'>" +
-                "</div>";
+               
+     // ===== 리뷰 이미지 HTML 생성 =====
+        StringBuilder reviewImgHtml = new StringBuilder();
+        if(dto.getReviewImg1() != null && !dto.getReviewImg1().isEmpty()) {
+        	//사진 더보기용 임의생성
+        	reviewImgHtml.append("<div class='review-img-container' onclick='' style='cursor:pointer;'>");
+        	
+            reviewImgHtml.append("<div class='review-img-thumb'>")
+                         .append("<img src='")
+                         .append(request.getContextPath())
+                         .append("/images/review_upload/")
+                         .append(dto.getReviewImg1()).append("'>")
+                         .append("</div>");
+            
+            // 2~5번 이미지는 반복문으로 처리
+            String[] otherImgs = {dto.getReviewImg2(), dto.getReviewImg3(), dto.getReviewImg4(), dto.getReviewImg5()};
+            for(String imgPath : otherImgs) {
+                if(imgPath != null && !imgPath.isEmpty()) {
+                    // style='display:none'로 숨김
+                    reviewImgHtml.append("<div class='review-img-thumb' style='display:none;'>")
+                                 .append("<img src='")
+                                 .append(request.getContextPath())
+                                 .append("/images/review_upload/")
+                                 .append(imgPath).append("'>")
+                                 .append("</div>");
+                }
+            }
+          	//사진 더보기용 임의생성
+            reviewImgHtml.append("</div>");
         }
         
     	String reviewHtml =
@@ -130,7 +147,7 @@ try{
 		                "<span class='review-date'>방금 전</span>" +
 		            "</div>" +
 		
-		            reviewImgHtml +
+					reviewImgHtml.toString()  +
 		
 		        "</div>" +
 		        
@@ -138,7 +155,6 @@ try{
 				"<button class='review-edit-btn'>수정</button>" +
 				"<button class='review-delete-btn'>삭제</button>" +
 				"</div>" +
-
 		
 		    "</div>";
     	       
