@@ -12,77 +12,72 @@
     request.setCharacterEncoding("UTF-8");
     String ctxPath = request.getContextPath();
     
-    // 1. 파라미터 수신
+    // 파라미터 수신
     String sort = request.getParameter("sort");
     if (sort == null) sort = "latest"; 
-    
     String question = request.getParameter("q"); 
-
     String category = request.getParameter("category");
-    if (category == null || category.trim().isEmpty()) {
-        category = "all";
-    }
+    if (category == null || category.trim().isEmpty()) category = "all";
     
-    // 2. 맛집 목록 조회
+    // 데이터 조회
     StoreDAO dao = new StoreDAO();
     List<StoreDTO> storeList = dao.selectStoreList(sort, question, category);
     
-    // 로그인 세션 처리 로직
+    // 로그인 및 관리자 체크
     boolean isAdmin = false;
     String myId = (String) session.getAttribute("member_id");   
     String myRole = (String) session.getAttribute("member_role"); 
+    if (myRole != null && "admin".equals(myRole)) isAdmin = true;
     
-    if (myRole != null && "admin".equals(myRole)) {
-        isAdmin = true;
-    }
-    
-    // 3. 찜 목록 조회
+    // 찜 목록
     Set<Long> myBookmarkSet = new HashSet<>(); 
     if(myId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
         myBookmarkSet = bookmarkDao.getMyBookmarkStoreIdxSet(myId);
     }
     
-    // 4. AI 답변 로직
+    // AI 답변
     String answer = "";
     if(question != null && !question.trim().isEmpty()) {
         StringBuilder prompt = new StringBuilder();
         if (storeList != null && !storeList.isEmpty()) {
-            prompt.append("다음은 우리 서비스에 등록된 맛집 데이터야. 일치하는 데이터를 전부 보여줘\n[우리 DB 데이터]\n");
+            prompt.append("다음 맛집 데이터 중 일치하는 것 보여줘:\n");
             int maxLimit = 30; int count = 0;
             for(StoreDTO s : storeList) {
                  if(count >= maxLimit) break;
-                 prompt.append(String.format("- 가게명:%s | 평점:%.1f | 주소:%s\n", s.getStoreName(), s.getStoreRatingAvg(), s.getStoreAddr()));
+                 prompt.append(String.format("- %s (평점:%.1f, 주소:%s)\n", s.getStoreName(), s.getStoreRatingAvg(), s.getStoreAddr()));
                  count++;
             }
-            prompt.append("\n[사용자 질문]\n" + question);
+            prompt.append("\n질문: " + question);
         } else {
-            prompt.append("사용자가 '" + question + "'에 대해 검색했는데, 우리 DB에는 관련 정보가 없어. 추천해줘.");
+            prompt.append("'" + question + "'에 대한 정보가 없어. 추천해줘.");
         }
-        
         answer = GeminiUtil.getGeminiResponse(prompt.toString());
         new SearchLogDAO().insertSearchLog(question, answer);
     }
 
     String[][] catArr = {
-        {"all", "allCategory.png", "전체"},
-        {"한식", "korean.png", "한식"},
-        {"중식", "chinese.png", "중식"},
-        {"일식", "japanese.png", "일식"},
-        {"양식", "western.png", "양식"},
-        {"카페/디저트", "cafe.png", "카페/디저트"}
+        {"all", "allCategory.png", "전체"}, {"한식", "korean.png", "한식"},
+        {"중식", "chinese.png", "중식"}, {"일식", "japanese.png", "일식"},
+        {"양식", "western.png", "양식"}, {"카페/디저트", "cafe.png", "카페/디저트"}
     };
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>맛집 추천 리스트</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=10">
+    <link rel="stylesheet" href="<%= ctxPath %>/store/store_main.css?v=12">
     <script>
         const ctxPath = "<%= ctxPath %>";
+        
+        // 삭제 확인 함수
+        function deleteStore(idx) {
+            if(confirm("정말로 이 맛집을 삭제하시겠습니까? (복구 불가)")) {
+                location.href = "store_delete_action.jsp?idx=" + idx;
+            }
+        }
     </script>
     <script src="<%= ctxPath %>/store/store_main.js?v=<%= System.currentTimeMillis() %>"></script>
 </head>
@@ -92,20 +87,16 @@
     <div class="container">
         <div class="header">
             <h1>맛집추천</h1>
-            
             <form action="store_main.jsp" method="post" class="search-box" id="searchForm">
                 <input type="hidden" name="sort" value="<%= sort %>">
                 <input type="hidden" name="category" id="categoryInput" value="<%= category %>">
-                
-                <input type="text" name="q" placeholder="가게명, 주소 또는 메뉴 추천!" value="<%= (question != null) ? question : "" %>">
+                <input type="text" name="q" placeholder="가게명, 주소, 메뉴 검색" value="<%= (question != null) ? question : "" %>">
                 <button type="submit">검색</button>
             </form>
-            
             <div class="header-right">
                 <% if(isAdmin) { %>
                     <button type="button" class="write-btn" onclick="location.href='store_write.jsp'">맛집등록</button>
                 <% } %>
-                
                 <select id="sortFilter" onchange="changeSort()">
                     <option value="rating" <%= "rating".equals(sort) ? "selected" : "" %>>별점 높은순</option>
                     <option value="review" <%= "review".equals(sort) ? "selected" : "" %>>리뷰 많은순</option>
@@ -116,15 +107,11 @@
 
         <div class="category-section">
             <% for(String[] cat : catArr) { 
-                String cCode = cat[0];
-                String cImg = cat[1];
-                String cName = cat[2];
+                String cCode = cat[0]; String cImg = cat[1]; String cName = cat[2];
                 String activeClass = category.equals(cCode) ? "active" : "";
             %>
             <div class="category-item <%= activeClass %>" onclick="selectCategory('<%= cCode %>')">
-                <div class="img-wrap">
-                    <img src="<%= ctxPath %>/images/store_category/<%= cImg %>" alt="<%= cName %>">
-                </div>
+                <div class="img-wrap"><img src="<%= ctxPath %>/images/store_category/<%= cImg %>" alt="<%= cName %>"></div>
                 <span><%= cName %></span>
             </div>
             <% } %>
@@ -138,37 +125,32 @@
         <% } %>
         
         <div class="store-grid">
-            <% 
-            if (storeList != null && !storeList.isEmpty()) {
+            <% if (storeList != null && !storeList.isEmpty()) {
                 for(StoreDTO store : storeList) { 
                     String imgPath = store.getStoreImg();
-                    // 경로 보정: null이 아니고, /로 시작하지 않으면 붙여줌
-                    if (imgPath != null && !imgPath.startsWith("/") && !imgPath.trim().isEmpty()) {
-                        imgPath = "/" + imgPath;
-                    }
-                    
+                    if (imgPath != null && !imgPath.startsWith("/") && !imgPath.trim().isEmpty()) imgPath = "/" + imgPath;
                     boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty());
                     boolean isBookmarked = (store.getStoreIdx() > 0 && myBookmarkSet.contains(store.getStoreIdx()));
                     String heartShape = isBookmarked ? "♥" : "♡";
-                    
-                    // 전화번호 null 처리
                     String tel = store.getStoreTel();
                     if(tel == null || tel.trim().isEmpty()) tel = "전화번호 없음";
             %>
-                <div class="store-card">
+                <div class="store-card" onclick="location.href='store_detail.jsp?idx=<%= store.getStoreIdx() %>'">
+                    
                     <button type="button" class="store-jjim-btn" 
-                            onclick="toggleBookmark(this, '<%= store.getStoreIdx() %>', '<%= store.getStoreName() %>', '<%= store.getStoreAddr() %>')">
+                            onclick="event.stopPropagation(); toggleBookmark(this, '<%= store.getStoreIdx() %>', '<%= store.getStoreName() %>', '<%= store.getStoreAddr() %>')">
                         <%= heartShape %>
                     </button>
-                    <a href="store_detail.jsp?idx=<%= store.getStoreIdx() %>" class="img-link">
+                    
+                    <div class="img-link">
                         <% if(hasImage) { %>
-                            <img src="<%= ctxPath %>/images/store_image<%= imgPath %>" class="store-img" alt="가게사진"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <img src="<%= ctxPath %>/images/store_image<%= imgPath %>" class="store-img" alt="가게사진" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div class="no-img-box" style="display:none;">이미지 없음</div>
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
                         <% } %>
-                    </a>
+                    </div>
+                    
                     <div class="store-info">
                         <div class="store-name"><%= store.getStoreName() %></div>
                         <div class="store-stats">
@@ -179,19 +161,23 @@
                         <div class="store-addr"><%= store.getStoreAddr() %></div>
                         <div class="store-tel"><%= tel %></div>
                     </div>
+
+                    <%-- 관리자 버튼 영역도 클릭 시 이동 방지 --%>
+                    <% if(isAdmin) { %>
+                    <div class="admin-btn-group" onclick="event.stopPropagation()" style="padding: 10px; border-top: 1px solid #eee; text-align: right; background: #f9f9f9;">
+                        <button type="button" onclick="location.href='store_update.jsp?idx=<%= store.getStoreIdx() %>'" 
+                                style="background:#3498db; color:white; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; font-size:12px;">수정</button>
+                        <button type="button" onclick="deleteStore('<%= store.getStoreIdx() %>')" 
+                                style="background:#e74c3c; color:white; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; margin-left:5px; font-size:12px;">삭제</button>
+                    </div>
+                    <% } %>
                 </div>
-            <% 
-                }
-            } else { 
-            %>
-                <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #666;">
-                    <h2>🚫 조건에 맞는 맛집이 없습니다.</h2>
-                </div>
+            <% } 
+            } else { %>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #666;"><h2>🚫 맛집이 없습니다.</h2></div>
             <% } %>
         </div>
     </div>
-    
     <jsp:include page="/footer/footer.jsp" />
-    
 </body>
 </html>
