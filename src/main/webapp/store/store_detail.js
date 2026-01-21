@@ -134,6 +134,19 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
 	    new bootstrap.Modal(document.getElementById("menuAddModal")).show();
 	}
 	
+	//리뷰더보기
+	function showMoreReviews() {
+	    // 숨겨진 리뷰 전부 가져오기
+	    const hiddenReviews = document.querySelectorAll('.review-hidden');
+
+	    hiddenReviews.forEach(review => {
+	        review.classList.remove('review-hidden');
+	    });
+
+	    // 더보기 버튼 숨기기
+	    document.querySelector('.review-more-btn').style.display = 'none';
+	}
+	
 	
 	//지도
 	var mapContainer = document.getElementById('map');
