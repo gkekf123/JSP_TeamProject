@@ -43,7 +43,7 @@
         </li>
         <li>
             <a href="<%= (session.getAttribute("loginok") != null) 
-            ? (ctxPath + "/") : (ctxPath + "/login/login_form.jsp") %>">내 리뷰</a>
+            ? (ctxPath + "/review/my_review.jsp") : (ctxPath + "/login/login_form.jsp") %>">내 리뷰</a>
         </li>
 
         <%-- 로그인 상태일 때만 로그아웃 메뉴 출력 --%>

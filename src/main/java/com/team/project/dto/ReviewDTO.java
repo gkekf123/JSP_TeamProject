@@ -17,6 +17,16 @@ public class ReviewDTO {
 	private String reviewImg5;
 	private Timestamp reviewCreatedAt;
 	private Timestamp reviewUpdatedAt;
+	
+	private String storeName;
+	
+	
+	public String getStoreName() {
+		return storeName;
+	}
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
 	public long getReviewIdx() {
 		return reviewIdx;
 	}

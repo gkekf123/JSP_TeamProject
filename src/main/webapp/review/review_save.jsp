@@ -147,39 +147,62 @@ try{
         // ===== 리뷰 이미지 HTML 생성 =====
         StringBuilder reviewImgHtml = new StringBuilder();
         if(dto.getReviewImg1() != null && !dto.getReviewImg1().isEmpty()) {
-            reviewImgHtml.append("<img src='" + request.getContextPath() + dto.getReviewImg1() + "' class='review-img'>");
+            reviewImgHtml.append(
+            		"<div class='review-img-thumb'>" +
+                    "<img src='" + request.getContextPath() + dto.getReviewImg1() + "'>" +
+                    "</div>");
         }
         if(dto.getReviewImg2() != null && !dto.getReviewImg2().isEmpty()) {
-            reviewImgHtml.append("<img src='" + request.getContextPath() + dto.getReviewImg2() + "' class='review-img'>");
+            reviewImgHtml.append(
+            		"<div class='review-img-thumb'>" +
+                    "<img src='" + request.getContextPath() + dto.getReviewImg2() + "'>" +
+                    "</div>");
         }
         if(dto.getReviewImg3() != null && !dto.getReviewImg3().isEmpty()) {
-            reviewImgHtml.append("<img src='" + request.getContextPath() + dto.getReviewImg3() + "' class='review-img'>");
+            reviewImgHtml.append(
+            		"<div class='review-img-thumb'>" +
+                    "<img src='" + request.getContextPath() + dto.getReviewImg3() + "'>" +
+                    "</div>");
         }
         if(dto.getReviewImg4() != null && !dto.getReviewImg4().isEmpty()) {
-            reviewImgHtml.append("<img src='" + request.getContextPath() + dto.getReviewImg4() + "' class='review-img'>");
+            reviewImgHtml.append(
+            		"<div class='review-img-thumb'>" +
+                    "<img src='" + request.getContextPath() + dto.getReviewImg4() + "'>" +
+                    "</div>");
         }
         if(dto.getReviewImg5() != null && !dto.getReviewImg5().isEmpty()) {
-            reviewImgHtml.append("<img src='" + request.getContextPath() + dto.getReviewImg5() + "' class='review-img'>");
+            reviewImgHtml.append(
+            		"<div class='review-img-thumb'>" +
+                    "<img src='" + request.getContextPath() + dto.getReviewImg5() + "'>" +
+                    "</div>");
         }
-    	
+        
     	String reviewHtml =
-    		    "<div class='review-item'>" +
+    			"<div class='review-item'>" +
 
-    		    " <div class='review-profile'>" +
-    		          profileHtml +
-    		    " </div>" +
-
-    	        " <div class='review-content'>" +
-    	        "   <div class='review-top'>" +
-    	        "     <span class='review-writer'>" + dto.getMemberName() + "</span>" +
-    	        "     <span class='review-rating'>평점 " + dto.getReviewRating() + " ★★★★★</span>" +
-    	        "   </div>" +
-    	        "   <p class='review-text'>" + dto.getReviewContent() + "</p>" +
-    	        		 reviewImgHtml.toString() +
-    	        "   <span class='review-date'>방금 전</span>" +
-    	        " </div>" +
-
-    	        "</div>";
+		        "<div class='review-profile'>" +
+		            profileHtml +
+		            "<span class='review-writer'>" + dto.getMemberName() + "</span>" +
+		            "<span class='review-rating'>평점 " + dto.getReviewRating() + "점</span>" +
+		        "</div>" +
+		
+		        "<div class='review-content'>" +
+		
+		            "<div class='review-text-wrap'>" +
+		                "<p class='review-text'>" + dto.getReviewContent() + "</p>" +
+		                "<span class='review-date'>방금 전</span>" +
+		            "</div>" +
+		
+					reviewImgHtml.toString()  +
+		
+		        "</div>" +
+		        
+				"<div class='review-actions'>" +
+				"<button class='review-edit-btn'>수정</button>" +
+				"<button class='review-delete-btn'>삭제</button>" +
+				"</div>" +
+		
+		    "</div>";
     	       
         ob.put("reviewResult", "success");
         ob.put("reviewCount", reviewCount);

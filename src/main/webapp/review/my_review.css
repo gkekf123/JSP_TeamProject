@@ -1,1 +1,60 @@
 @charset "UTF-8";
+.container {
+    max-width: 1200px;
+    width: 90%;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* 헤더 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.my-review-list {
+    margin-top: 30px;
+}
+
+.review-item {
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+}
+
+.review-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+}
+
+.review-content {
+    margin: 10px 0;
+    font-size: 15px;
+}
+
+.review-rating {
+    font-size: 14px;
+    color: #ff9800;
+}
+
+.review-img img {
+    width: 120px;
+    border-radius: 8px;
+}

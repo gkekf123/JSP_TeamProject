@@ -246,8 +246,6 @@
         	data-login="<%= (memberId!= null) %>">
     		리뷰 쓰기
 		</button>
-		
-		<jsp:include page="/review/review_write.jsp"/>
 
     </div>
 
@@ -259,8 +257,8 @@
         	int index = 0; 
         
         	for (ReviewDTO r : reviewList) { 
-            	boolean isMyReview = (loginMember != null 
-                	&& loginMember.getMemberId().equals(r.getMemberId()));
+        		boolean isMyReview = (memberId != null 
+        			    && memberId.equals(r.getMemberId()));
         %>
 		
         <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>">
@@ -272,42 +270,62 @@
                 <% } else { %>
                     <div class="profile-circle"><i class="bi bi-person-circle"></i></div>
                 <% } %>
+                <span class="review-writer"><%= r.getMemberName() %></span>
+                <span class="review-rating">
+                    평점 <%= r.getReviewRating() %>점
+                </span>
             </div>
 
             <!-- 리뷰 본문 -->
             <div class="review-content">
-
-                <div class="review-top">
-                    <span class="review-writer"><%= r.getMemberName() %></span>
-
-                    <span class="review-rating">
-                        평점 <%= r.getReviewRating() %>
-                        ★★★★★
-                    </span>
-                </div>
-
-                <p class="review-text">
-                    <%= r.getReviewContent() %>
-                </p>
- 
-
-                <span class="review-date"><%= r.getReviewCreatedAt() %></span>
+                <!-- 왼쪽 : 텍스트 -->
+		        <div class="review-text-wrap">
+		            <p class="review-text">
+		                <%= r.getReviewContent() %>
+		            </p>
+		
+		            <span class="review-date">
+		                <%= r.getReviewCreatedAt() %>
+		            </span>
+		        </div>
+		        
+		        <!-- 오른쪽 : 대표 이미지 -->
+		        <div class="review-img-thumb">
+		        	<% if (r.getReviewImg1() != null && !r.getReviewImg1().equals("")) { %>
+		        		<img src="<%= ctxPath %><%= r.getReviewImg1() %>">
+		        	<% } %>
+		        	<% if (r.getReviewImg2() != null && !r.getReviewImg1().equals("")) { %>
+		        		<img src="<%= ctxPath %><%= r.getReviewImg2() %>">
+		        	<% } %>
+		        	<% if (r.getReviewImg3() != null && !r.getReviewImg1().equals("")) { %>
+		                <img src="<%= ctxPath %><%= r.getReviewImg3() %>">
+		        	<% } %>
+		        	<% if (r.getReviewImg4() != null && !r.getReviewImg1().equals("")) { %>
+		                <img src="<%= ctxPath %><%= r.getReviewImg4() %>">
+		        	<% } %>
+		        	<% if (r.getReviewImg5() != null && !r.getReviewImg1().equals("")) { %>
+		                <img src="<%= ctxPath %><%= r.getReviewImg5() %>">
+		        	<% } %>
+		        </div>
             </div>
-
-            <!-- 내 리뷰일 때만 -->
+            
             <% if (isMyReview) { %>
-                <div class="review-btns">
-                    <button class="btn-edit"
-                        onclick="openEditReview(<%= r.getReviewIdx() %>)">
-                        수정
-                    </button>
-                    <button class="btn-delete"
-                        onclick="deleteReview(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
-                        삭제
-                    </button>
-                </div>
-                
-            <% } %>
+		        <div class="review-actions">
+		            <button class="review-edit-btn"
+		                onclick="openEditReviewModal(
+		                    <%= r.getReviewIdx() %>,
+		                    '<%= r.getReviewContent().replace("'", "\\'") %>',
+		                    <%= r.getReviewRating() %>
+		                )">
+		                수정
+		            </button>
+		
+		            <button class="review-delete-btn"
+		                onclick="deleteReview(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
+		                삭제
+		            </button>
+		        </div>
+		    <% } %>
 
         </div>
 		<% index++; } %>
@@ -331,6 +349,8 @@
 	
     
 </div>
+
+<jsp:include page="/review/review_write.jsp"/>
 
 <jsp:include page="/footer/footer.jsp" />
 

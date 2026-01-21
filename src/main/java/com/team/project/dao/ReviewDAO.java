@@ -205,4 +205,41 @@ public class ReviewDAO {
 		return reviewCount;
 		
 	}
+	
+	
+	public List<ReviewDTO> getMyReviews(String memberId) {
+	    List<ReviewDTO> list = new ArrayList<>();
+
+	    String sql = """
+	        SELECT r.*, s.store_name
+	        FROM review r
+	        JOIN store s ON r.store_idx = s.store_idx
+	        WHERE r.member_id = ?
+	        ORDER BY r.review_created_at DESC
+	    """;
+
+	    try (Connection conn = db.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+	        pstmt.setString(1, memberId);
+	        ResultSet rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            ReviewDTO dto = new ReviewDTO();
+	            dto.setReviewIdx(rs.getLong("review_idx"));
+	            dto.setStoreIdx(rs.getLong("store_idx"));
+	            dto.setStoreName(rs.getString("store_name")); // ⭐ 핵심
+	            dto.setReviewContent(rs.getString("review_content"));
+	            dto.setReviewRating(rs.getInt("review_rating"));
+	            dto.setReviewCreatedAt(rs.getTimestamp("review_created_at"));
+	            dto.setReviewImg1(rs.getString("review_img1"));
+	            list.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+
+
 }
