@@ -1,3 +1,24 @@
+## Roles & Responsibilities (R&R)
+### 황주현 User & Data
+  - 로그인 / 회원가입 / 로그아웃 구현
+  - 마이페이지 (내 정보 수정, 활동 내역 조회)
+  - 초기 데이터 수집 및 DB 구축
+### 유지은 Review & Layout
+  - 공통 레이아웃 (헤더, 푸터) 구현
+  - 리뷰 시스템 (등록, 삭제, 수정 기능)
+  - 리뷰 평점 및 통계 처리
+### 이태주 Store & Map
+  - Gemini 검색 기능 구현
+  - 맛집 리스트 조회 및 필터링
+  - 맛집 등록 (관리자) 및 지도(Map) 연동
+  - 찜하기(Bookmark) 목록 및 기능 구현
+### 김민지 Detail & Community
+  - 가게 상세 페이지 구현 (디테일 뷰)
+  - 맛집 뉴스/공유 게시판 기능
+  - 가게별 리뷰 목록 조회 및 UI 구현
+
+<br>
+
 ## DB(ERD)
 <img width="745" height="829" alt="image" src="https://github.com/user-attachments/assets/9127daf0-79ff-4b94-9276-2d29b350ad72" />
 
