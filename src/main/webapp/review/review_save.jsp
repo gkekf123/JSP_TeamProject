@@ -104,23 +104,43 @@ try{
                 "<div class='profile-circle'><i class='bi bi-person-circle'></i></div>";
         }
     	
+        String reviewImgHtml = "";
+
+        if (dto.getReviewImg1() != null && !dto.getReviewImg1().isEmpty()) {
+            reviewImgHtml =
+                "<div class='review-img-thumb'>" +
+                "<img src='" + request.getContextPath() +
+                "/images/review_upload/" + dto.getReviewImg1() + "'>" +
+                "</div>";
+        }
+        
     	String reviewHtml =
-    		    "<div class='review-item'>" +
+    			"<div class='review-item'>" +
 
-    		    " <div class='review-profile'>" +
-    		          profileHtml +
-    		    " </div>" +
+		        "<div class='review-profile'>" +
+		            profileHtml +
+		            "<span class='review-writer'>" + dto.getMemberName() + "</span>" +
+		            "<span class='review-rating'>평점 " + dto.getReviewRating() + "점</span>" +
+		        "</div>" +
+		
+		        "<div class='review-content'>" +
+		
+		            "<div class='review-text-wrap'>" +
+		                "<p class='review-text'>" + dto.getReviewContent() + "</p>" +
+		                "<span class='review-date'>방금 전</span>" +
+		            "</div>" +
+		
+		            reviewImgHtml +
+		
+		        "</div>" +
+		        
+				"<div class='review-actions'>" +
+				"<button class='review-edit-btn'>수정</button>" +
+				"<button class='review-delete-btn'>삭제</button>" +
+				"</div>" +
 
-    	        " <div class='review-content'>" +
-    	        "   <div class='review-top'>" +
-    	        "     <span class='review-writer'>" + dto.getMemberName() + "</span>" +
-    	        "     <span class='review-rating'>평점 " + dto.getReviewRating() + " ★★★★★</span>" +
-    	        "   </div>" +
-    	        "   <p class='review-text'>" + dto.getReviewContent() + "</p>" +
-    	        "   <span class='review-date'>방금 전</span>" +
-    	        " </div>" +
-
-    	        "</div>";
+		
+		    "</div>";
     	       
         ob.put("reviewResult", "success");
         ob.put("reviewCount", reviewCount);
