@@ -21,7 +21,7 @@ if (!"yes".equals(loginOk) || memberId == null) {
 ReviewDAO dao = new ReviewDAO();
 List<ReviewDTO> list = dao.getMyReviews(memberId);
 
-
+int reviewCount = list.size();
 %>
 <!DOCTYPE html>
 <html>
@@ -36,7 +36,7 @@ List<ReviewDTO> list = dao.getMyReviews(memberId);
 
 <div class="container">
 	<div class="header">
-		<h3>마이리뷰 목록</h3>
+		<h3>마이리뷰 (<%= reviewCount %>)</h3>
 	</div>
 	<div class="my-review-list">
 
