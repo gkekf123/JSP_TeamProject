@@ -1,4 +1,8 @@
+## DB(ERD)
+<img width="745" height="829" alt="image" src="https://github.com/user-attachments/assets/9127daf0-79ff-4b94-9276-2d29b350ad72" />
+
 ## Tech Stack
+<img width="838" height="464" alt="image" src="https://github.com/user-attachments/assets/c2656030-037f-4d81-ae2f-67822f69f5a6" />
 ### Frontend
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
