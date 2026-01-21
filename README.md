@@ -1,3 +1,15 @@
+<div align="center">
+  <img width="100%" alt="logo" src="https://github.com/user-attachments/assets/8b145ecd-323b-465e-82c1-2f9fa9740536" />
+  <h2>맛집리뷰</h2>
+  <p>
+    <b>취향을 분석하는 AI(Gemini) 기반 검색과 카카오맵(Kakao Map) 위치 서비스를 결합한 맛집 커뮤니티입니다.</b><br>
+    단순한 검색을 넘어, AI와의 대화를 통해 숨은 맛집을 발견하고,<br>
+    실제 방문자들의 별점과 리뷰를 통해 검증된 미식 정보를 지도에서 한눈에 확인할 수 있습니다.
+  </p>
+</div>
+
+<br>
+
 ## Roles & Responsibilities (R&R)
 ### 황주현 User & Data
   - 로그인 / 회원가입 / 로그아웃 구현
@@ -47,3 +59,7 @@
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 ![Canva](https://img.shields.io/badge/Canva-%2300C4CC.svg?style=for-the-badge&logo=Canva&logoColor=white)
+
+<br>
+
+## In Action
