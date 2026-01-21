@@ -11,7 +11,7 @@ import com.team.project.util.DBConn;
 
 public class StoreDAO {
     
-    // 맛집 등록 (수정됨: 좌표 및 카카오 데이터 추가)
+    // 맛집 등록
     public int insertStore(StoreDTO dto) {
         int result = 0;
         Connection conn = null;
@@ -35,10 +35,10 @@ public class StoreDAO {
             pstmt.setString(6, dto.getStoreImg3());
             pstmt.setString(7, dto.getStoreIntro());
             pstmt.setString(8, dto.getStoreTel());
-            pstmt.setDouble(9, dto.getLatitude());   // 위도
-            pstmt.setDouble(10, dto.getLongitude()); // 경도
-            pstmt.setString(11, dto.getKakaoId());   // 카카오 ID
-            pstmt.setString(12, dto.getPlaceUrl());  // URL
+            pstmt.setDouble(9, dto.getLatitude());   
+            pstmt.setDouble(10, dto.getLongitude()); 
+            pstmt.setString(11, dto.getKakaoId());   
+            pstmt.setString(12, dto.getPlaceUrl());  
             
             result = pstmt.executeUpdate();
             
@@ -51,7 +51,7 @@ public class StoreDAO {
         return result;
     }
     
-    // 맛집 목록 조회 (정렬 + 검색 + 카테고리 필터)
+    // 맛집 목록 조회
     public List<StoreDTO> selectStoreList(String sortType, String searchWord, String category) {
         List<StoreDTO> list = new ArrayList<>();
         
@@ -61,7 +61,7 @@ public class StoreDAO {
 
         StringBuilder sql = new StringBuilder();
         
-        sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_view_count, store_addr, latitude, longitude, kakao_id, place_url ");
+        sql.append("SELECT store_idx, store_name, store_img, store_rating_avg, store_rating_count, store_view_count, store_addr, store_tel, latitude, longitude, kakao_id, place_url ");
         sql.append("FROM store ");
         sql.append("WHERE 1=1 "); 
         
@@ -75,7 +75,6 @@ public class StoreDAO {
         }
         
         if (hasSearch) {
-            // (이름 OR 주소 OR 카테고리)
             sql.append(" AND (store_name LIKE ? OR store_addr LIKE ? OR store_category LIKE ?) ");
         }
         
@@ -95,7 +94,7 @@ public class StoreDAO {
             pstmt = conn.prepareStatement(sql.toString());
             
             // 5. 물음표(?) 값 채우기
-            int paramIndex = 1; // 물음표 순서 카운터
+            int paramIndex = 1;
 
             if (hasCategory) {
                 pstmt.setString(paramIndex++, category);
@@ -119,8 +118,7 @@ public class StoreDAO {
                 dto.setStoreRatingCount(rs.getInt("store_rating_count"));
                 dto.setStoreViewCount(rs.getInt("store_view_count"));
                 dto.setStoreAddr(rs.getString("store_addr"));
-                
-                // [추가] 새로 생긴 컬럼들도 DTO에 담기
+                dto.setStoreTel(rs.getString("store_tel"));
                 dto.setLatitude(rs.getDouble("latitude"));
                 dto.setLongitude(rs.getDouble("longitude"));
                 dto.setKakaoId(rs.getString("kakao_id"));
@@ -132,7 +130,7 @@ public class StoreDAO {
             System.out.println("[DAO] 맛집 목록 조회 실패");
             e.printStackTrace();
         } finally {
-           DBConn.close(rs, pstmt, conn);
+            DBConn.close(rs, pstmt, conn);
         }
         
         return list;

@@ -3,23 +3,25 @@
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
     font-family: 'Noto Sans KR', sans-serif;
     background-color: #f9f9f9;
 }
+
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+
 .container {
     flex: 1;
     max-width: 1000px;
     width: 90%;
-    margin: 50px auto;
+    margin: 100px auto;
     padding: 20px;
     box-sizing: border-box;
 }
+
 .page-title {
     text-align: center;
     font-size: 28px;
@@ -27,37 +29,83 @@ body {
     margin-bottom: 40px;
     color: #333;
 }
+
+/* 그리드 레이아웃 */
 .bookmark-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
+
+/* 카드 스타일 */
 .bookmark-card {
     background: #fff;
     border: 1px solid #eee;
     border-radius: 12px;
-    padding: 20px;
     position: relative;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     transition: transform 0.2s, box-shadow 0.2s;
     
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 180px;
+    height: 160px;
+    overflow: hidden;
 }
+
 .bookmark-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
+
+/* [왼쪽] 이미지 영역 스타일 */
+.card-left {
+    width: 140px;
+    height: 100%;
+    flex-shrink: 0;
+    background-color: #f0f0f0;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.card-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 이미지 없음 박스 스타일 */
+.no-img-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e0e0e0;
+    color: #777;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* [오른쪽] 정보 영역 스타일 */
+.card-right {
+    flex: 1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    overflow: hidden;
+}
+
 .badge {
     display: inline-block;
-    padding: 4px 8px;
+    padding: 3px 6px;
     font-size: 11px;
     border-radius: 4px;
     font-weight: bold;
-    margin-bottom: 10px;
     width: fit-content;
+    margin-bottom: 5px;
 }
 .badge.internal { background-color: #e3f2fd; color: #1976d2; }
 .badge.external { background-color: #fff3e0; color: #f57c00; }
@@ -66,9 +114,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 8px;
     text-decoration: none;
-    display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -77,35 +123,47 @@ body {
     text-decoration: underline;
     color: #3498db;
 }
+
 .place-addr {
     font-size: 13px;
     color: #666;
-    margin-bottom: 5px;
-    line-height: 1.4;
-    height: 36px;
+    white-space: nowrap;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
 }
+
+.place-stats {
+    font-size: 13px;
+    color: #444;
+    font-weight: 500;
+}
+.star { color: #f39c12; }
+.view-count { font-size: 12px; color: #888; font-weight: normal; margin-left: 3px; }
+.external-info { color: #999; font-size: 12px; }
+
 .place-phone {
     font-size: 12px;
     color: #888;
+    margin-top: 3px;
 }
+
 .delete-btn {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    right: 10px;
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
     color: #ff4757;
     cursor: pointer;
+    z-index: 10;
     transition: transform 0.2s;
+    line-height: 1;
 }
 .delete-btn:hover {
     transform: scale(1.2);
 }
+
 .no-data {
     grid-column: 1 / -1;
     text-align: center;
@@ -113,32 +171,15 @@ body {
     color: #999;
     font-size: 16px;
 }
-.no-data p {
-    margin: 5px 0;
-}
 
-/* 반응형 스타일 */
-@media screen and (max-width: 900px) {
-    .bookmark-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-@media screen and (max-width: 600px) {
-    .container {
-        width: 100%;
-        margin: 20px auto;
-        padding: 0 15px;
-    }
-    .page-title {
-        font-size: 22px;
-        margin-bottom: 20px;
-    }
+@media screen and (max-width: 768px) {
     .bookmark-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
     }
     .bookmark-card {
-        height: auto;
-        min-height: 150px;
+        height: 140px;
+    }
+    .card-left {
+        width: 110px;
     }
 }

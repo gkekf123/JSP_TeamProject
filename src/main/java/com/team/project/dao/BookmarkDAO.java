@@ -14,31 +14,31 @@ import com.team.project.util.DBConn;
 public class BookmarkDAO {
 
     // 1. 내가 찜한 '내부 가게(store_idx)' 목록만 빠르게 조회
-	public Set<Long> getMyBookmarkStoreIdxSet(String memberId) {
-	    Set<Long> set = new HashSet<>();
-	    Connection conn = null;
-	    PreparedStatement pstmt = null;
-	    ResultSet rs = null;
-	    
-	    try {
-	        conn = DBConn.getConnection();
-	        String sql = "SELECT store_idx FROM bookmark WHERE member_id = ? AND store_idx IS NOT NULL";
-	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, memberId);
-	        rs = pstmt.executeQuery();
-	        
-	        while(rs.next()) {
-	            set.add(rs.getLong("store_idx"));
-	        }
-	    } catch(Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        DBConn.close(rs, pstmt, conn);
-	    }
-	    return set;
-	}
+    public Set<Long> getMyBookmarkStoreIdxSet(String memberId) {
+        Set<Long> set = new HashSet<>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DBConn.getConnection();
+            String sql = "SELECT store_idx FROM bookmark WHERE member_id = ? AND store_idx IS NOT NULL";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, memberId);
+            rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+                set.add(rs.getLong("store_idx"));
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBConn.close(rs, pstmt, conn);
+        }
+        return set;
+    }
 
-    // 2. 찜 여부 단건 확인 (특정 가게를 찜했는지?)
+    // 2. 찜 여부 단건 확인
     public boolean isBookmarked(String memberId, int storeIdx) {
         boolean result = false;
         Connection conn = null;
@@ -64,7 +64,7 @@ public class BookmarkDAO {
         return result;
     }
 
-    // 3. 찜 추가 (INSERT) - 내부 가게/외부 가게 공용
+    // 3. 찜 추가
     public int addBookmark(String memberId, int storeIdx, String name, String addr, String url, String phone, String kakaoId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -74,6 +74,7 @@ public class BookmarkDAO {
         try {
             conn = DBConn.getConnection();
             
+            // 카카오 ID로 store_idx 찾기
             if (storeIdx == 0 && kakaoId != null && !kakaoId.isEmpty()) {
                 String checkSql = "SELECT store_idx FROM store WHERE kakao_id = ?";
                 pstmt = conn.prepareStatement(checkSql);
@@ -87,6 +88,7 @@ public class BookmarkDAO {
                 pstmt.close();
             }
 
+            // store_idx로 카카오 정보 찾기
             if (storeIdx > 0 && (kakaoId == null || kakaoId.isEmpty())) {
                  String infoSql = "SELECT kakao_id, place_url FROM store WHERE store_idx = ?";
                  pstmt = conn.prepareStatement(infoSql);
@@ -100,7 +102,7 @@ public class BookmarkDAO {
                  pstmt.close();
             }
 
-            // 3. 찜 저장
+            // INSERT
             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO bookmark ");
             sql.append("(member_id, store_idx, place_name, place_addr, place_url, place_phone, kakao_id) ");
@@ -109,13 +111,11 @@ public class BookmarkDAO {
             pstmt = conn.prepareStatement(sql.toString());
             
             pstmt.setString(1, memberId);
-            
             if (storeIdx > 0) {
                 pstmt.setInt(2, storeIdx);
             } else {
                 pstmt.setNull(2, java.sql.Types.INTEGER);
             }
-            
             pstmt.setString(3, name);
             pstmt.setString(4, addr);
             pstmt.setString(5, url);
@@ -132,7 +132,7 @@ public class BookmarkDAO {
         return result;
     }
 
-    // 4. 찜 삭제 (DELETE) - store_idx 기준 (내부 가게용)
+    // 4. 찜 삭제
     public int removeBookmark(String memberId, int storeIdx) {
         int result = 0;
         Connection conn = null;
@@ -155,7 +155,7 @@ public class BookmarkDAO {
         return result;
     }
     
-    // 5. [마이페이지용] 내 찜 목록 전체 조회 (DTO 리스트 반환)
+    // 5. 내 찜 목록 전체 조회
     public List<BookmarkDTO> selectMyBookmarkList(String memberId) {
         List<BookmarkDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -164,9 +164,15 @@ public class BookmarkDAO {
         
         try {
             conn = DBConn.getConnection();
-            // 최신순(찜한 날짜 내림차순) 정렬
-            String sql = "SELECT * FROM bookmark WHERE member_id = ? ORDER BY like_date DESC";
-            pstmt = conn.prepareStatement(sql);
+            
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT b.*, s.store_img, s.store_rating_avg, s.store_view_count, s.store_tel ");
+            sql.append("FROM bookmark b ");
+            sql.append("LEFT JOIN store s ON b.store_idx = s.store_idx "); 
+            sql.append("WHERE b.member_id = ? ");
+            sql.append("ORDER BY b.like_date DESC");
+
+            pstmt = conn.prepareStatement(sql.toString());
             pstmt.setString(1, memberId);
             rs = pstmt.executeQuery();
             
@@ -175,14 +181,26 @@ public class BookmarkDAO {
                 
                 dto.setLikeIdx(rs.getLong("like_idx"));
                 dto.setMemberId(rs.getString("member_id"));
-                dto.setStoreIdx(rs.getInt("store_idx")); 
+                int storeIdx = rs.getInt("store_idx");
+                dto.setStoreIdx(storeIdx); 
                 dto.setPlaceName(rs.getString("place_name"));
                 dto.setPlaceAddr(rs.getString("place_addr"));
                 dto.setPlaceUrl(rs.getString("place_url"));
-                dto.setPlacePhone(rs.getString("place_phone"));
                 dto.setLikeDate(rs.getTimestamp("like_date"));
-                
                 dto.setKakaoId(rs.getString("kakao_id"));
+                
+                String storeTel = rs.getString("store_tel");
+                String bookmarkPhone = rs.getString("place_phone");
+                
+                if (storeIdx > 0 && storeTel != null && !storeTel.trim().isEmpty()) {
+                    dto.setPlacePhone(storeTel);
+                } else {
+                    dto.setPlacePhone(bookmarkPhone);
+                }
+                
+                dto.setStoreImg(rs.getString("store_img"));
+                dto.setStoreRatingAvg(rs.getDouble("store_rating_avg"));
+                dto.setStoreViewCount(rs.getInt("store_view_count"));
                 
                 list.add(dto);
             }

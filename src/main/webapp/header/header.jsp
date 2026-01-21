@@ -14,7 +14,6 @@
 
     <nav>
         <ul>
-        	<!-- 링크 수정 필요 -->
             <li><a href="<%= ctxPath %>/store/store_main.jsp">맛집추천</a></li> 
         	<li><a href="<%= ctxPath %>/map/map_main.jsp">맛집지도</a></li>
         	<li><a href="<%= ctxPath %>/news/news.jsp">맛집공유</a></li>
@@ -34,19 +33,17 @@
 <div class="header-sidebar" id="headerSidebar">
     <h6 id="headerCloseSidebar">X</h6>
     <ul>
-    	<!-- 링크 수정 필요 전자-각각의 페이지 후자-로그인페이지  -->
-    	<!-- 로그인 필요합니다 알림창 진행 추후 결정 -->
         <li>
             <a href="<%= (session.getAttribute("loginok") != null) 
             ? (ctxPath + "/member/my_page.jsp") : (ctxPath + "/login/login_form.jsp") %>">마이페이지</a>
         </li>
         <li>
             <a href="<%= (session.getAttribute("loginok") != null) 
-            ? (ctxPath + "/") : (ctxPath + "/") %>">찜</a>
+            ? (ctxPath + "/bookmark/bookmark_list.jsp") : (ctxPath + "/login/login_form.jsp") %>">찜</a>
         </li>
         <li>
             <a href="<%= (session.getAttribute("loginok") != null) 
-            ? (ctxPath + "/") : (ctxPath + "/") %>">내 리뷰</a>
+            ? (ctxPath + "/") : (ctxPath + "/login/login_form.jsp") %>">내 리뷰</a>
         </li>
 
         <%-- 로그인 상태일 때만 로그아웃 메뉴 출력 --%>
