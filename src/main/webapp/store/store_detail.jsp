@@ -290,23 +290,11 @@
 		        </div>
 		        
 		        <!-- 오른쪽 : 대표 이미지 -->
-		        <div class="review-img-thumb">
 		        	<% if (r.getReviewImg1() != null && !r.getReviewImg1().equals("")) { %>
-		        		<img src="<%= ctxPath %><%= r.getReviewImg1() %>">
+						<div class="review-img-thumb">
+		        			<img src="<%= ctxPath %><%= r.getReviewImg1() %>">
+		        		</div>
 		        	<% } %>
-		        	<% if (r.getReviewImg2() != null && !r.getReviewImg1().equals("")) { %>
-		        		<img src="<%= ctxPath %><%= r.getReviewImg2() %>">
-		        	<% } %>
-		        	<% if (r.getReviewImg3() != null && !r.getReviewImg1().equals("")) { %>
-		                <img src="<%= ctxPath %><%= r.getReviewImg3() %>">
-		        	<% } %>
-		        	<% if (r.getReviewImg4() != null && !r.getReviewImg1().equals("")) { %>
-		                <img src="<%= ctxPath %><%= r.getReviewImg4() %>">
-		        	<% } %>
-		        	<% if (r.getReviewImg5() != null && !r.getReviewImg1().equals("")) { %>
-		                <img src="<%= ctxPath %><%= r.getReviewImg5() %>">
-		        	<% } %>
-		        </div>
             </div>
             
             <% if (isMyReview) { %>

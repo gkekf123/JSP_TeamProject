@@ -143,39 +143,26 @@ try{
             profileHtml =
                 "<div class='profile-circle'><i class='bi bi-person-circle'></i></div>";
         }
-        
-        // ===== 리뷰 이미지 HTML 생성 =====
+               
+     // ===== 리뷰 이미지 HTML 생성 =====
         StringBuilder reviewImgHtml = new StringBuilder();
         if(dto.getReviewImg1() != null && !dto.getReviewImg1().isEmpty()) {
-            reviewImgHtml.append(
-            		"<div class='review-img-thumb'>" +
-                    "<img src='" + request.getContextPath() + dto.getReviewImg1() + "'>" +
-                    "</div>");
+            reviewImgHtml.append("<div class='review-img-thumb'>")
+                         .append("<img src='").append(request.getContextPath()).append(dto.getReviewImg1()).append("'>")
+                         .append("</div>");
+            
+            // 2~5번 이미지는 반복문으로 처리
+            String[] otherImgs = {dto.getReviewImg2(), dto.getReviewImg3(), dto.getReviewImg4(), dto.getReviewImg5()};
+            for(String imgPath : otherImgs) {
+                if(imgPath != null && !imgPath.isEmpty()) {
+                    // style='display:none'로 숨김
+                    reviewImgHtml.append("<div class='review-img-thumb' style='display:none;'>")
+                                 .append("<img src='").append(request.getContextPath()).append(imgPath).append("'>")
+                                 .append("</div>");
+                }
+            }
         }
-        if(dto.getReviewImg2() != null && !dto.getReviewImg2().isEmpty()) {
-            reviewImgHtml.append(
-            		"<div class='review-img-thumb'>" +
-                    "<img src='" + request.getContextPath() + dto.getReviewImg2() + "'>" +
-                    "</div>");
-        }
-        if(dto.getReviewImg3() != null && !dto.getReviewImg3().isEmpty()) {
-            reviewImgHtml.append(
-            		"<div class='review-img-thumb'>" +
-                    "<img src='" + request.getContextPath() + dto.getReviewImg3() + "'>" +
-                    "</div>");
-        }
-        if(dto.getReviewImg4() != null && !dto.getReviewImg4().isEmpty()) {
-            reviewImgHtml.append(
-            		"<div class='review-img-thumb'>" +
-                    "<img src='" + request.getContextPath() + dto.getReviewImg4() + "'>" +
-                    "</div>");
-        }
-        if(dto.getReviewImg5() != null && !dto.getReviewImg5().isEmpty()) {
-            reviewImgHtml.append(
-            		"<div class='review-img-thumb'>" +
-                    "<img src='" + request.getContextPath() + dto.getReviewImg5() + "'>" +
-                    "</div>");
-        }
+        reviewImgHtml.append("</div>");
         
     	String reviewHtml =
     			"<div class='review-item'>" +
