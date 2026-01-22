@@ -3,16 +3,21 @@
 body { 
     font-family: 'Noto Sans KR', sans-serif; 
     background-color: #f4f4f4; 
-    margin-top: 62px; 
+    margin: 0 !important; 
+    padding: 0 !important; 
     overflow: hidden; 
 }
 
-/* 지도 컨테이너 */
+/* 지도 컨테이너 (강제 고정 방식) */
 .map_wrap { 
-    position: relative; 
+    position: fixed; 
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%; 
-    margin: 0; 
-    height: calc(100vh - 62px); 
+    height: auto; 
+    z-index: 1;
 }
 
 /* 지도와 관련된 모든 요소 초기화 */
@@ -31,19 +36,17 @@ body {
 /* 왼쪽 검색창 박스 */
 #menu_wrap { 
     position: absolute; 
-    top: 0; 
-    left: 0; 
-    bottom: 0; 
+    top: 10px; 
+    left: 10px; 
+    bottom: 30px; 
     width: 300px; 
-    margin: 10px 0 30px 10px; 
     padding: 5px; 
     overflow-y: auto; 
-    background: rgba(255, 255, 255, 0.9); 
-    /* 지도가 덮지 않도록 z-index 확인 */
-    z-index: 2; 
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 50; 
     font-size: 12px; 
     border-radius: 10px; 
-    box-shadow: 0 0 5px #333; 
+    box-shadow: 0 0 5px rgba(0,0,0,0.2); 
 }
 
 #placesList li { list-style: none; }
@@ -75,7 +78,6 @@ body {
 .info:after { content: ''; position: absolute; margin-left: -12px; left: 50%; bottom: 0; width: 22px; height: 12px; background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png') }
 .info .link { color: #5085BB; }
 
-/* 찜하기 버튼 스타일 (하트 아이콘) */
 .jjim-btn {
     position: absolute;
     right: 15px;
@@ -91,7 +93,4 @@ body {
     transition: transform 0.2s;
     text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
-
-.jjim-btn:hover {
-    transform: scale(1.2);
-}
+.jjim-btn:hover { transform: scale(1.2); }
