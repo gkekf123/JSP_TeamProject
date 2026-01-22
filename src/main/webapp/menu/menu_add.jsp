@@ -10,7 +10,7 @@ String storeIdx = request.getParameter("storeIdx");
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>메뉴추가</title>
 <link rel="stylesheet" href="<%= ctxPath %>/menu/menu_add.css">
 <script src="<%= ctxPath %>/menu/menu_add.js" defer></script>
 </head>

@@ -233,6 +233,10 @@ public class ReviewDAO {
 	            dto.setReviewRating(rs.getInt("review_rating"));
 	            dto.setReviewCreatedAt(rs.getTimestamp("review_created_at"));
 	            dto.setReviewImg1(rs.getString("review_img1"));
+	            dto.setReviewImg2(rs.getString("review_img2"));
+	            dto.setReviewImg3(rs.getString("review_img3"));
+	            dto.setReviewImg4(rs.getString("review_img4"));
+	            dto.setReviewImg5(rs.getString("review_img5"));
 	            list.add(dto);
 	        }
 	    } catch (Exception e) {
