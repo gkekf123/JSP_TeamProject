@@ -259,25 +259,35 @@ document.addEventListener("DOMContentLoaded", () => {
         	return;
     	}
 
-    	const formData = new FormData(this);
+		const formData = new FormData(this);
+		const isEditMode = this.dataset.mode === "edit";
+
+		// 수정 모드일 경우 reviewIdx 추가
+		if (isEditMode) {
+		    formData.append("review_idx", this.dataset.editIdx);
+		}
+
+		const url = isEditMode 
+		    ? ctxPath + "/review/review_update.jsp"
+		    : ctxPath + "/review/review_save.jsp";
 
     	$.ajax({
-        	url: ctxPath +"/review/review_save.jsp",
+        	url: url,
         	type: "POST",
         	data: formData,
         	processData: false, // jQuery가 데이터를 문자열로 변환하지 않도록 설정 (파일 업로드 시 필수)
         	contentType: false, // 폼 데이터의 Content-Type을 자동 설정
         	dataType: "json",  
         	success: function (res) {
+				
+				// 로그인 확인 - 프론트(서버 결과 처리)
+				if (res.reviewResult === "login_required") {
+				    alert("로그인이 필요합니다.");
+				    location.href = ctxPath + "/login/login_form.jsp"; 
+				    return;
+				}
 
             	if (res.reviewResult === "success") {
-					
-					// 로그인 확인 - 프론트(서버 결과 처리)
-					if (res.reviewResult === "login_required") {
-					    alert("로그인이 필요합니다.");
-					    location.href = ctxPath + "/login/login_form.jsp"; 
-					    return;
-					}
 					
 					// 리뷰 수, 리뷰 순서 갱신
 					document.getElementById('reviewCount').innerText = res.reviewCount;
@@ -296,15 +306,14 @@ document.addEventListener("DOMContentLoaded", () => {
 					
 					allowClose = true;
 					
-					alert("리뷰 등록 성공");
+					alert(isEditMode ? "리뷰 수정 성공" : "리뷰 등록 성공");
 
 					// 모달 닫기
-					const modal = bootstrap.Modal.getInstance(
-					    document.getElementById("reviewModal"));
+					const modal = bootstrap.Modal.getInstance(reviewModal);
 					modal.hide();
 
             	} else {
-                	alert("리뷰 등록 실패");
+                	alert(isEditMode ? "리뷰 수정 실패" : "리뷰 등록 실패");
             	}
         	},
         	error: function () {
@@ -312,4 +321,67 @@ document.addEventListener("DOMContentLoaded", () => {
         	}
     	});
 	});
+	// ================== 리뷰 수정용 함수 ==================
+		window.openEditReviewModal = function(reviewIdx, content, rating) {
+		    // 1. 수정 모드임을 알리기 위한 변수 설정 (필요 시)
+		    const form = document.querySelector("#reviewModal form");
+		    form.dataset.mode = "edit";
+		    form.dataset.editIdx = reviewIdx;
+			
+			// 2. 별점 세팅 - rating 매개변수 사용
+			updateStars(rating); 
+
+			// 3. 내용 세팅 - content 매개변수 사용
+			form.querySelector("textarea[name='review_content']").value = content;
+
+		    // 4. 서버에서 기존 리뷰 데이터 가져오기
+		    $.ajax({
+		        url: ctxPath + "/review/review_update.jsp", // 아까 만든 JSON 반환 페이지
+		        type: "GET",
+		        data: { "reviewIdx": reviewIdx },
+		        dataType: "json",
+		        success: function(res) {
+		            
+		            // 기존 이미지 미리보기 세팅
+		            const previewContainer = document.getElementById("reviewImgPreview");
+		            previewContainer.innerHTML = ""; // 기존 미리보기 비우기
+		            reviewImgFiles = []; // 파일 배열 초기화 (수정 시 새로 올릴 파일들을 담기 위함)
+		            
+		            const existingImgs = [res.img1, res.img2, res.img3, res.img4, res.img5];
+		            
+		            existingImgs.forEach((path, index) => {
+		                if(path && path !== "") {
+		                    const wrapper = document.createElement("div");
+		                    wrapper.className = "preview-item existing-item";
+		                    // 기존 이미지는 서버에 이미 있으므로 삭제 시 서버 파일도 지워야 함을 표시
+		                    wrapper.innerHTML = `
+		                        <img src="${ctxPath}${path}">
+		                        <button type="button" class="preview-delete" onclick="removeExistingImg(this, '${path}')">✕</button>
+		                        <input type="hidden" name="existing_img${index+1}" value="${path}">
+		                    `;
+		                    previewContainer.appendChild(wrapper);
+		                }
+		            });
+
+		            // (4) 모달 띄우기
+		            const modalElement = document.getElementById('reviewModal');
+		            const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+		            modalInstance.show();
+		        },
+		        error: function() {
+		            alert("리뷰 정보를 가져오는데 실패했습니다.");
+		        }
+		    });
+		};
+
+		// 기존 이미지를 미리보기에서 제거하는 함수
+		window.removeExistingImg = function(btn, path) {
+		    if(confirm("기존 이미지를 삭제하시겠습니까? 등록 시 실제 파일이 삭제됩니다.")) {
+		        const wrapper = btn.parentElement;
+		        // hidden input의 값을 비워서 서버에 삭제 대상임을 알림
+		        const hiddenInput = wrapper.querySelector("input[type='hidden']");
+		        if(hiddenInput) hiddenInput.value = ""; 
+		        wrapper.style.display = "none"; // 화면에서만 숨김 (제출 시 데이터 처리를 위해)
+		    }
+		};	
 });

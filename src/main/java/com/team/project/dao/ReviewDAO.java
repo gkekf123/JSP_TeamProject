@@ -240,6 +240,48 @@ public class ReviewDAO {
 	    }
 	    return list;
 	}
+	
+	public int updateReview(ReviewDTO dto) {
+		
+	    Connection conn = db.getConnection();
+	    PreparedStatement pstmt = null;
+	    
+	    int updateResult = 0;
+	    
+	    try {
+	        
+	        String sql = "UPDATE review SET "
+	                   + "review_rating = ?, "
+	                   + "review_content = ?, "
+	                   + "review_img1 = ?, "
+	                   + "review_img2 = ?, "
+	                   + "review_img3 = ?, "
+	                   + "review_img4 = ?, "
+	                   + "review_img5 = ?, "
+	                   + "review_updated_at = CURRENT_TIMESTAMP "
+	                   + "WHERE review_idx = ? AND member_id = ?";
+	        
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, dto.getReviewRating());
+	        pstmt.setString(2, dto.getReviewContent());
+	        pstmt.setString(3, dto.getReviewImg1());
+	        pstmt.setString(4, dto.getReviewImg2());
+	        pstmt.setString(5, dto.getReviewImg3());
+	        pstmt.setString(6, dto.getReviewImg4());
+	        pstmt.setString(7, dto.getReviewImg5());
+	        pstmt.setLong(8, dto.getReviewIdx());
+	        pstmt.setString(9, dto.getMemberId());
+	        
+	        updateResult = pstmt.executeUpdate();
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	    	db.close(pstmt, conn);
+	    }
+	    
+	    return updateResult;
+	}
 
 
 }
