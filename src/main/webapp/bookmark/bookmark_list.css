@@ -54,6 +54,7 @@ body {
 
 .bookmark-card:hover {
     transform: translateY(-5px);
+    border: 2px solid orange;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
@@ -93,7 +94,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 5px;
+    gap: 2px;
     overflow: hidden;
     min-width: 0; 
 }
