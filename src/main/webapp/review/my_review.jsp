@@ -21,7 +21,7 @@ if (!"yes".equals(loginOk) || memberId == null) {
 ReviewDAO dao = new ReviewDAO();
 List<ReviewDTO> list = dao.getMyReviews(memberId);
 
-
+int reviewCount = list.size();
 %>
 <!DOCTYPE html>
 <html>
@@ -29,14 +29,17 @@ List<ReviewDTO> list = dao.getMyReviews(memberId);
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/review/my_review.css">
 <script src="<%= ctxPath %>/review/my_review.js" defer></script>
-<title>Insert title here</title>
+<title>마이리뷰</title>
+<!-- Bootstrap & Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body>
 <jsp:include page="/header/header.jsp" />
 
 <div class="container">
 	<div class="header">
-		<h3>마이리뷰 목록</h3>
+		<h3>마이리뷰 (<%= reviewCount %>)</h3>
 	</div>
 	<div class="my-review-list">
 
@@ -56,7 +59,25 @@ List<ReviewDTO> list = dao.getMyReviews(memberId);
         <!-- 이미지 -->
         <% if (dto.getReviewImg1() != null) { %>
         <div class="review-img">
-            <img src="<%=ctxPath%>/images/review_upload/<%=dto.getReviewImg1()%>">
+            <% if (dto.getReviewImg1() != null && !dto.getReviewImg1().equals("")) { %>
+		        <img src="<%=ctxPath%>/images/review_upload/<%=dto.getReviewImg1()%>">
+		    <% } %>
+		    
+		    <% if (dto.getReviewImg2() != null && !dto.getReviewImg2().equals("")) { %>
+		        <img src="<%=ctxPath%>/images/review_upload/<%=dto.getReviewImg2()%>">
+		    <% } %>
+		    
+		    <% if (dto.getReviewImg3() != null && !dto.getReviewImg3().equals("")) { %>
+		        <img src="<%=ctxPath%>/images/review_upload/<%=dto.getReviewImg3()%>">
+		    <% } %>
+		    
+		    <% if (dto.getReviewImg4() != null && !dto.getReviewImg4().equals("")) { %>
+		        <img src="<%=ctxPath%>/images/review_upload/<%=dto.getReviewImg4()%>">
+		    <% } %>
+		    
+		    <% if (dto.getReviewImg5() != null && !dto.getReviewImg5().equals("")) { %>
+		        <img src="<%=ctxPath%>/images/review_upload/<%=dto.getReviewImg5()%>">
+		    <% } %>
         </div>
         <% } %>
 
@@ -65,10 +86,22 @@ List<ReviewDTO> list = dao.getMyReviews(memberId);
             <%= dto.getReviewContent() %>
         </div>
 
-        <!-- 별점 -->
-        <div class="review-rating">
-            ⭐ <%= dto.getReviewRating() %>
-        </div>
+		<div class="review-footer">
+			 <!-- 별점 -->
+	        <div class="review-rating">
+	        	<i class="bi bi-star-fill"></i>
+	            <%= dto.getReviewRating() %>
+	        </div>
+	        
+	        <!-- 삭제 -->
+	        <div class="review-actions">
+	            <button type="button" class="btn-delete" 
+	                onclick="deleteMyReview(<%= dto.getReviewIdx() %>, <%= dto.getStoreIdx() %>)">
+	                삭제
+	            </button>
+	        </div>
+		</div>
+       
 
     </div>
 
@@ -78,5 +111,14 @@ List<ReviewDTO> list = dao.getMyReviews(memberId);
 </div>
 
 <jsp:include page="/footer/footer.jsp" />
+
+<script>
+function deleteMyReview(reviewIdx, storeIdx) {
+    if (confirm("정말로 이 리뷰를 삭제하시겠습니까?")) {
+        // 삭제 처리를 담당하는 jsp로 이동 (경로 확인 필요)
+        location.href = "<%= ctxPath %>/review/my_review_delete.jsp?reviewIdx=" + reviewIdx + "&storeIdx=" + storeIdx + "&from=myreview";
+    }
+}
+</script>
 </body>
 </html>

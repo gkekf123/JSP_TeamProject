@@ -10,7 +10,7 @@ String storeIdx = request.getParameter("storeIdx");
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>메뉴추가</title>
 <link rel="stylesheet" href="<%= ctxPath %>/menu/menu_add.css">
 <script src="<%= ctxPath %>/menu/menu_add.js" defer></script>
 </head>
@@ -23,7 +23,11 @@ String storeIdx = request.getParameter("storeIdx");
       method="post"
       enctype="multipart/form-data">
 
-        <input type="hidden" name="storeIdx" value="<%= request.getParameter("storeIdx") %>">
+        <%
+		    // include 시 jsp:param으로 전달된 값을 가져옵니다.
+		    String storeIdxFromParam = request.getParameter("storeIdx");
+		%>
+		<input type="hidden" name="storeIdx" id="menuStoreIdx" value="<%= storeIdxFromParam %>">
         <input type="hidden" name="menuIdx" value="" id="menuIdx">
 
         <div class="modal-header">

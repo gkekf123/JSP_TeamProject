@@ -54,7 +54,42 @@
     color: #ff9800;
 }
 
-.review-img img {
-    width: 120px;
-    border-radius: 8px;
+.review-img {
+    margin: 10px 0;
+    display: flex;
+    gap: 10px; /* 이미지 사이 간격 */
+    flex-wrap: wrap; /* 이미지가 많으면 다음 줄로 넘김 */
 }
+
+.review-img img {
+    width: 150px; /* 원하는 가로 크기 */
+    height: 100px;
+    object-fit: cover; /* 비율 유지하며 꽉 채움 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    border: 1px solid #eee;
+}
+
+/* 리뷰 아이템 하단 정렬 */
+.review-footer {
+    display: flex;
+    justify-content: space-between; /* 별점은 왼쪽, 버튼은 오른쪽 */
+    align-items: center;
+    margin-top: 15px;
+}
+
+.review-rating {
+    font-weight: bold;
+    color: #f39c12;
+}
+
+/* 삭제 버튼 스타일 */
+.btn-delete {
+    background-color: #ff6b6b;
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
