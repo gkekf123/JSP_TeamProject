@@ -14,9 +14,9 @@
 
     <nav>
         <ul>
-            <li><a href="<%= ctxPath %>/store/store_main.jsp">맛집추천</a></li> 
-        	<li><a href="<%= ctxPath %>/map/map_main.jsp">맛집지도</a></li>
-        	<li><a href="<%= ctxPath %>/news/news.jsp">맛집공유</a></li>
+            <li><a href="<%= ctxPath %>/store/store_main.jsp" class="nav">맛집추천</a></li> 
+        	<li><a href="<%= ctxPath %>/map/map_main.jsp" class="nav">맛집지도</a></li>
+        	<li><a href="<%= ctxPath %>/news/news.jsp" class="nav">맛집공유</a></li>
         </ul>
     </nav>
 
