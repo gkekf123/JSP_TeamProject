@@ -7,16 +7,13 @@
 request.setCharacterEncoding("UTF-8");
 String ctxPath = request.getContextPath();
 
-// 1. 로그인 & 관리자 체크 (보안 필수)
-Object loginObj = session.getAttribute("loginMember");
-if (loginObj == null || !(loginObj instanceof MemberDTO)) {
-    out.println("<script>alert('권한이 없습니다.'); history.back();</script>");
-    return;
-}
+//1. 로그인 & 관리자 체크 (store_detail.jsp와 동일한 방식)
+String memberId = (String) session.getAttribute("member_id");
+String memberRole = (String) session.getAttribute("member_role");
 
-MemberDTO m = (MemberDTO) loginObj;
-if (!"admin".equals(m.getMemberRole())) {
-    out.println("<script>alert('관리자만 삭제할 수 있습니다.'); history.back();</script>");
+// 세션에 아이디가 없거나, 역할이 'admin'이 아니면 차단
+if (memberId == null || !"admin".equals(memberRole)) {
+    out.println("<script>alert('관리자 권한이 없습니다.'); history.back();</script>");
     return;
 }
 

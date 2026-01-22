@@ -34,16 +34,11 @@
     
 
     //로그인할시 메뉴추가 보임
-    boolean isAdmin = false;
-    MemberDTO loginMember = null;
-    Object loginObj = session.getAttribute("loginMember");
-
-    if (loginObj instanceof MemberDTO) {
-        loginMember = (MemberDTO) loginObj;
-        if ("admin".equals(loginMember.getMemberRole())) {
-            isAdmin = true;
-        }
-    }
+   boolean isAdmin = false;
+    String memberId = (String) session.getAttribute("member_id");
+    String memberRole = (String) session.getAttribute("member_role");
+    if (memberRole != null && "admin".equals(memberRole)) {
+        isAdmin = true;}
     
     //메뉴 불러오기
     MenuDAO menuDao = new MenuDAO();
@@ -54,21 +49,21 @@
     ReviewDAO reviewDao=new ReviewDAO();
     List<ReviewDTO> reviewList=reviewDao.selectReview(storeIdx);
     
+    
     //평점 불러오기
     Double avgRating = reviewDao.avgReview(storeIdx);
     int reviewCount = reviewDao.countReview(storeIdx);
     
     //찜하기 여부 확인
     boolean isBookmarked = false;
-    if (loginMember != null) {
+    if (memberId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
-        isBookmarked = bookmarkDao.isBookmarked(loginMember.getMemberId(), (int)storeIdx);
+        isBookmarked = bookmarkDao.isBookmarked(memberId, (int)storeIdx);
     }
     
 	//리뷰
     int reviewOrder = reviewCount +1 ; 
 	request.setAttribute("reviewOrder", reviewOrder);
-	String memberId=(String)session.getAttribute("member_id");
 %>
 
 <!DOCTYPE html>
@@ -275,7 +270,7 @@
                     평점 <%= r.getReviewRating() %>점
                 </span>
             </div>
-
+        
             <!-- 리뷰 본문 -->
             <div class="review-content">
                 <!-- 왼쪽 : 텍스트 -->
@@ -291,10 +286,16 @@
 		        
 		        <!-- 오른쪽 : 대표 이미지 -->
 		        	<% if (r.getReviewImg1() != null && !r.getReviewImg1().equals("")) { %>
-						<div class="review-img-thumb">
-		        			<img src="<%= ctxPath %>/images/review_upload/<%= r.getReviewImg1() %>">
-		        		</div>
-		        	<% } %>
+				    <div class="review-img-thumb" 
+				         style="cursor:pointer;" 
+				         onclick="showReviewImages('<%= r.getReviewImg1() %>', '<%= r.getReviewImg2() %>', '<%= r.getReviewImg3() %>', '<%= r.getReviewImg4() %>', '<%= r.getReviewImg5() %>')">
+				        <img src="<%= ctxPath %>/images/review_upload/<%= r.getReviewImg1() %>">
+				        
+				        <% if (r.getReviewImg2() != null && !r.getReviewImg2().equals("")) { %>
+				            <div class="img-count-badge"><i class="bi bi-images"></i></div>
+				        <% } %>
+				    </div>
+				<% } %>
             </div>
             
             <% if (isMyReview) { %>
@@ -336,6 +337,25 @@
 </div>
 	
     
+    <!-- 리뷰 이미지 모달 -->
+	<div class="modal fade" id="reviewImageModal" tabindex="-1">
+	  <div class="modal-dialog modal-lg modal-dialog-centered">
+	    <div class="modal-content">
+	
+	      <div class="modal-header">
+	        <h5 class="modal-title">리뷰 이미지</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	      </div>
+	
+	      <div class="modal-body">
+	        <div id="reviewModalImages" class="review-modal-images"></div>
+	      </div>
+			
+	    </div>
+	  </div>
+	</div>
+
+    
 </div>
 
 <jsp:include page="/review/review_write.jsp"/>
@@ -362,6 +382,20 @@ function deleteMenu(menuIdx, storeIdx) {
     }
 }
 
+//메뉴 추가 버튼 클릭 시 (Bootstrap 모달 이벤트 활용)
+$('#menuAddModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // "메뉴추가" 버튼
+    var modal = $(this);
+    
+    // 추가 모드일 때는 menuIdx를 비워야 합니다.
+    if (button.hasClass('menu-add-btn')) {
+        modal.find('#menuModalTitle').text('메뉴 추가');
+        modal.find('#menuIdx').val(''); // 매우 중요: 빈값이어야 insert가 실행됨
+        modal.find('#menuName').val('');
+        modal.find('#menuPrice').val('');
+        modal.find('#menuSubmitBtn').text('등록');
+    }
+});
 
 //리뷰삭제
 function deleteReview(reviewIdx, storeIdx) {
