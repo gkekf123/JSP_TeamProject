@@ -23,7 +23,11 @@ String storeIdx = request.getParameter("storeIdx");
       method="post"
       enctype="multipart/form-data">
 
-        <input type="hidden" name="storeIdx" value="<%= request.getParameter("storeIdx") %>">
+        <%
+		    // include 시 jsp:param으로 전달된 값을 가져옵니다.
+		    String storeIdxFromParam = request.getParameter("storeIdx");
+		%>
+		<input type="hidden" name="storeIdx" id="menuStoreIdx" value="<%= storeIdxFromParam %>">
         <input type="hidden" name="menuIdx" value="" id="menuIdx">
 
         <div class="modal-header">
