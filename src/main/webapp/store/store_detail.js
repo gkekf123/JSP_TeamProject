@@ -134,6 +134,14 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
 	    new bootstrap.Modal(document.getElementById("menuAddModal")).show();
 	}
 	
+	//메뉴추가버튼
+	function openMenuModal(storeIdx) {
+	    document.getElementById("menuStoreIdx").value = storeIdx;
+	    document.getElementById("menuModalTitle").innerText = "메뉴 추가";
+	    new bootstrap.Modal(document.getElementById("menuAddModal")).show();
+	}
+
+	
 	//리뷰더보기
 	function showMoreReviews() {
 	    // 숨겨진 리뷰 전부 가져오기
@@ -147,6 +155,30 @@ function toggleBookmark(btn, storeIdx, storeName, storeAddr) {
 	    document.querySelector('.review-more-btn').style.display = 'none';
 	}
 	
+	
+	//리뷰이미지 모달
+	function showReviewImages(img1, img2, img3, img4, img5) {
+	    const images = [img1, img2, img3, img4, img5];
+	    const modalBody = document.getElementById('reviewModalImages');
+	    
+	    // 1. 기존 모달 내용 비우기
+	    modalBody.innerHTML = '';
+	    
+	    // 2. 이미지가 있는 것만 찾아서 img 태그 생성
+	    images.forEach(imgName => {
+	        if (imgName && imgName !== 'null' && imgName !== '') {
+	            const imgTag = document.createElement('img');
+	            imgTag.src = ctxPath + '/images/review_upload/' + imgName;
+	            imgTag.className = 'img-fluid mb-2 w-100 rounded'; // Bootstrap 클래스로 스타일 지정
+	            modalBody.appendChild(imgTag);
+	        }
+	    });
+	    
+	    // 3. 모달 띄우기
+	    const imageModal = new bootstrap.Modal(document.getElementById('reviewImageModal'));
+	    imageModal.show();
+	}
+
 	
 	//지도
 	var mapContainer = document.getElementById('map');

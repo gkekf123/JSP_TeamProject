@@ -469,6 +469,29 @@ body {
     background-color: #ddd;
 }
 
+.review-modal-images img {
+    max-height: 150px;
+    object-fit: contain; /* 이미지 비율 유지 */
+    display: block;
+    margin: 0 auto 15px;
+    border: 1px solid #eee;
+}
+
+/* 대표이미지 오른쪽 상단에 이미지 개수 표시용 스타일 */
+.review-img-thumb {
+    position: relative;
+}
+.img-count-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
 
 /*지도*/
 .map-section{
