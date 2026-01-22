@@ -1,24 +1,45 @@
 @charset "UTF-8";
 
-body {
-	font-family: 'Noto Sans KR', sans-serif;
-	background-color: #f4f4f4;
+/* 1. HTML과 BODY가 화면 전체 높이를 차지하도록 설정 */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
+/* 2. BODY를 Flex 컨테이너로 설정하여 세로 정렬 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f4f4;
+    
+    display: flex;
+    flex-direction: column; /* 요소를 세로로 배치 */
+    min-height: 100vh;      /* 최소 높이를 화면(Viewport) 높이의 100%로 설정 */
+}
+
+/* 3. 중간 콘텐츠 영역 (보통 .container)이 늘어나도록 하거나, 
+      푸터가 자동으로 바닥에 붙도록 설정 */
 #footer {
-    background-color: #333; /* 어두운 배경 */
-    color: #fff;            /* 흰색 글씨 */
-    padding: 20px;        /* 위아래 여백 */
-    text-align: center;     /* 가운데 정렬 */
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
     width: 100%;
-    margin-top: 50px;       /* 본문과 거리 두기 */
     font-size: 14px;
+    
+    /* ★ 핵심: 위쪽 여백을 자동으로 채워서 푸터를 바닥으로 밀어버림 */
+    margin-top: auto; 
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
 }
 
 .footer-content p {
-    margin: 5px 0;          /* 줄 간격 조정 */
+    margin: 5px 0;
 }
 
-.main-page #footer {
-    margin-top: 0;
+/* (옵션) 모바일 등 작은 화면 반응형 처리 */
+@media screen and (max-width: 768px) {
+    #footer {
+        font-size: 12px;
+        padding: 15px;
+    }
 }

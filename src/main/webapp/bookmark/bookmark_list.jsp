@@ -51,7 +51,10 @@
 
     <div class="container">
         <h2 class="page-title">내가 찜한 맛집 (<%= list.size() %>)</h2>
-
+		<h5>'등록된 맛집'은 사이트 내 정식 등록된 가게</h5>
+		<h5>'카카오 장소'는 지도에서 검색해 찜 목록에만 추가된 외부 장소입니다.</h5>
+		<br>
+		        
         <div class="bookmark-grid">
             <% 
             if (list != null && !list.isEmpty()) {
