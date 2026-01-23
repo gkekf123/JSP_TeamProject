@@ -160,6 +160,36 @@ public class StoreDAO {
         }
     }
     
+ // 카테고리별 게시글 개수 조회 (Map<카테고리명, 개수> 형태)
+    public java.util.Map<String, Integer> getCategoryCounts() {
+        java.util.Map<String, Integer> map = new java.util.HashMap<>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        
+        // 카테고리별로 그룹화해서 개수 세기
+        String sql = "SELECT store_category, COUNT(*) as cnt FROM store GROUP BY store_category";
+
+        try {
+            conn = DBConn.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+                String category = rs.getString("store_category");
+                int count = rs.getInt("cnt");
+                if(category != null) {
+                    map.put(category, count);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBConn.close(rs, pstmt, conn);
+        }
+        return map;
+    }
+    
     // 수정을 위한 단건 조회 (idx로 가게 정보 가져오기)
     public StoreDTO selectStoreOne(String storeIdx) {
         StoreDTO dto = null;
