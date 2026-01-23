@@ -55,7 +55,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f4f4f4; margi
     cursor: pointer;
     z-index: 20;
     padding: 0;
-    line-height: 1;
+    line-height: 15;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.9);
     transition: transform 0.2s;
 }
