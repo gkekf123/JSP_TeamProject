@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="com.team.project.dao.BookmarkDAO"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Set"%>
@@ -23,6 +24,15 @@
     StoreDAO dao = new StoreDAO();
     List<StoreDTO> storeList = dao.selectStoreList(sort, question, category);
     
+    // 카테고리별 개수 가져오기
+    Map<String, Integer> countMap = dao.getCategoryCounts();
+    
+    // 전체 개수 계산 (Map의 모든 값 합산)
+    int totalCount = 0;
+    for(int c : countMap.values()) {
+        totalCount += c;
+    }
+
     // 로그인 및 관리자 체크
     boolean isAdmin = false;
     String myId = (String) session.getAttribute("member_id");   
@@ -72,7 +82,6 @@
     <script>
         const ctxPath = "<%= ctxPath %>";
         
-        // 삭제 확인 함수
         function deleteStore(idx) {
             if(confirm("정말로 이 맛집을 삭제하시겠습니까? (복구 불가)")) {
                 location.href = "store_delete_action.jsp?idx=" + idx;
@@ -80,6 +89,22 @@
         }
     </script>
     <script src="<%= ctxPath %>/store/store_main.js?v=<%= System.currentTimeMillis() %>"></script>
+    
+    <style>
+        .cat-count {
+            font-size: 12px;
+            color: #888;
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+            font-weight: bold;
+        }
+        .category-item.active .cat-count {
+            background: #f39c12;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <jsp:include page="/header/header.jsp" />
@@ -107,12 +132,25 @@
 
         <div class="category-section">
             <% for(String[] cat : catArr) { 
-                String cCode = cat[0]; String cImg = cat[1]; String cName = cat[2];
+                String cCode = cat[0]; 
+                String cImg = cat[1]; 
+                String cName = cat[2];
                 String activeClass = category.equals(cCode) ? "active" : "";
+                
+                // 해당 카테고리의 개수 찾기
+                int count = 0;
+                if("all".equals(cCode)) {
+                    count = totalCount; // 전체 개수
+                } else {
+                    // Map에서 카테고리 이름으로 개수 찾기 (없으면 0)
+                    if(countMap.containsKey(cName)) {
+                        count = countMap.get(cName);
+                    }
+                }
             %>
             <div class="category-item <%= activeClass %>" onclick="selectCategory('<%= cCode %>')">
                 <div class="img-wrap"><img src="<%= ctxPath %>/images/store_category/<%= cImg %>" alt="<%= cName %>"></div>
-                <span><%= cName %></span>
+                <span><%= cName %> <span class="cat-count"><%= count %></span></span>
             </div>
             <% } %>
         </div>
@@ -128,7 +166,6 @@
             <% if (storeList != null && !storeList.isEmpty()) {
                 for(StoreDTO store : storeList) { 
                     
-                    // 이미지 3개를 리스트에 담아 슬라이드용 데이터 생성
                     java.util.List<String> validImgs = new java.util.ArrayList<>();
                     String[] rawImgs = {store.getStoreImg(), store.getStoreImg2(), store.getStoreImg3()};
                     
@@ -139,11 +176,8 @@
                         }
                     }
                     
-                    // 화면에 보일 첫 번째 이미지
                     String mainImgSrc = (validImgs.size() > 0) ? validImgs.get(0) : "";
                     boolean hasImage = (validImgs.size() > 0);
-                    
-                    // JS에 전달할 콤마로 구분된 이미지 경로들
                     String dataImgs = String.join(",", validImgs);
 
                     boolean isBookmarked = (store.getStoreIdx() > 0 && myBookmarkSet.contains(store.getStoreIdx()));
@@ -182,7 +216,6 @@
                         <div class="store-tel"><%= tel %></div>
                     </div>
 
-                    <%-- 관리자 버튼 영역 --%>
                     <% if(isAdmin) { %>
                     <div class="admin-btn-group" onclick="event.stopPropagation()" style="padding: 10px; border-top: 1px solid #eee; text-align: right; background: #f9f9f9;">
                         <button type="button" onclick="location.href='store_update.jsp?idx=<%= store.getStoreIdx() %>'" 
