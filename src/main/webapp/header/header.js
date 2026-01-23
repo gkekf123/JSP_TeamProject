@@ -40,3 +40,29 @@ window.addEventListener("load", () => {
 		headerCloseSidebar.addEventListener('click', toggleSidebar);
 	}
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. 현재 페이지의 전체 경로를 가져옵니다 (예: /project/store/store_main.jsp)
+    const currentPath = window.location.pathname;
+
+    // 2. 헤더 nav 내부의 모든 링크를 가져옵니다.
+    const navLinks = document.querySelectorAll("header nav ul li a");
+
+    navLinks.forEach(link => {
+        // 3. 링크의 href 속성값을 가져옵니다.
+        const linkPath = link.getAttribute("href");
+
+        // 4. 현재 주소에 해당 링크의 경로가 포함되어 있는지 확인합니다.
+        // (단순 포함 확인 시 메인페이지(/)가 중복될 수 있으므로 구체적으로 비교)
+        if (currentPath.includes(linkPath)) {
+            link.classList.add("active");
+        }
+		
+		// 5. 예외 매칭: 상세 페이지(store_detail)에 있을 때 '맛집추천' 메뉴 활성화
+        // '맛집추천' 링크의 href가 store_main.jsp를 포함하고 있는지 확인
+        if (currentPath.includes("/store/") && linkPath.includes("store_main.jsp")) {
+            link.classList.add("active");
+        }
+    });
+});

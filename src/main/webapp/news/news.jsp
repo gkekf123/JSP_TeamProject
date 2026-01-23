@@ -15,7 +15,7 @@
     
  // 1. 관리자 권한 확인 (세션 체크)
     boolean isAdmin = false;
-    Object loginObj = session.getAttribute("loginMember");
+    Object loginObj = session.getAttribute("loginok");
     
     if (loginObj != null) {
         // 경우 1: 세션값이 MemberDTO 객체일 때 (정상적인 경우)
