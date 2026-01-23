@@ -127,9 +127,25 @@
         <div class="store-grid">
             <% if (storeList != null && !storeList.isEmpty()) {
                 for(StoreDTO store : storeList) { 
-                    String imgPath = store.getStoreImg();
-                    if (imgPath != null && !imgPath.startsWith("/") && !imgPath.trim().isEmpty()) imgPath = "/" + imgPath;
-                    boolean hasImage = (imgPath != null && !imgPath.trim().isEmpty());
+                    
+                    // 이미지 3개를 리스트에 담아 슬라이드용 데이터 생성
+                    java.util.List<String> validImgs = new java.util.ArrayList<>();
+                    String[] rawImgs = {store.getStoreImg(), store.getStoreImg2(), store.getStoreImg3()};
+                    
+                    for(String raw : rawImgs) {
+                        if (raw != null && !raw.trim().isEmpty()) {
+                            if (!raw.startsWith("/")) raw = "/" + raw;
+                            validImgs.add(ctxPath + "/images/store_image" + raw);
+                        }
+                    }
+                    
+                    // 화면에 보일 첫 번째 이미지
+                    String mainImgSrc = (validImgs.size() > 0) ? validImgs.get(0) : "";
+                    boolean hasImage = (validImgs.size() > 0);
+                    
+                    // JS에 전달할 콤마로 구분된 이미지 경로들
+                    String dataImgs = String.join(",", validImgs);
+
                     boolean isBookmarked = (store.getStoreIdx() > 0 && myBookmarkSet.contains(store.getStoreIdx()));
                     String heartShape = isBookmarked ? "♥" : "♡";
                     String tel = store.getStoreTel();
@@ -144,7 +160,11 @@
                     
                     <div class="img-link">
                         <% if(hasImage) { %>
-                            <img src="<%= ctxPath %>/images/store_image<%= imgPath %>" class="store-img" alt="가게사진" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <img src="<%= mainImgSrc %>" 
+                                 class="store-img slide-img" 
+                                 alt="가게사진" 
+                                 data-imgs="<%= dataImgs %>"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div class="no-img-box" style="display:none;">이미지 없음</div>
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
@@ -162,7 +182,7 @@
                         <div class="store-tel"><%= tel %></div>
                     </div>
 
-                    <%-- 관리자 버튼 영역도 클릭 시 이동 방지 --%>
+                    <%-- 관리자 버튼 영역 --%>
                     <% if(isAdmin) { %>
                     <div class="admin-btn-group" onclick="event.stopPropagation()" style="padding: 10px; border-top: 1px solid #eee; text-align: right; background: #f9f9f9;">
                         <button type="button" onclick="location.href='store_update.jsp?idx=<%= store.getStoreIdx() %>'" 
