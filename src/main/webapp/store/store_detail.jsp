@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.team.project.dao.BookmarkDAO"%>
 <%@page import="com.team.project.dto.ReviewDTO"%>
 <%@page import="com.team.project.dao.ReviewDAO"%>
@@ -64,6 +65,7 @@
 	//리뷰
     int reviewOrder = reviewCount +1 ; 
 	request.setAttribute("reviewOrder", reviewOrder);
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd HH:mm");
 %>
 
 <!DOCTYPE html>
@@ -154,7 +156,7 @@
                 <div class="info-row">
 				    <i class="bi bi-star-fill"></i>
 				    <p class="store-rating">
-				        <%= String.format("%.1f", avgRating) %> <span id="reviewCount">(<%= reviewCount %>)</span> 
+				        <%= String.format("%.1f", avgRating)%> (<%=reviewCount%>)
 				    </p>
 				</div>
 
@@ -238,7 +240,8 @@
 			data-bs-toggle="modal"
         	data-bs-target="#reviewModal"
         	data-store-idx="<%=storeIdx%>"
-        	data-login="<%= (memberId!= null) %>">
+        	data-login="<%= (memberId!= null) %>"
+        	data-review-count="<%= reviewCount %>">
     		리뷰 쓰기
 		</button>
 
@@ -256,7 +259,7 @@
         			    && memberId.equals(r.getMemberId()));
         %>
 		
-        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>">
+        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>" id="review-<%=r.getReviewIdx()%>" data-store-idx="<%= storeIdx %>">
 
             <!-- 프로필 -->
             <div class="review-profile">
@@ -276,11 +279,14 @@
                 <!-- 왼쪽 : 텍스트 -->
 		        <div class="review-text-wrap">
 		            <p class="review-text">
-		                <%= r.getReviewContent() %>
+		                <%= r.getReviewContent().replace("\n", "<br>")%>
 		            </p>
 		
 		            <span class="review-date">
-		                <%= r.getReviewCreatedAt() %>
+		                <%=sdf.format(r.getReviewCreatedAt())%>
+		                <% if (r.getReviewUpdatedAt() != null) { %>
+				            (수정됨)
+				        <% } %> 
 		            </span>
 		        </div>
 		        
@@ -300,17 +306,12 @@
             
             <% if (isMyReview) { %>
 		        <div class="review-actions">
-		            <button class="review-edit-btn"
-		                onclick="openEditReviewModal(
-		                    <%= r.getReviewIdx() %>,
-		                    '<%= r.getReviewContent().replace("'", "\\'") %>',
-		                    <%= r.getReviewRating() %>
-		                )">
+		            <button class="review-edit-btn" 
+		           		onclick="openUpdateReviewModal(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
 		                수정
 		            </button>
 		
-		            <button class="review-delete-btn"
-		                onclick="deleteReview(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
+		            <button class="review-delete-btn">
 		                삭제
 		            </button>
 		        </div>
@@ -397,15 +398,6 @@ $('#menuAddModal').on('show.bs.modal', function (event) {
     }
 });
 
-//리뷰삭제
-function deleteReview(reviewIdx, storeIdx) {
-    if (confirm("리뷰를 삭제하시겠습니까?")) {
-        location.href =
-            "<%= ctxPath %>/review/review_delete.jsp"
-            + "?reviewIdx=" + reviewIdx
-            + "&storeIdx=" + storeIdx;
-    }
-}
 </script>
 
 </body>

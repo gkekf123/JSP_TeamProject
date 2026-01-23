@@ -20,6 +20,7 @@ String ctxPath = request.getContextPath();
 
                 <input type="hidden" name="store_idx" id="storeIdx">
                 <input type="hidden" name="review_rating" id="reviewRating">
+                <input type="hidden" name="review_idx" id="reviewIdx">
 
                 <!-- 모달 헤더 -->
                 <div class="review-modal-header">
@@ -76,7 +77,8 @@ String ctxPath = request.getContextPath();
                     <!-- 리뷰 순서 -->
                     <div class="review-order-wrapper">
                         <span class="review-order-text">
-                            😊 이 매장의 <span id="reviewOrder"><%=request.getAttribute("reviewOrder")%></span>번째 리뷰입니다
+                            😊 이 매장의 <span id="reviewOrder">
+                            <%=request.getAttribute("reviewOrder")%></span>번째 리뷰입니다
                         </span>
                     </div>
                 </div>
