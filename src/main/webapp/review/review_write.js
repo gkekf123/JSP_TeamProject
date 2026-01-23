@@ -305,6 +305,8 @@ document.addEventListener("DOMContentLoaded", () => {
 					const storeRating = document.querySelector(".store-rating");
 					storeRating.innerText =
 					    res.avgRating.toFixed(1) + " (" + res.reviewCount + ")";
+					const reviewBtn = document.getElementById("reviewBtn");
+						reviewBtn.dataset.reviewCount = res.reviewCount;
 						
 					if (isEditMode) {
 					    const target = document.getElementById("review-" + editIdx);
@@ -318,6 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					    header.insertAdjacentHTML("afterend", res.reviewHtml);
 
 					    // 리뷰 순서 갱신 (신규일 때만 의미 있음)
+						
 					    document.getElementById('reviewOrder').innerText = res.reviewOrder;
 					}				
 											

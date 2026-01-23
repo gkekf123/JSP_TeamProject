@@ -4,7 +4,6 @@
 <%
 String ctxPath = request.getContextPath();
 %>
-
 <script>
     const ctxPath = "<%= ctxPath %>";
 </script>

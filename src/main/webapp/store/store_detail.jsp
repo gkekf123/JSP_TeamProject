@@ -261,7 +261,7 @@
         
             <div class="review-content">
                 <div class="review-text-wrap">
-                    <p class="review-text"><%= r.getReviewContent() %></p>
+                    <p class="review-text"><%= r.getReviewContent().replace("\n", "<br>")%></p>
                     <span class="review-date">
                     	<%=sdf.format(r.getReviewCreatedAt())%>
 		                <% if (r.getReviewUpdatedAt() != null) { %>

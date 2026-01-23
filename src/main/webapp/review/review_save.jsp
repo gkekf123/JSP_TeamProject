@@ -129,7 +129,6 @@ try{
         
     	String reviewHtml =
     			"<div class='review-item' id='review-" + dto.getReviewIdx() + "'>" +
-
 		        "<div class='review-profile'>" +
 		            profileHtml +
 		            "<span class='review-writer'>" + dto.getMemberName() + "</span>" +
@@ -156,6 +155,7 @@ try{
     	       
         ob.put("reviewResult", "success");
         ob.put("reviewCount", reviewCount);
+        ob.put("reviewOrder", reviewCount+1);
         ob.put("reviewHtml", reviewHtml);
         ob.put("avgRating", avgRating);
     } else {
