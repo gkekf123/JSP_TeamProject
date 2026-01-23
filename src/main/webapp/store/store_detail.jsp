@@ -7,63 +7,70 @@
 <%@page import="com.team.project.dto.MemberDTO"%>
 <%@page import="com.team.project.dao.StoreDetailDAO"%>
 <%@page import="com.team.project.dto.StoreDTO"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
     // 0. 기본 설정
     request.setCharacterEncoding("UTF-8");
     String ctxPath = request.getContextPath();
 
-	String storeIdxParam = request.getParameter("idx");
+    String storeIdxParam = request.getParameter("idx");
     if (storeIdxParam == null) {
-        response.sendRedirect(ctxPath + "/main.jsp");
+        %>
+        <script>
+            alert("잘못된 접근입니다.");
+            location.href = "<%= ctxPath %>/store/store_main.jsp";
+        </script>
+        <%
         return;
     }
 
     long storeIdx = Long.parseLong(storeIdxParam);
-    
 
+    // 1. 가게 정보 가져오기
     StoreDetailDAO dao = new StoreDetailDAO();
     StoreDTO dto = dao.selectDetailIntro(storeIdx);
 
+    // 데이터가 없으면 목록으로 튕겨내기
     if (dto == null) {
-        response.sendRedirect(ctxPath + "/main.jsp");
+        %>
+        <script>
+            alert("삭제되거나 존재하지 않는 맛집입니다.");
+            location.href = "<%= ctxPath %>/store/store_main.jsp";
+        </script>
+        <%
         return;
     }
-    
 
-    //로그인할시 메뉴추가 보임
-   boolean isAdmin = false;
+    // 2. 관리자 여부 확인
+    boolean isAdmin = false;
     String memberId = (String) session.getAttribute("member_id");
     String memberRole = (String) session.getAttribute("member_role");
     if (memberRole != null && "admin".equals(memberRole)) {
-        isAdmin = true;}
+        isAdmin = true;
+    }
     
-    //메뉴 불러오기
+    // 3. 메뉴 불러오기
     MenuDAO menuDao = new MenuDAO();
     List<MenuDTO> menuList = menuDao.selectMenu(storeIdx);
 
+    // 4. 리뷰 불러오기
+    ReviewDAO reviewDao = new ReviewDAO();
+    List<ReviewDTO> reviewList = reviewDao.selectReview(storeIdx);
     
-    //리뷰 불러오기
-    ReviewDAO reviewDao=new ReviewDAO();
-    List<ReviewDTO> reviewList=reviewDao.selectReview(storeIdx);
-    
-    
-    //평점 불러오기
+    // 5. 평점 통계
     Double avgRating = reviewDao.avgReview(storeIdx);
     int reviewCount = reviewDao.countReview(storeIdx);
     
-    //찜하기 여부 확인
+    // 6. 찜하기 여부 확인
     boolean isBookmarked = false;
     if (memberId != null) {
         BookmarkDAO bookmarkDao = new BookmarkDAO();
         isBookmarked = bookmarkDao.isBookmarked(memberId, (int)storeIdx);
     }
     
-	//리뷰
-    int reviewOrder = reviewCount +1 ; 
-	request.setAttribute("reviewOrder", reviewOrder);
+    int reviewOrder = reviewCount + 1; 
+    request.setAttribute("reviewOrder", reviewOrder);
 %>
 
 <!DOCTYPE html>
@@ -77,14 +84,10 @@
 
 <link rel="stylesheet" href="<%= ctxPath %>/store/store_detail.css">
 
-<!-- Bootstrap & Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-<!-- jQuery (찜하기 AJAX 필수) -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d6ec00692a6f465a841ee2f2e06d862&libraries=services"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<!-- 슬라이더 JS -->
 <script src="<%= ctxPath %>/store/store_detail.js" defer></script>
 </head>
 
@@ -95,25 +98,38 @@
 <div class="container">
     <div class="info">
 
-        <!-- 이미지 슬라이드 -->
         <div class="slider-container">
             <div class="custom-slider">
-
                 <div class="slides">
-                    <% if (dto.getStoreImg() != null) { %>
-                        <img src="<%= ctxPath %>/images/<%= dto.getStoreImg() %>" class="slide active">
+                    <% 
+                        // 이미지 경로 처리 (앞에 /가 없으면 붙여줌)
+                        String img1 = dto.getStoreImg();
+                        String img2 = dto.getStoreImg2();
+                        String img3 = dto.getStoreImg3();
+                        
+                        if(img1 != null && !img1.startsWith("/")) img1 = "/" + img1;
+                        if(img2 != null && !img2.startsWith("/")) img2 = "/" + img2;
+                        if(img3 != null && !img3.startsWith("/")) img3 = "/" + img3;
+                    %>
+
+                    <%-- 1번 이미지 --%>
+                    <% if (dto.getStoreImg() != null && !dto.getStoreImg().trim().isEmpty()) { %>
+                        <img src="<%= ctxPath %>/images/store_image<%= img1 %>" class="slide active" onerror="this.style.display='none'">
+                    <% } else { %>
+                        <div class="slide active" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#888;">이미지 없음</div>
                     <% } %>
 
-                    <% if (dto.getStoreImg2() != null) { %>
-                        <img src="<%= ctxPath %>/images/<%= dto.getStoreImg2() %>" class="slide">
+                    <%-- 2번 이미지 --%>
+                    <% if (dto.getStoreImg2() != null && !dto.getStoreImg2().trim().isEmpty()) { %>
+                        <img src="<%= ctxPath %>/images/store_image<%= img2 %>" class="slide" onerror="this.style.display='none'">
                     <% } %>
 
-                    <% if (dto.getStoreImg3() != null) { %>
-                        <img src="<%= ctxPath %>/images/<%= dto.getStoreImg3() %>" class="slide">
+                    <%-- 3번 이미지 --%>
+                    <% if (dto.getStoreImg3() != null && !dto.getStoreImg3().trim().isEmpty()) { %>
+                        <img src="<%= ctxPath %>/images/store_image<%= img3 %>" class="slide" onerror="this.style.display='none'">
                     <% } %>
                 </div>
 
-                <!-- 좌우 버튼 -->
                 <button class="slider-btn prev">
                     <i class="bi bi-chevron-left caret"></i>
                 </button>
@@ -121,7 +137,6 @@
                     <i class="bi bi-chevron-right caret"></i>
                 </button>
 
-                <!-- 하단 점 -->
                 <div class="slider-dots">
                     <span class="dot active"></span>
                     <span class="dot"></span>
@@ -130,9 +145,7 @@
             </div>
         </div>
 
-        <!-- 가게 정보 -->
         <div class="store-info">
-
             <span class="store-category"><%= dto.getStoreCategory() %></span>
 
             <div class="store-title-row">
@@ -141,22 +154,19 @@
                     <p class="store-intro"><%= dto.getStoreIntro() %></p>
                 </div>
 
-                <!-- 찜 버튼 -->
                 <button type="button" class="store-jjim-btn"
                     onclick="toggleBookmark(this, '<%= dto.getStoreIdx() %>', '<%= dto.getStoreName() %>', '<%= dto.getStoreAddr() %>')">
                     <%= isBookmarked ? "♥" : "♡" %>
                 </button>
             </div>
 
-            <!-- 상세 정보 -->
             <div class="storeinfomation">
-
                 <div class="info-row">
-				    <i class="bi bi-star-fill"></i>
-				    <p class="store-rating">
-				        <%= String.format("%.1f", avgRating) %> <span id="reviewCount">(<%= reviewCount %>)</span> 
-				    </p>
-				</div>
+                    <i class="bi bi-star-fill"></i>
+                    <p class="store-rating">
+                        <%= String.format("%.1f", avgRating) %> <span id="reviewCount">(<%= reviewCount %>)</span> 
+                    </p>
+                </div>
 
                 <div class="info-row">
                     <i class="bi bi-telephone-fill"></i>
@@ -167,98 +177,72 @@
                     <i class="bi bi-geo-alt-fill"></i>
                     <p class="store-addr"><%= dto.getStoreAddr() %></p>
                 </div>
-
             </div>
         </div>
     </div>
     
-    
-    <!-- 메뉴창 -->
     <div class="menu-section">
-	    <div class="menu-header">
-	        <h3>메뉴</h3>
-	
-	        <% if (isAdmin) { %>
-			    <button class="menu-add-btn" data-bs-toggle="modal" data-bs-target="#menuAddModal">
-			        메뉴추가
-			    </button>
-			<% } %>
-	    </div>
-	
-	    <div class="menu-list">
-
-	        <% if (menuList == null || menuList.isEmpty()) { %>
-	            <p style="color:#999;">등록된 메뉴가 없습니다.</p>
-	        <% } else {
-	            for (MenuDTO m : menuList) { %>
-	
-	        <div class="menu-item">
-			    <div class="menu-img">
-			        <% if (m.getMenuImg() != null) { %>
-			            <img src="<%= ctxPath %>/images/menu/<%= m.getMenuImg() %>" />
-			        <% } %>
-			    </div>
-			
-			    <div class="menu-text">
-			        <p class="menu-name"><%= m.getMenuName() %></p>
-			        <p class="menu-price"><%= m.getMenuPrice() %>원</p>
-			    </div>
-	        
-	        <%-- 관리자 전용 버튼 --%>
-		    <% if (isAdmin) { %>
-			    <div class="menu-admin-btns">
-			        <button class="btn-edit"
-			            onclick="openEditMenuModal(<%= m.getMenuIdx() %>,'<%= m.getMenuName() %>',<%= m.getMenuPrice() %>,'<%= m.getMenuImg() == null ? "" : m.getMenuImg() %>')">
-			            수정
-			        </button>
-			
-			        <button class="btn-delete"
-    				onclick="deleteMenu(<%= m.getMenuIdx() %>, <%= storeIdx %>)">
-    				삭제
-					</button>
-
-			    </div>
-			    <% } %>
-			</div>
-	        <% } } %>
-	    </div>
-	</div>
-	
-	
-	<%-- 리뷰쓰기 --%>
-	
-	<!-- 리뷰 영역 -->
-<div class="review-section">
-
-    <div class="review-header">
-        <h3>리뷰</h3>
-
-		<button class="review-write-btn"
-			id="reviewBtn"
-			data-bs-toggle="modal"
-        	data-bs-target="#reviewModal"
-        	data-store-idx="<%=storeIdx%>"
-        	data-login="<%= (memberId!= null) %>">
-    		리뷰 쓰기
-		</button>
-
+        <div class="menu-header">
+            <h3>메뉴</h3>
+            <% if (isAdmin) { %>
+                <button class="menu-add-btn" data-bs-toggle="modal" data-bs-target="#menuAddModal">
+                    메뉴추가
+                </button>
+            <% } %>
+        </div>
+    
+        <div class="menu-list">
+            <% if (menuList == null || menuList.isEmpty()) { %>
+                <p style="color:#999;">등록된 메뉴가 없습니다.</p>
+            <% } else {
+                for (MenuDTO m : menuList) { %>
+            <div class="menu-item">
+                <div class="menu-img">
+                    <% if (m.getMenuImg() != null) { %>
+                        <img src="<%= ctxPath %>/images/menu/<%= m.getMenuImg() %>" onerror="this.src='<%= ctxPath %>/images/no_img.png'"/>
+                    <% } %>
+                </div>
+                <div class="menu-text">
+                    <p class="menu-name"><%= m.getMenuName() %></p>
+                    <p class="menu-price"><%= m.getMenuPrice() %>원</p>
+                </div>
+            
+                <%-- 관리자 전용 버튼 --%>
+                <% if (isAdmin) { %>
+                <div class="menu-admin-btns">
+                    <button class="btn-edit"
+                        onclick="openEditMenuModal(<%= m.getMenuIdx() %>,'<%= m.getMenuName() %>',<%= m.getMenuPrice() %>,'<%= m.getMenuImg() == null ? "" : m.getMenuImg() %>')">
+                        수정
+                    </button>
+                    <button class="btn-delete"
+                        onclick="deleteMenu(<%= m.getMenuIdx() %>, <%= storeIdx %>)">
+                        삭제
+                    </button>
+                </div>
+                <% } %>
+            </div>
+            <% } } %>
+        </div>
     </div>
+    
+    <div class="review-section">
+        <div class="review-header">
+            <h3>리뷰</h3>
+            <button class="review-write-btn" id="reviewBtn"
+                data-bs-toggle="modal" data-bs-target="#reviewModal"
+                data-store-idx="<%=storeIdx%>" data-login="<%= (memberId!= null) %>">
+                리뷰 쓰기
+            </button>
+        </div>
 
-    <% if (reviewList == null || reviewList.isEmpty()) { %>
-        <p class="no-review">작성된 리뷰가 없습니다.</p>
-    <% } else { %>
-
-        <%  
-        	int index = 0; 
-        
-        	for (ReviewDTO r : reviewList) { 
-        		boolean isMyReview = (memberId != null 
-        			    && memberId.equals(r.getMemberId()));
+        <% if (reviewList == null || reviewList.isEmpty()) { %>
+            <p class="no-review">작성된 리뷰가 없습니다.</p>
+        <% } else { 
+            int index = 0; 
+            for (ReviewDTO r : reviewList) { 
+                boolean isMyReview = (memberId != null && memberId.equals(r.getMemberId()));
         %>
-		
         <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>">
-
-            <!-- 프로필 -->
             <div class="review-profile">
                 <% if (r.getMemberImg() != null) { %>
                     <img src="<%= ctxPath %>/images/profile/<%= r.getMemberImg() %>">
@@ -266,146 +250,103 @@
                     <div class="profile-circle"><i class="bi bi-person-circle"></i></div>
                 <% } %>
                 <span class="review-writer"><%= r.getMemberName() %></span>
-                <span class="review-rating">
-                    평점 <%= r.getReviewRating() %>점
-                </span>
+                <span class="review-rating">평점 <%= r.getReviewRating() %>점</span>
             </div>
         
-            <!-- 리뷰 본문 -->
             <div class="review-content">
-                <!-- 왼쪽 : 텍스트 -->
-		        <div class="review-text-wrap">
-		            <p class="review-text">
-		                <%= r.getReviewContent() %>
-		            </p>
-		
-		            <span class="review-date">
-		                <%= r.getReviewCreatedAt() %>
-		            </span>
-		        </div>
-		        
-		        <!-- 오른쪽 : 대표 이미지 -->
-		        	<% if (r.getReviewImg1() != null && !r.getReviewImg1().equals("")) { %>
-				    <div class="review-img-thumb" 
-				         style="cursor:pointer;" 
-				         onclick="showReviewImages('<%= r.getReviewImg1() %>', '<%= r.getReviewImg2() %>', '<%= r.getReviewImg3() %>', '<%= r.getReviewImg4() %>', '<%= r.getReviewImg5() %>')">
-				        <img src="<%= ctxPath %>/images/review_upload/<%= r.getReviewImg1() %>">
-				        
-				        <% if (r.getReviewImg2() != null && !r.getReviewImg2().equals("")) { %>
-				            <div class="img-count-badge"><i class="bi bi-images"></i></div>
-				        <% } %>
-				    </div>
-				<% } %>
+                <div class="review-text-wrap">
+                    <p class="review-text"><%= r.getReviewContent() %></p>
+                    <span class="review-date"><%= r.getReviewCreatedAt() %></span>
+                </div>
+                
+                <% if (r.getReviewImg1() != null && !r.getReviewImg1().equals("")) { %>
+                    <div class="review-img-thumb" style="cursor:pointer;" 
+                         onclick="showReviewImages('<%= r.getReviewImg1() %>', '<%= r.getReviewImg2() %>', '<%= r.getReviewImg3() %>', '<%= r.getReviewImg4() %>', '<%= r.getReviewImg5() %>')">
+                        <img src="<%= ctxPath %>/images/review_upload/<%= r.getReviewImg1() %>">
+                        <% if (r.getReviewImg2() != null && !r.getReviewImg2().equals("")) { %>
+                            <div class="img-count-badge"><i class="bi bi-images"></i></div>
+                        <% } %>
+                    </div>
+                <% } %>
             </div>
             
             <% if (isMyReview) { %>
-		        <div class="review-actions">
-		            <button class="review-edit-btn"
-		                onclick="openEditReviewModal(
-		                    <%= r.getReviewIdx() %>,
-		                    '<%= r.getReviewContent().replace("'", "\\'") %>',
-		                    <%= r.getReviewRating() %>
-		                )">
-		                수정
-		            </button>
-		
-		            <button class="review-delete-btn"
-		                onclick="deleteReview(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
-		                삭제
-		            </button>
-		        </div>
-		    <% } %>
-
+                <div class="review-actions">
+                    <button class="review-edit-btn"
+                        onclick="openEditReviewModal(<%= r.getReviewIdx() %>, '<%= r.getReviewContent().replace("'", "\\'") %>', <%= r.getReviewRating() %>)">
+                        수정
+                    </button>
+                    <button class="review-delete-btn"
+                        onclick="deleteReview(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
+                        삭제
+                    </button>
+                </div>
+            <% } %>
         </div>
-		<% index++; } %>
+        <% index++; } } %>
 
+        <% if (reviewList != null && reviewList.size() > 5) { %>
+            <button class="review-more-btn" onclick="showMoreReviews()">더보기</button>
         <% } %>
+    </div>
 
-    <% if (reviewList != null && reviewList.size() > 5) { %>
-    	<button class="review-more-btn" onclick="showMoreReviews()">더보기</button>
-	<% } %>
-
-</div>
-
-<!-- 지도 -->
-<div class="map-section">
-	<div class="map-header">
-		<h3>지도</h3>
-	</div>
-
-	<div id="map" style="width:100%; height:350px; border-radius:10px;"></div>
-</div>
-	
+    <div class="map-section">
+        <div class="map-header">
+            <h3>지도</h3>
+        </div>
+        <div id="map" style="width:100%; height:350px; border-radius:10px;"></div>
+    </div>
     
-    <!-- 리뷰 이미지 모달 -->
-	<div class="modal fade" id="reviewImageModal" tabindex="-1">
-	  <div class="modal-dialog modal-lg modal-dialog-centered">
-	    <div class="modal-content">
-	
-	      <div class="modal-header">
-	        <h5 class="modal-title">리뷰 이미지</h5>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-	      </div>
-	
-	      <div class="modal-body">
-	        <div id="reviewModalImages" class="review-modal-images"></div>
-	      </div>
-			
-	    </div>
-	  </div>
-	</div>
-
-    
+    <div class="modal fade" id="reviewImageModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">리뷰 이미지</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div id="reviewModalImages" class="review-modal-images"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 
 <jsp:include page="/review/review_write.jsp"/>
-
 <jsp:include page="/footer/footer.jsp" />
-
 <jsp:include page="../menu/menu_add.jsp">
     <jsp:param name="storeIdx" value="<%= storeIdx %>" />
 </jsp:include>
 
-
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script type="text/javascript">
-
-//메뉴삭제
-function deleteMenu(menuIdx, storeIdx) {
-    if (confirm("정말로 이 메뉴를 삭제하시겠습니까?")) {
-        location.href =
-            "<%= request.getContextPath() %>/menu/menu_delete.jsp"
-            + "?menuIdx=" + menuIdx
-            + "&storeIdx=" + storeIdx;
+    // 메뉴삭제
+    function deleteMenu(menuIdx, storeIdx) {
+        if (confirm("정말로 이 메뉴를 삭제하시겠습니까?")) {
+            location.href = "<%= ctxPath %>/menu/menu_delete.jsp?menuIdx=" + menuIdx + "&storeIdx=" + storeIdx;
+        }
     }
-}
 
-//메뉴 추가 버튼 클릭 시 (Bootstrap 모달 이벤트 활용)
-$('#menuAddModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // "메뉴추가" 버튼
-    var modal = $(this);
-    
-    // 추가 모드일 때는 menuIdx를 비워야 합니다.
-    if (button.hasClass('menu-add-btn')) {
-        modal.find('#menuModalTitle').text('메뉴 추가');
-        modal.find('#menuIdx').val(''); // 매우 중요: 빈값이어야 insert가 실행됨
-        modal.find('#menuName').val('');
-        modal.find('#menuPrice').val('');
-        modal.find('#menuSubmitBtn').text('등록');
-    }
-});
+    // 메뉴 추가 모달 초기화
+    $('#menuAddModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+        if (button.hasClass('menu-add-btn')) {
+            modal.find('#menuModalTitle').text('메뉴 추가');
+            modal.find('#menuIdx').val('');
+            modal.find('#menuName').val('');
+            modal.find('#menuPrice').val('');
+            modal.find('#menuSubmitBtn').text('등록');
+        }
+    });
 
-//리뷰삭제
-function deleteReview(reviewIdx, storeIdx) {
-    if (confirm("리뷰를 삭제하시겠습니까?")) {
-        location.href =
-            "<%= ctxPath %>/review/review_delete.jsp"
-            + "?reviewIdx=" + reviewIdx
-            + "&storeIdx=" + storeIdx;
+    // 리뷰삭제
+    function deleteReview(reviewIdx, storeIdx) {
+        if (confirm("리뷰를 삭제하시겠습니까?")) {
+            location.href = "<%= ctxPath %>/review/review_delete.jsp?reviewIdx=" + reviewIdx + "&storeIdx=" + storeIdx;
+        }
     }
-}
 </script>
 
 </body>
