@@ -160,7 +160,7 @@ public class StoreDAO {
         }
     }
     
- // 카테고리별 게시글 개수 조회 (Map<카테고리명, 개수> 형태)
+    // 카테고리별 게시글 개수 조회 (Map<카테고리명, 개수> 형태)
     public java.util.Map<String, Integer> getCategoryCounts() {
         java.util.Map<String, Integer> map = new java.util.HashMap<>();
         Connection conn = null;
