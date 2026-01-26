@@ -207,11 +207,16 @@
                     
                     <div class="store-info">
                         <div class="store-name"><%= store.getStoreName() %></div>
+                        
                         <div class="store-stats">
                             <span class="star-icon">★</span> <%= String.format("%.1f", store.getStoreRatingAvg()) %> 
                             <span style="color:#999; font-size:0.9em;">/ 5</span>
-                            (리뷰 <%= store.getStoreRatingCount() %>)
+                            
+                            <span style="color:#888; font-size:0.9em; margin-left:5px;">
+                                (리뷰 <%= store.getStoreRatingCount() %> · 조회 <%= store.getStoreViewCount() %>)
+                            </span>
                         </div>
+                        
                         <div class="store-addr"><%= store.getStoreAddr() %></div>
                         <div class="store-tel"><%= tel %></div>
                     </div>
