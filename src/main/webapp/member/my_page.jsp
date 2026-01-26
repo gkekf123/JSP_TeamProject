@@ -218,31 +218,21 @@ document.addEventListener("DOMContentLoaded", () => {
         <ul>
             <li onclick="location.href='<%=ctxPath%>/index.jsp'">메인</li>
             <li class="active">마이페이지</li>
-            
-            <% if("admin".equalsIgnoreCase(member_role)) { %>
-		    <!-- 관리자 메뉴만 보여줌 -->
-		    <li onclick="location.href='<%=ctxPath%>/admin/admin_list.jsp'">관리자 글 작성 목록</li>
-			<% } else if("user".equalsIgnoreCase(member_role)) { %>
-		    <!-- 일반유저 메뉴만 보여줌 -->
-		    <li onclick="location.href='<%=ctxPath%>/user/wish_list.jsp'">찜 목록</li>
-		    <li onclick="location.href='<%=ctxPath%>/user/review_list.jsp'">리뷰 작성 목록</li>
-				<% } %>
-				
+		    <li onclick="location.href='<%=ctxPath%>/user/wish_list.jsp'">나의 활동</li>
             <li onclick="location.href='<%=ctxPath%>/member/my_info_update_form.jsp'">회원 정보 수정</li>
             <li onclick="location.href='<%=ctxPath%>/member/member_delete_form.jsp'">회원 탈퇴</li>
-          
-        <!-- 로그아웃 -->
-        <li id="sidebarLogout" 
-        	style="color:#e74c3c; font-weight:600;">
-            로그아웃
-         </li>  
+        	<!-- 로그아웃 -->
+        	<li id="sidebarLogout" 
+        		style="color:#e74c3c; font-weight:600;">
+            	로그아웃
+         	</li>
         </ul>
     </div>
 
     <!-- 메인 컨텐츠 -->
     <div class="content">
     	<div class="role-badge">
-    		<%= "admin".equalsIgnoreCase(member_role) ? "-관리자-" : "-유저-" %>
+    		<%= "admin".equalsIgnoreCase(member_role) ? "- 관리자 -" : "- 유저 -" %>
 		</div>
         <h2>마이페이지</h2>
 		<!-- 프로필 영역 -->
@@ -315,8 +305,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <input type="text" value="<%=dto.getMemberJoinday()%>" readonly>
             </div>
         </div>
-
-        <!-- 정보 수정 버튼은 제거 -->
     </div>
 </div>
 <jsp:include page="/footer/footer.jsp" />

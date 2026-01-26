@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.team.project.dao.BookmarkDAO"%>
 <%@page import="com.team.project.dto.ReviewDTO"%>
 <%@page import="com.team.project.dao.ReviewDAO"%>
@@ -69,8 +70,10 @@
         isBookmarked = bookmarkDao.isBookmarked(memberId, (int)storeIdx);
     }
     
-    int reviewOrder = reviewCount + 1; 
-    request.setAttribute("reviewOrder", reviewOrder);
+	//리뷰
+    int reviewOrder = reviewCount +1 ; 
+	request.setAttribute("reviewOrder", reviewOrder);
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd HH:mm");
 %>
 
 <!DOCTYPE html>
@@ -162,11 +165,11 @@
 
             <div class="storeinfomation">
                 <div class="info-row">
-                    <i class="bi bi-star-fill"></i>
-                    <p class="store-rating">
-                        <%= String.format("%.1f", avgRating) %> <span id="reviewCount">(<%= reviewCount %>)</span> 
-                    </p>
-                </div>
+				    <i class="bi bi-star-fill"></i>
+				    <p class="store-rating">
+				        <%= String.format("%.1f", avgRating)%> (<%=reviewCount%>)
+				    </p>
+				</div>
 
                 <div class="info-row">
                     <i class="bi bi-telephone-fill"></i>
@@ -230,7 +233,8 @@
             <h3>리뷰</h3>
             <button class="review-write-btn" id="reviewBtn"
                 data-bs-toggle="modal" data-bs-target="#reviewModal"
-                data-store-idx="<%=storeIdx%>" data-login="<%= (memberId!= null) %>">
+                data-store-idx="<%=storeIdx%>" data-login="<%= (memberId!= null) %>"
+                data-review-count="<%= reviewCount %>">
                 리뷰 쓰기
             </button>
         </div>
@@ -242,7 +246,9 @@
             for (ReviewDTO r : reviewList) { 
                 boolean isMyReview = (memberId != null && memberId.equals(r.getMemberId()));
         %>
-        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>">
+        
+		<!-- 프로필 -->
+        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>" data-review-idx="<%=r.getReviewIdx()%>" data-store-idx="<%= storeIdx %>">
             <div class="review-profile">
                 <% if (r.getMemberImg() != null) { %>
                     <img src="<%= ctxPath %>/images/profile/<%= r.getMemberImg() %>">
@@ -255,8 +261,12 @@
         
             <div class="review-content">
                 <div class="review-text-wrap">
-                    <p class="review-text"><%= r.getReviewContent() %></p>
-                    <span class="review-date"><%= r.getReviewCreatedAt() %></span>
+                    <p class="review-text"><%= r.getReviewContent().replace("\n", "<br>")%></p>
+                    <span class="review-date">
+                    	<%=sdf.format(r.getReviewCreatedAt())%>
+		                <% if (r.getReviewUpdatedAt() != null) { %>
+				            (수정됨)
+				        <% } %> </span>
                 </div>
                 
                 <% if (r.getReviewImg1() != null && !r.getReviewImg1().equals("")) { %>
@@ -272,14 +282,8 @@
             
             <% if (isMyReview) { %>
                 <div class="review-actions">
-                    <button class="review-edit-btn"
-                        onclick="openEditReviewModal(<%= r.getReviewIdx() %>, '<%= r.getReviewContent().replace("'", "\\'") %>', <%= r.getReviewRating() %>)">
-                        수정
-                    </button>
-                    <button class="review-delete-btn"
-                        onclick="deleteReview(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
-                        삭제
-                    </button>
+		            <button class="review-edit-btn">수정</button>
+					<button class="review-delete-btn">삭제</button>
                 </div>
             <% } %>
         </div>
@@ -340,13 +344,6 @@
             modal.find('#menuSubmitBtn').text('등록');
         }
     });
-
-    // 리뷰삭제
-    function deleteReview(reviewIdx, storeIdx) {
-        if (confirm("리뷰를 삭제하시겠습니까?")) {
-            location.href = "<%= ctxPath %>/review/review_delete.jsp?reviewIdx=" + reviewIdx + "&storeIdx=" + storeIdx;
-        }
-    }
 </script>
 
 </body>
