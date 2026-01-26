@@ -290,7 +290,7 @@
         <% index++; } } %>
 
         <% if (reviewList != null && reviewList.size() > 5) { %>
-            <button class="review-more-btn" id="reviewMoreBtn" onclick="showMoreReviews()">더보기</button>
+            <button class="review-more-btn" onclick="showMoreReviews()">더보기</button>
         <% } %>
     </div>
 
