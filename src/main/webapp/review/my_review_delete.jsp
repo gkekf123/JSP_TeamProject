@@ -1,3 +1,5 @@
+<%@page import="java.io.File"%>
+<%@page import="com.team.project.dto.ReviewDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.team.project.dao.ReviewDAO" %>
@@ -27,6 +29,18 @@
     
     // 3. DAO 호출 (삭제 실행)
     ReviewDAO dao = new ReviewDAO();
+    ReviewDTO dto=dao.oneSelectReview(reviewIdx);
+    
+    // 실제 파일 삭제 (서버 하드디스크)
+    String savePath = application.getRealPath("/images/review_upload/");
+    String[] images = {dto.getReviewImg1(), dto.getReviewImg2(), dto.getReviewImg3(), dto.getReviewImg4(), dto.getReviewImg5()};
+    
+    for(String path : images) {
+        if(path != null && !path.isEmpty()) {
+            File file = new File(savePath + path);
+            if(file.exists()) file.delete(); 
+        }
+    }
     // DAO 내부에서 member_id를 체크하므로 안전합니다.
     int result = dao.deleteReview(reviewIdx, memberId);
 

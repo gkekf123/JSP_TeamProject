@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	// ================== 로그인 확인 - 프론트 ==================
 	const reviewBtn = document.getElementById("reviewBtn");
+	const reviewOrder=document.getElementById("reviewOrder");
 
 	reviewBtn.addEventListener("click", function (e) {
 	    const isLogin = this.dataset.login === "true";
@@ -13,8 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	        return;
 	    }
 		
+		
 		const reviewCount = parseInt(this.dataset.reviewCount, 10) || 0;
-		document.getElementById("reviewOrder").textContent = reviewCount + 1;
+		reviewOrder.textContent = reviewCount + 1;
 	});
 
 	// ================== 모달 열기==================
@@ -24,7 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const btn = event.relatedTarget;
         const storeIdx = btn.getAttribute('data-store-idx');
         document.getElementById('storeIdx').value = storeIdx;
+		
     });
+
 
     // ================== 별점 ==================
 	const starGroup = document.querySelectorAll("#starGroup span");
@@ -217,7 +221,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		// 수정 모드 해제
 		delete form.dataset.mode;
-		delete form.dataset.editIdx;
 		
         // 별점 초기화
         starGroup.forEach(star => star.classList.remove("active"));
@@ -240,8 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateImgCount();
 		
 		// reviewOrder 초기화
-		const orderEl = document.getElementById("reviewOrder");
-		if (orderEl) orderEl.textContent = "";
+		reviewOrder.textContent = "";
     }
 
     let allowClose = false;
@@ -259,8 +261,8 @@ document.addEventListener("DOMContentLoaded", () => {
         allowClose = false;
     });
 
-    // ================== 폼 제출 ==================
-	
+    // ================== 리뷰(입력, 수정, 삭제)==================
+	// 입력,수정
 	$("#reviewModal form").on("submit", function (e) {
     	e.preventDefault();
 	
@@ -268,16 +270,10 @@ document.addEventListener("DOMContentLoaded", () => {
         	alert("별점을 선택해주세요!");
         	return;
     	}
-
-		const formData = new FormData(this);
-		const isEditMode = this.dataset.mode === "edit";
+		
 		const form = this;
-		const editIdx = form.dataset.editIdx;
-
-		// 수정 모드일 경우 reviewIdx 추가
-		if (isEditMode) {
-		    formData.append("review_idx", editIdx);
-		}
+		const formData = new FormData(form);
+		const isEditMode = form.dataset.mode === "edit";
 
 		const url = isEditMode 
 		    ? ctxPath + "/review/review_update.jsp"
@@ -300,37 +296,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 
             	if (res.reviewResult === "success") {
-					
-					// 평균 평점 갱신
-					const storeRating = document.querySelector(".store-rating");
-					storeRating.innerText =
-					    res.avgRating.toFixed(1) + " (" + res.reviewCount + ")";
-					const reviewBtn = document.getElementById("reviewBtn");
-						reviewBtn.dataset.reviewCount = res.reviewCount;
-						
-					if (isEditMode) {
-					    const target = document.getElementById("review-" + editIdx);
-					    if (target) {
-					        target.outerHTML = res.reviewHtml;
-					    }
-					} else {
-						// 리뷰 목록 맨 위에 추가
-					    const reviewSection = document.querySelector(".review-section");
-					    const header = reviewSection.querySelector(".review-header");
-					    header.insertAdjacentHTML("afterend", res.reviewHtml);
-
-					    // 리뷰 순서 갱신 (신규일 때만 의미 있음)
-						
-					    document.getElementById('reviewOrder').innerText = res.reviewOrder;
-					}				
-											
-					allowClose = true;
-					
 					alert(isEditMode ? "리뷰 수정 성공" : "리뷰 등록 성공");
-
-					// 모달 닫기
-					const modal = bootstrap.Modal.getInstance(reviewModal);
-					modal.hide();
+					location.reload();
+					return;
+				
 
             	} else {
                 	alert(isEditMode ? "리뷰 수정 실패" : "리뷰 등록 실패");
@@ -342,12 +311,16 @@ document.addEventListener("DOMContentLoaded", () => {
         	}
     	});
 	});
-	// ================== 리뷰 수정용 함수 ==================
-	window.openUpdateReviewModal = function(reviewIdx, storeIdx) {
+	
+	// 수정-데이터 가져오기
+	$(document).on("click", ".review-edit-btn", function() {
 		// 1. 수정 모드임을 알리기 위한 변수 설정 (필요 시)
 	    const form = document.querySelector("#reviewModal form");
 	    form.dataset.mode = "edit";
-	    form.dataset.editIdx = reviewIdx;
+		
+		const reviewItem = $(this).closest(".review-item");
+		const reviewIdx = reviewItem.data("review-idx");
+		const storeIdx = reviewItem.data("store-idx");
 		
 		document.getElementById("reviewIdx").value = reviewIdx;
 		document.getElementById("storeIdx").value = storeIdx;
@@ -376,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	                }
 	            });
 				
-				document.getElementById("reviewOrder").textContent = res.reviewOrder
+				reviewOrder.textContent = res.reviewOrder
 				renderPreviews();
 				
 	            const updateModal = bootstrap.Modal.getInstance(reviewModal) || new bootstrap.Modal(reviewModal);
@@ -386,9 +359,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	            alert("리뷰 정보를 가져오는데 실패했습니다.");
 	        }
 	    });
-	};
+	});
 
-	// 기존 이미지를 미리보기에서 제거하는 함수
+	// 수정-기존 이미지를 미리보기에서 제거하는 함수
 	window.removeExistingImg = function(btn, path) {
 	    if(confirm("기존 이미지를 삭제하시겠습니까? 등록 시 실제 파일이 삭제됩니다.")) {
 	        const preview = btn.parentElement;
@@ -403,30 +376,23 @@ document.addEventListener("DOMContentLoaded", () => {
 	    }
 	};
 	
-	//수정 버튼
-	$(document).on("click", ".review-edit-btn", function() {
-	    const reviewIdx = $(this).closest(".review-item").attr("id").split("-")[1];
-	    window.openUpdateReviewModal(reviewIdx);
-	});
-	
 	//삭제
 	$(document).on("click", ".review-delete-btn", function() {
-	    const reviewItem = $(this).closest(".review-item");
-	    const reviewIdx = reviewItem.attr("id").split("-")[1];
+		const reviewItem = $(this).closest(".review-item");
+		const reviewIdx = reviewItem.data("review-idx");
+		const storeIdx = reviewItem.data("store-idx");
 
 	    if (confirm("정말 이 리뷰를 삭제하시겠습니까?")) {
 	        $.ajax({
 	            url: ctxPath + "/review/review_delete.jsp",
 	            type: "POST",
-	            data: { "reviewIdx": reviewIdx, "storeIdx": reviewItem.data("store-idx")},
+	            data: { "reviewIdx": reviewIdx, "storeIdx": storeIdx},
 	            dataType: "json",
 	            success: function(res) {
 	                if (res.deleteResult === "success") {
 	                    alert("삭제되었습니다.");
-	                    reviewItem.remove();
-						const storeRating = document.querySelector(".store-rating");
-						storeRating.innerText =
-						    res.avgRating.toFixed(1) + " (" + res.reviewCount + ")";
+						sessionStorage.setItem("scrollY", window.scrollY);
+						location.reload();
 	                } else {
 	                    alert("삭제 실패");
 	                }
@@ -435,5 +401,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 	
+	
+	// 더보기 클릭 시 상태 저장
+	$(".review-more-btn").click(function() {
+	    const openedIndexes = [];
+	    $(".review-item:not(.review-hidden)").each(function(index) {
+	        if(index >= 5) openedIndexes.push(index);
+	    });
+	    sessionStorage.setItem("reviewMoreOpened", JSON.stringify(openedIndexes));
+	});
+	// reload 후 상태 복원
+	window.addEventListener("load", () => {
+	    const openedIndexes = JSON.parse(sessionStorage.getItem("reviewMoreOpened") || "[]");
+	    openedIndexes.forEach(idx => {
+	        $(".review-item").eq(idx).removeClass("review-hidden");
+	    });
+	    sessionStorage.removeItem("reviewMoreOpened");
+	});
+
 	
 });
