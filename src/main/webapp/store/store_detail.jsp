@@ -248,7 +248,7 @@
         %>
         
 		<!-- 프로필 -->
-        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>" id="review-<%=r.getReviewIdx()%>" data-store-idx="<%= storeIdx %>">
+        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>" data-review-idx="<%=r.getReviewIdx()%>" data-store-idx="<%= storeIdx %>">
             <div class="review-profile">
                 <% if (r.getMemberImg() != null) { %>
                     <img src="<%= ctxPath %>/images/profile/<%= r.getMemberImg() %>">
@@ -282,21 +282,15 @@
             
             <% if (isMyReview) { %>
                 <div class="review-actions">
-		            <button class="review-edit-btn" 
-		           		onclick="openUpdateReviewModal(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
-		                수정
-		            </button>
-		
-		            <button class="review-delete-btn">
-		                삭제
-		            </button>
+		            <button class="review-edit-btn">수정</button>
+					<button class="review-delete-btn">삭제</button>
                 </div>
             <% } %>
         </div>
         <% index++; } } %>
 
         <% if (reviewList != null && reviewList.size() > 5) { %>
-            <button class="review-more-btn" onclick="showMoreReviews()">더보기</button>
+            <button class="review-more-btn" id="reviewMoreBtn" onclick="showMoreReviews()">더보기</button>
         <% } %>
     </div>
 
