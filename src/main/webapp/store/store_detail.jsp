@@ -8,6 +8,7 @@
 <%@page import="com.team.project.dto.MemberDTO"%>
 <%@page import="com.team.project.dao.StoreDetailDAO"%>
 <%@page import="com.team.project.dto.StoreDTO"%>
+<%@page import="com.team.project.dao.StoreDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
@@ -27,6 +28,9 @@
     }
 
     long storeIdx = Long.parseLong(storeIdxParam);
+
+    StoreDAO commonDao = new StoreDAO();
+    commonDao.updateReadCount(storeIdxParam);
 
     // 1. 가게 정보 가져오기
     StoreDetailDAO dao = new StoreDetailDAO();
@@ -70,10 +74,10 @@
         isBookmarked = bookmarkDao.isBookmarked(memberId, (int)storeIdx);
     }
     
-	//리뷰
-    int reviewOrder = reviewCount +1 ; 
-	request.setAttribute("reviewOrder", reviewOrder);
-	SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    // 리뷰 순서용 변수
+    int reviewOrder = reviewCount + 1; 
+    request.setAttribute("reviewOrder", reviewOrder);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 %>
 
 <!DOCTYPE html>
@@ -165,11 +169,14 @@
 
             <div class="storeinfomation">
                 <div class="info-row">
-				    <i class="bi bi-star-fill"></i>
-				    <p class="store-rating">
-				        <%= String.format("%.1f", avgRating)%> (<%=reviewCount%>)
-				    </p>
-				</div>
+                    <i class="bi bi-star-fill"></i>
+                    <p class="store-rating">
+                        <%= String.format("%.1f", avgRating)%> (<%=reviewCount%>)
+                        <span style="font-size:0.8em; color:#888; margin-left:5px;">
+                            (조회수: <%= dto.getStoreViewCount() %>)
+                        </span>
+                    </p>
+                </div>
 
                 <div class="info-row">
                     <i class="bi bi-telephone-fill"></i>
@@ -247,7 +254,6 @@
                 boolean isMyReview = (memberId != null && memberId.equals(r.getMemberId()));
         %>
         
-		<!-- 프로필 -->
         <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>" data-review-idx="<%=r.getReviewIdx()%>" data-store-idx="<%= storeIdx %>">
             <div class="review-profile">
                 <% if (r.getMemberImg() != null) { %>
@@ -263,10 +269,10 @@
                 <div class="review-text-wrap">
                     <p class="review-text"><%= r.getReviewContent().replace("\n", "<br>")%></p>
                     <span class="review-date">
-                    	<%=sdf.format(r.getReviewCreatedAt())%>
-		                <% if (r.getReviewUpdatedAt() != null) { %>
-				            (수정됨)
-				        <% } %> </span>
+                        <%=sdf.format(r.getReviewCreatedAt())%>
+                        <% if (r.getReviewUpdatedAt() != null) { %>
+                            (수정됨)
+                        <% } %> </span>
                 </div>
                 
                 <% if (r.getReviewImg1() != null && !r.getReviewImg1().equals("")) { %>
@@ -282,8 +288,8 @@
             
             <% if (isMyReview) { %>
                 <div class="review-actions">
-		            <button class="review-edit-btn">수정</button>
-					<button class="review-delete-btn">삭제</button>
+                    <button class="review-edit-btn">수정</button>
+                    <button class="review-delete-btn">삭제</button>
                 </div>
             <% } %>
         </div>

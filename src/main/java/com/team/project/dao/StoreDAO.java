@@ -61,9 +61,12 @@ public class StoreDAO {
 
         StringBuilder sql = new StringBuilder();
         
-        sql.append("SELECT store_idx, store_name, store_img, store_img2, store_img3, ");
-        sql.append("store_rating_avg, store_rating_count, store_view_count, store_addr, store_tel, latitude, longitude, kakao_id, place_url ");
-        sql.append("FROM store ");
+        sql.append("SELECT s.store_idx, s.store_name, s.store_img, s.store_img2, s.store_img3, ");
+        sql.append("COALESCE(AVG(r.review_rating), 0) AS avg_rating, ");
+        sql.append("COUNT(r.review_idx) AS review_cnt, ");
+        sql.append("s.store_view_count, s.store_addr, s.store_tel, s.latitude, s.longitude, s.kakao_id, s.place_url ");
+        sql.append("FROM store s ");
+        sql.append("LEFT JOIN review r ON s.store_idx = r.store_idx ");
         sql.append("WHERE 1=1 "); 
         
         // 2. 조건 확인 변수 설정
@@ -72,22 +75,24 @@ public class StoreDAO {
 
         // 3. SQL 조건 추가
         if (hasCategory) {
-            sql.append(" AND store_category = ? ");
+            sql.append(" AND s.store_category = ? ");
         }
         
         if (hasSearch) {
-            sql.append(" AND (store_name LIKE ? OR store_addr LIKE ? OR store_category LIKE ?) ");
+            sql.append(" AND (s.store_name LIKE ? OR s.store_addr LIKE ? OR s.store_category LIKE ?) ");
         }
         
+        sql.append("GROUP BY s.store_idx ");
+
         // 4. 정렬 조건 추가
         if ("rating".equals(sortType)) {
-            sql.append("ORDER BY store_rating_avg DESC, store_idx DESC ");
+            sql.append("ORDER BY avg_rating DESC, s.store_idx DESC ");
         } else if ("review".equals(sortType)) {
-            sql.append("ORDER BY store_rating_count DESC, store_idx DESC ");
+            sql.append("ORDER BY review_cnt DESC, s.store_idx DESC ");
         } else if ("view".equals(sortType)) {
-            sql.append("ORDER BY store_view_count DESC, store_idx DESC ");
+            sql.append("ORDER BY s.store_view_count DESC, s.store_idx DESC ");
         } else {
-            sql.append("ORDER BY store_created_at DESC ");
+            sql.append("ORDER BY s.store_created_at DESC ");
         }
 
         try {
@@ -117,8 +122,8 @@ public class StoreDAO {
                 dto.setStoreImg(rs.getString("store_img"));
                 dto.setStoreImg2(rs.getString("store_img2"));
                 dto.setStoreImg3(rs.getString("store_img3"));
-                dto.setStoreRatingAvg(rs.getDouble("store_rating_avg"));
-                dto.setStoreRatingCount(rs.getInt("store_rating_count"));
+                dto.setStoreRatingAvg(rs.getDouble("avg_rating"));
+                dto.setStoreRatingCount(rs.getInt("review_cnt"));
                 dto.setStoreViewCount(rs.getInt("store_view_count"));
                 dto.setStoreAddr(rs.getString("store_addr"));
                 dto.setStoreTel(rs.getString("store_tel"));
