@@ -19,8 +19,9 @@ request.setCharacterEncoding("UTF-8");
             request, uploadPath, uploadSize, "UTF-8", new DefaultFileRenamePolicy()
         );
 
-        String member_name = multi.getParameter("member_name");
+        
         String member_id = multi.getParameter("member_id");
+        String member_name = multi.getParameter("member_name");
         String member_pw = multi.getParameter("member_pw1");
         String member_hp = multi.getParameter("member_hp");
         String member_addr = multi.getParameter("member_addr");
@@ -28,22 +29,34 @@ request.setCharacterEncoding("UTF-8");
 
         String member_img = multi.getFilesystemName("member_img");
         if(member_img == null) member_img = "noimage.png";
+        
+     	// role 처리
+        String member_role = multi.getParameter("member_role");
+        if(member_role == null){
+            member_role = "USER";
+        } else {
+            member_role = "admin";
+        }
 
         // DTO 세팅
         MemberDTO dto = new MemberDTO();
-        dto.setMemberName(member_name);
         dto.setMemberId(member_id);
+        dto.setMemberName(member_name);
         dto.setMemberPw(member_pw);
         dto.setMemberHp(member_hp);
         dto.setMemberAddr(member_addr);
         dto.setMemberEmail(member_email);
         dto.setMemberImg(member_img);
-
-        dto.setMemberRole("USER");
-        
+        dto.setMemberRole(member_role);
+                
         // DB insert
         MemberDAO dao = new MemberDAO();
         dao.insertMember(dto);
+        
+        session.setAttribute("member_id", member_id);
+        session.setAttribute("member_name", member_name);
+        session.setAttribute("member_role", dto.getMemberRole());
+        session.setAttribute("member_img", member_img);
 %>
 <script>
     alert("회원가입이 완료되었습니다!");

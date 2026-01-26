@@ -125,18 +125,22 @@ function checkForm(f){
 }
 
 function previewImage(input){
+    const preview = document.getElementById("preview");
     if(input.files && input.files[0]){
         const reader = new FileReader();
-        reader.onload = e => document.getElementById("preview").src = e.target.result;
+        reader.onload = e => preview.src = e.target.result;
         reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.src = "<%=request.getContextPath()%>/upload/default_profile.png"; // 기본 이미지
     }
 }
+
 
 $(function(){
     $("#btncheck").click(function(){
         const member_id = $("#member_id").val();
         $.get(
-            "<%=request.getContextPath()%>/membertest/idcheck_test.jsp",
+            "<%=request.getContextPath()%>/member/id_check.jsp",
             { member_id },
             function(res){
                 if(res.count == 1){

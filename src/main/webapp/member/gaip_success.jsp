@@ -24,6 +24,15 @@ body{
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
 }
 
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 20px auto; /* ⭐ 가운데 정렬 */
+}
+
 .logo{
     text-align: center;
     margin-bottom: 25px;
@@ -74,24 +83,25 @@ body{
 </head>
 
 <%
-    String id = request.getParameter("member_id");
+    String memberId = (String)session.getAttribute("member_id");
+    String memberName = (String)session.getAttribute("member_name");
+    String memberImg  = (String) session.getAttribute("member_img");
+    
+    if(memberImg == null) memberImg = "noimage.png";
 %>
-
 <body>
 <jsp:include page="/header/header.jsp" />
 <div class="container">
+	<img src="<%=request.getContextPath()%>/upload/<%=memberImg%>" class="profile-img">
+	
 
-    <div class="logo">
-        <img src="<%=request.getContextPath()%>/images/logo1.png">
-    </div>
-
-    <div class="complete-text">
-        <b><%=id %></b>님의 회원가입이<br>
+    <p style="text-align: center;">
+        <b><%=memberName %></b>님의 회원가입이<br>
         정상적으로 완료되었습니다 🎉
-    </div>
+    </p>
 
     <button class="main-btn"
-        onclick="location.href='<%=request.getContextPath()%>/login/login_test.jsp'">
+        onclick="location.href='<%=request.getContextPath()%>/login/login_form.jsp'">
         로그인
     </button>
 

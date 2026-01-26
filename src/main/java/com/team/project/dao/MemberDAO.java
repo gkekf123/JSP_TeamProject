@@ -248,7 +248,24 @@ public class MemberDAO {
 
         return result;
     }
+    
+    public void updateProfileImg(String member_id, String member_img) {
+        Connection conn = db.getConnection();
+        PreparedStatement pstmt = null;
 
+        String sql = "update member set member_img=? where member_id=?";
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, member_img);
+            pstmt.setString(2, member_id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBConn.close(pstmt, conn);
+        }
+    }
 	
 }
 

@@ -39,7 +39,7 @@ body {
 .container {
     display: flex;
     max-width: 1000px;
-    margin: 30px auto;
+    margin: 100px auto;
     gap: 20px;
 }
 
