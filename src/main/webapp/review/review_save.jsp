@@ -18,9 +18,9 @@ JSONObject ob = new JSONObject();
 
 //로그인 확인 - 서버
 String loginok = (String) session.getAttribute("loginok");
-String memberId = (String) session.getAttribute("member_id");
+String sessionMemberId = (String) session.getAttribute("member_id");
 
-if (loginok == null || memberId == null) {
+if (loginok == null || sessionMemberId == null) {
     ob.put("reviewResult", "login_required");
     out.print(ob.toString());
     return;
@@ -52,11 +52,10 @@ try{
     dto.setStoreIdx(storeIdx);
 
 	MemberDAO mdao = new MemberDAO();
-	MemberDTO mdto = mdao.getMyInfo(memberId);	
-	dto.setMemberId(memberId);
+	MemberDTO mdto = mdao.getMyInfo(sessionMemberId);	
+	dto.setMemberId(sessionMemberId);
 	dto.setMemberName(mdto.getMemberName());
-	dto.setMemberImg("logo.png"); //임의지정
-	//dto.setMemberImg(mdto.getMemberImg());
+	dto.setMemberImg(mdto.getMemberImg());
 
     dto.setReviewRating(reviewRating);
     dto.setReviewContent(reviewContent);
@@ -90,74 +89,7 @@ try{
     int reviewResult = dao.insertReview(dto);
 
     if (reviewResult > 0) {
-    	int reviewCount = dao.countReview(storeIdx);
-        double avgRating = dao.avgReview(storeIdx);
-        
-        String profileHtml;
-
-        if(dto.getMemberImg() != null && !dto.getMemberImg().isEmpty()) {
-            profileHtml =
-                "<img src='" + request.getContextPath() + "/images/profile/" + dto.getMemberImg() + "'>";
-        } else {
-            profileHtml =
-                "<div class='profile-circle'><i class='bi bi-person-circle'></i></div>";
-        }
-               
-     // 리뷰 이미지 HTML 생성 
-        StringBuilder reviewImgHtml = new StringBuilder();
-    
-        if(dto.getReviewImg1() != null && !dto.getReviewImg1().isEmpty()) {
-        	reviewImgHtml.append("<div class='review-img-thumb' style='cursor:pointer;' ")
-        		.append("onclick=\"showReviewImages('")
-        		.append(dto.getReviewImg1()).append("','")
-        		.append(dto.getReviewImg2()).append("','")
-        		.append(dto.getReviewImg3()).append("','")
-        		.append(dto.getReviewImg4()).append("','")
-        		.append(dto.getReviewImg5()).append("')\">")
-        		
-                .append("<img src='")
-				.append(request.getContextPath())
-      			.append("/images/review_upload/")
-   				.append(dto.getReviewImg1()).append("'>");
-
-            if(dto.getReviewImg2() != null && !dto.getReviewImg2().isEmpty()){
-                reviewImgHtml.append("<div class='img-count-badge'><i class='bi bi-images'></i></div>");
-            }
-            
-            reviewImgHtml.append("</div>");
-        }
-        
-    	String reviewHtml =
-    			"<div class='review-item' id='review-" + dto.getReviewIdx() + "'>" +
-
-		        "<div class='review-profile'>" +
-		            profileHtml +
-		            "<span class='review-writer'>" + dto.getMemberName() + "</span>" +
-		            "<span class='review-rating'>평점 " + dto.getReviewRating() + "점</span>" +
-		        "</div>" +
-		
-		        "<div class='review-content'>" +
-		
-		            "<div class='review-text-wrap'>" +
-		                "<p class='review-text'>" + dto.getReviewContent().replace("\n", "<br>") + "</p>" +
-		                "<span class='review-date'>방금 전</span>" +
-		            "</div>" +
-		
-					reviewImgHtml.toString()  +
-		
-		        "</div>" +
-		        
-				"<div class='review-actions'>" +
-				"<button class='review-edit-btn'>수정</button>" +
-				"<button class='review-delete-btn'>삭제</button>" +
-				"</div>" +
-		
-		    "</div>";
-    	       
         ob.put("reviewResult", "success");
-        ob.put("reviewCount", reviewCount);
-        ob.put("reviewHtml", reviewHtml);
-        ob.put("avgRating", avgRating);
     } else {
         ob.put("reviewResult", "fail");
     }

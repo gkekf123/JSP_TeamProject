@@ -34,13 +34,9 @@
     // 3. DB 삭제
     int deleteResult = dao.deleteReview(reviewIdx, memberId);
     
-    if(deleteResult > 0) {
-    	int reviewCount = dao.countReview(storeIdx);
-        double avgRating = dao.avgReview(storeIdx);
-        
+    if(deleteResult > 0) {     
     	ob.put("deleteResult", "success");
-        ob.put("reviewCount", reviewCount);
-        ob.put("avgRating", avgRating);
+
     } else {
         ob.put("deleteResult", "fail");
     }

@@ -248,7 +248,7 @@
         %>
         
 		<!-- 프로필 -->
-        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>" id="review-<%=r.getReviewIdx()%>" data-store-idx="<%= storeIdx %>">
+        <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>" data-review-idx="<%=r.getReviewIdx()%>" data-store-idx="<%= storeIdx %>">
             <div class="review-profile">
                 <% if (r.getMemberImg() != null) { %>
                     <img src="<%= ctxPath %>/images/profile/<%= r.getMemberImg() %>">
@@ -261,7 +261,7 @@
         
             <div class="review-content">
                 <div class="review-text-wrap">
-                    <p class="review-text"><%= r.getReviewContent() %></p>
+                    <p class="review-text"><%= r.getReviewContent().replace("\n", "<br>")%></p>
                     <span class="review-date">
                     	<%=sdf.format(r.getReviewCreatedAt())%>
 		                <% if (r.getReviewUpdatedAt() != null) { %>
@@ -282,14 +282,8 @@
             
             <% if (isMyReview) { %>
                 <div class="review-actions">
-		            <button class="review-edit-btn" 
-		           		onclick="openUpdateReviewModal(<%= r.getReviewIdx() %>, <%= storeIdx %>)">
-		                수정
-		            </button>
-		
-		            <button class="review-delete-btn">
-		                삭제
-		            </button>
+		            <button class="review-edit-btn">수정</button>
+					<button class="review-delete-btn">삭제</button>
                 </div>
             <% } %>
         </div>

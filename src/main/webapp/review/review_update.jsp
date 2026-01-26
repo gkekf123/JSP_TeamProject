@@ -1,4 +1,3 @@
-<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.team.project.dao.MemberDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -12,8 +11,6 @@
 	pageEncoding="UTF-8"%>
 <%
 JSONObject ob = new JSONObject();
-
-SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
 String memberId = (String) session.getAttribute("member_id");
 String loginok = (String) session.getAttribute("loginok");
@@ -38,21 +35,15 @@ try {
 	);
 
 	// 파라미터 받기
+	long storeIdx = Long.parseLong(multi.getParameter("store_idx"));
 	long reviewIdx = Long.parseLong(multi.getParameter("review_idx"));
 	int reviewRating = Integer.parseInt(multi.getParameter("review_rating"));
 	String reviewContent = multi.getParameter("review_content");
 	
 	ReviewDAO dao = new ReviewDAO();
-	ReviewDTO existingDto = dao.oneSelectReview(reviewIdx);
-
 	ReviewDTO dto = new ReviewDTO();
 	dto.setReviewIdx(reviewIdx);
-
-	dto.setStoreIdx(existingDto.getStoreIdx()); // storeIdx도 DB에서 가져옴
-	dto.setMemberId(existingDto.getMemberId());
-	dto.setMemberName(existingDto.getMemberName());
-	dto.setMemberImg(existingDto.getMemberImg());
-	
+	dto.setMemberId(memberId);
 	dto.setReviewRating(reviewRating);
 	dto.setReviewContent(reviewContent);
 
@@ -86,74 +77,7 @@ try {
 	int updateResult = dao.updateReview(dto);
 
 	if (updateResult > 0) {
-    	int reviewCount = dao.countReview(existingDto.getStoreIdx());
-        double avgRating = dao.avgReview(existingDto.getStoreIdx());
-        
-        String profileHtml;
-
-        if(dto.getMemberImg() != null && !dto.getMemberImg().isEmpty()) {
-            profileHtml =
-                "<img src='" + request.getContextPath() + "/images/profile/" + dto.getMemberImg() + "'>";
-        } else {
-            profileHtml =
-                "<div class='profile-circle'><i class='bi bi-person-circle'></i></div>";
-        }
-               
-     // 리뷰 이미지 HTML 생성 
-        StringBuilder reviewImgHtml = new StringBuilder();
-    
-        if(dto.getReviewImg1() != null && !dto.getReviewImg1().isEmpty()) {
-        	reviewImgHtml.append("<div class='review-img-thumb' style='cursor:pointer;' ")
-        		.append("onclick=\"showReviewImages('")
-        		.append(dto.getReviewImg1()).append("','")
-        		.append(dto.getReviewImg2()).append("','")
-        		.append(dto.getReviewImg3()).append("','")
-        		.append(dto.getReviewImg4()).append("','")
-        		.append(dto.getReviewImg5()).append("')\">")
-        		
-                .append("<img src='")
-				.append(request.getContextPath())
-      			.append("/images/review_upload/")
-   				.append(dto.getReviewImg1()).append("'>");
-
-            if(dto.getReviewImg2() != null && !dto.getReviewImg2().isEmpty()){
-                reviewImgHtml.append("<div class='img-count-badge'><i class='bi bi-images'></i></div>");
-            }
-            
-            reviewImgHtml.append("</div>");
-        }
-        
-    	String reviewHtml =
-    			"<div class='review-item' id='review-" + reviewIdx + "'>" +
-
-		        "<div class='review-profile'>" +
-		            profileHtml +
-		            "<span class='review-writer'>" + dto.getMemberName() + "</span>" +
-		            "<span class='review-rating'>평점 " + dto.getReviewRating() + "점</span>" +
-		        "</div>" +
-		
-		        "<div class='review-content'>" +
-		
-		            "<div class='review-text-wrap'>" +
-		                "<p class='review-text'>" + dto.getReviewContent().replace("\n", "<br>") + "</p>" +
-		                "<span class='review-date'>"+sdf.format(existingDto.getReviewCreatedAt())+" (수정됨)</span>" +
-		            "</div>" +
-		
-					reviewImgHtml.toString()  +
-	
-		        "</div>" +
-		        
-				"<div class='review-actions'>" +
-				"<button class='review-edit-btn'>수정</button>" +
-				"<button class='review-delete-btn'>삭제</button>" +
-				"</div>" +
-		
-		    "</div>";
-
 		ob.put("reviewResult", "success");
-		ob.put("reviewHtml", reviewHtml);
-		ob.put("avgRating", avgRating);
-		ob.put("reviewCount", reviewCount);
 	} else {
 		ob.put("reviewResult", "fail");
 	}
