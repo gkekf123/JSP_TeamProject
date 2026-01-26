@@ -13,26 +13,14 @@
     request.setCharacterEncoding("UTF-8");
     String ctxPath = request.getContextPath();
     
- // 1. 관리자 권한 확인 (세션 체크)
+ 	// 1. 관리자 권한 확인 (세션 체크)
+
     boolean isAdmin = false;
-    Object loginObj = session.getAttribute("loginok");
-    
-    if (loginObj != null) {
-        // 경우 1: 세션값이 MemberDTO 객체일 때 (정상적인 경우)
-        if (loginObj instanceof MemberDTO) {
-            MemberDTO loginMember = (MemberDTO) loginObj;
-            
-            // DTO 안의 권한(role)이 'admin'인지 확인
-            if ("admin".equals(loginMember.getMemberRole())) { 
-                isAdmin = true;
-            }
-        }
-        // 경우 2: 세션값이 혹시 문자열일 때 (예외 처리)
-        else if (loginObj instanceof String) {
-            if ("admin".equals((String)loginObj)) {
-                isAdmin = true;
-            }
-        }
+    String loginOk = (String) session.getAttribute("loginok");
+    String memberRole = (String) session.getAttribute("member_role");
+
+    if ("yes".equals(loginOk) && "admin".equals(memberRole)) {
+        isAdmin = true;
     }
     
     NewsDAO dao=new NewsDAO();
