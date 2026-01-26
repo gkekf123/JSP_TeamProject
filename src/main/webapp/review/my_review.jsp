@@ -33,6 +33,10 @@ int reviewCount = list.size();
 <!-- Bootstrap & Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    const ctxPath = "<%= ctxPath %>";
+</script>
 </head>
 <body>
 <jsp:include page="/header/header.jsp" />
@@ -48,7 +52,7 @@ int reviewCount = list.size();
 <% } else { 
     for (ReviewDTO dto : list) { %>
 
-    <div class="review-item">
+    <div class="review-item" data-review-idx="<%=dto.getReviewIdx()%>" data-store-idx="<%= dto.getStoreIdx() %>">
 
         <!-- 상단 -->
         <div class="review-top">
@@ -95,6 +99,7 @@ int reviewCount = list.size();
 	        
 	        <!-- 삭제 -->
 	        <div class="review-actions">
+	        	<button class="review-edit-btn">수정</button>
 	            <button type="button" class="btn-delete" 
 	                onclick="deleteMyReview(<%= dto.getReviewIdx() %>, <%= dto.getStoreIdx() %>)">
 	                삭제
@@ -109,8 +114,10 @@ int reviewCount = list.size();
 </div>
 	
 </div>
-
+<jsp:include page="/review/review_write.jsp"/>
 <jsp:include page="/footer/footer.jsp" />
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 function deleteMyReview(reviewIdx, storeIdx) {

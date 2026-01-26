@@ -93,3 +93,13 @@
     cursor: pointer;
 }
 
+.review-edit-btn {
+    background-color: #e9ecef;
+    color: #333;
+    font-size: 12px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
