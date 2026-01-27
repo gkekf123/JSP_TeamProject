@@ -194,11 +194,7 @@
                     
                     <div class="img-link">
                         <% if(hasImage) { %>
-                            <img src="<%= mainImgSrc %>" 
-                                 class="store-img slide-img" 
-                                 alt="가게사진" 
-                                 data-imgs="<%= dataImgs %>"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <img src="<%= mainImgSrc %>" class="store-img slide-img" alt="가게사진" data-imgs="<%= dataImgs %>" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div class="no-img-box" style="display:none;">이미지 없음</div>
                         <% } else { %>
                             <div class="no-img-box">이미지 없음</div>
