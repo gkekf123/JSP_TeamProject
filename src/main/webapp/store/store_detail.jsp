@@ -207,9 +207,16 @@
             <% } else {
                 for (MenuDTO m : menuList) { %>
             <div class="menu-item">
+                
                 <div class="menu-img">
-                    <% if (m.getMenuImg() != null) { %>
-                        <img src="<%= ctxPath %>/images/menu/<%= m.getMenuImg() %>" onerror="this.src='<%= ctxPath %>/images/no_img.png'"/>
+                    <% if (m.getMenuImg() != null && !m.getMenuImg().trim().isEmpty()) { %>
+                        <img src="<%= ctxPath %>/images/menu/<%= m.getMenuImg() %>" 
+                             alt="<%= m.getMenuName() %>"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                             
+                        <div class="no-img-box" style="display:none;">이미지 없음</div>
+                    <% } else { %>
+                        <div class="no-img-box">이미지 없음</div>
                     <% } %>
                 </div>
                 <div class="menu-text">
