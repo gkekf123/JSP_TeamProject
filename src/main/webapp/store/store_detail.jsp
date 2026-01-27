@@ -264,7 +264,7 @@
         <div class="review-item <%= (index >= 5 ? "review-hidden" : "") %>" data-review-idx="<%=r.getReviewIdx()%>" data-store-idx="<%= storeIdx %>">
             <div class="review-profile">
                 <% if (r.getMemberImg() != null) { %>
-                    <img src="<%= ctxPath %>/images/profile/<%= r.getMemberImg() %>">
+                    <img src="<%= ctxPath %>/images/profile/13.png<%= r.getMemberImg() %>">
                 <% } else { %>
                     <div class="profile-circle"><i class="bi bi-person-circle"></i></div>
                 <% } %>
