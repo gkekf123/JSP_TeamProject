@@ -195,15 +195,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <li onclick="location.href='<%=request.getContextPath()%>/index.jsp'">메인</li>
             <li onclick="location.href='<%=request.getContextPath()%>/member/my_page.jsp'">마이페이지</li>
             
-            <% if("admin".equalsIgnoreCase(member_role)) { %>
-		    <!-- 관리자 메뉴만 보여줌 -->
-		    <li onclick="location.href='<%=ctxPath%>/admin/admin_list.jsp'">관리자 글 작성 목록</li>
-			<% } else if("user".equalsIgnoreCase(member_role)) { %>
+            <li onclick="location.href='<%=ctxPath%>/user/wish_list.jsp'">나의 활동</li>
 			
-		    <!-- 일반유저 메뉴만 보여줌 -->
-		    <li onclick="location.href='<%=ctxPath%>/user/wish_list.jsp'">찜 목록</li>
-		    <li onclick="location.href='<%=ctxPath%>/user/review_list.jsp'">리뷰 작성 목록</li>
-				<% } %>
             <li onclick="location.href='<%=request.getContextPath()%>/member/my_info_update_form.jsp'">회원 정보 수정</li>
             <li class="active">회원 탈퇴</li>
 

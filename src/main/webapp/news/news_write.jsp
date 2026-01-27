@@ -7,16 +7,12 @@ String ctxPath = request.getContextPath();
 
     // 2. 관리자 권한 체크 로직
     boolean isAdmin = false;
-    Object loginObj = session.getAttribute("loginok");
-    
-    if (loginObj != null && loginObj instanceof MemberDTO) {
-        MemberDTO loginMember = (MemberDTO) loginObj;
-        
-        if ("admin".equals(loginMember.getMemberRole())) {
-            isAdmin = true;
-        }
-    }
+    String loginOk = (String) session.getAttribute("loginok");
+    String memberRole = (String) session.getAttribute("member_role");
 
+    if ("yes".equals(loginOk) && "admin".equals(memberRole)) {
+        isAdmin = true;
+    }
     if (!isAdmin) {
 %>
     <script>

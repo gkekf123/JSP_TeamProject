@@ -4,7 +4,7 @@
     pageEncoding="UTF-8"%>
 
 <%
-String loginOk = (String) session.getAttribute("loginok");
+	String loginOk = (String) session.getAttribute("loginok");
     if (loginOk == null) {
         response.sendRedirect(request.getContextPath() + "/login/login_form.jsp");
         return;
@@ -12,7 +12,6 @@ String loginOk = (String) session.getAttribute("loginok");
 
  	// "admin" 또는 "user"
     String member_role = (String) session.getAttribute("member_role");
-    
     String member_id = (String) session.getAttribute("member_id");
     MemberDAO dao = new MemberDAO();
     MemberDTO dto = dao.getMyInfo(member_id);
@@ -174,6 +173,26 @@ h2 {
     pointer-events: none; /* 클릭 방해 안 하게 */
 }
 
+.profile-area {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f39c12;
+    cursor: pointer;
+}
+
+.profile-name {
+    margin-top: 10px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
 </style>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -216,7 +235,30 @@ document.addEventListener("DOMContentLoaded", () => {
     		<%= "admin".equalsIgnoreCase(member_role) ? "- 관리자 -" : "- 유저 -" %>
 		</div>
         <h2>마이페이지</h2>
-
+		<!-- 프로필 영역 -->
+		<div class="profile-area">
+		    <form action="<%=ctxPath%>/member/profile_img_update.jsp"
+		          method="post"
+		          enctype="multipart/form-data">
+				<input type="hidden" name="member_id" value="<%=dto.getMemberId()%>">
+				
+		        <label for="profileInput">
+		            <img src="<%=ctxPath%>/upload/<%=dto.getMemberImg()%>"
+		                 class="profile-img"
+		                 title="image">
+		        </label>
+		
+		        <input type="file"
+		               id="profileInput"
+		               name="member_img"
+		               accept="image/*"
+		               onchange="this.form.submit();"
+		               hidden>
+		    </form>
+		    <div class="profile-name">
+		        <%=dto.getMemberName()%>
+		    </div>
+		</div>
         <div class="form-row">
             <div class="form-group">
                 <label>아이디</label>
