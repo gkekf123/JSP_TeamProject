@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </ul>
     </div>
 
-    <!-- 메인 컨텐츠 -->
+    <!-- 메인 컨텐츠  -->
     <div class="content">
     	<div class="role-badge">
     		<%= "admin".equalsIgnoreCase(member_role) ? "- 관리자 -" : "- 유저 -" %>
