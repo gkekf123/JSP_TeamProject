@@ -57,10 +57,12 @@ request.setCharacterEncoding("UTF-8");
         session.setAttribute("member_name", member_name);
         session.setAttribute("member_role", dto.getMemberRole());
         session.setAttribute("member_img", member_img);
+        
+        session.setAttribute("loginok", "yes");
 %>
 <script>
     alert("회원가입이 완료되었습니다!");
-    location.href="<%=request.getContextPath()%>/member/gaip_success.jsp";
+    location.href="<%=request.getContextPath()%>/index.jsp";
 </script>
 <%
     } catch(Exception e) {
