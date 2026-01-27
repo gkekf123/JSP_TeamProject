@@ -42,11 +42,23 @@ int reviewCount = list.size();
 <jsp:include page="/header/header.jsp" />
 
 <div class="container">
-	<div class="header">
+	
+	        <div class="sidebar">
+	            <ul>
+	                <li onclick="location.href='<%=ctxPath%>/store/store_main.jsp'">맛집 목록</li>
+	                <li onclick="location.href='<%=ctxPath%>/member/my_page.jsp'">마이페이지</li>
+	                <li onclick="location.href='<%=ctxPath%>/user/wish_list.jsp'">찜 목록</li>
+	                <li style="font-weight:bold; background-color:#f39c12; color:#fff;">내가 쓴 리뷰</li>
+	                <li onclick="location.href='<%=ctxPath%>/login/logout_action.jsp'" style="color:#e74c3c; margin-top:20px;">로그아웃</li>
+	            </ul>
+	        </div>
+
+	<div class="content">
+		<div class="header">
 		<h3>마이리뷰 (<%= reviewCount %>)</h3>
 	</div>
+	
 	<div class="my-review-list">
-
 <% if (list.isEmpty()) { %>
     <p class="empty">작성한 리뷰가 없습니다.</p>
 <% } else { 
@@ -106,13 +118,10 @@ int reviewCount = list.size();
 	            </button>
 	        </div>
 		</div>
-       
-
     </div>
-
 <% }} %>
 </div>
-	
+	</div>
 </div>
 <jsp:include page="/review/review_write.jsp"/>
 <jsp:include page="/footer/footer.jsp" />
