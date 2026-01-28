@@ -62,4 +62,78 @@
 
 <br>
 
-## In Action
+### In Action
+<table width="100%">
+  <tr>
+    <td align="center" width="33%">
+      <video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926768-8c7baa0c-a094-4cb3-af46-be752cdc9c52.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDQ5MTMsIm5iZiI6MTc2OTY0NDYxMywicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY3NjgtOGM3YmFhMGMtYTA5NC00Y2IzLWFmNDYtYmU3NTJjZGM5YzUyLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjglMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI4VDIzNTY1M1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTNhZWZmNTA0N2JhNDVkZjNjY2QyNThhMjAwZjg1MjJkNzJkYWI4M2Y3OGQ1ZWI1YjcyYTlhNTdjYjU2MzQ0ODgmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.m_g8bALCGnMevG8W2piRAVexf6v6_0RttwTkQe6xN_U" controls width="100%"></video><br>
+      <b>1. 로그인 (통합)</b>
+    </td>
+    <td align="center" width="33%">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>2. 맛집 등록 및 수정</b>
+    </td>
+    <td align="center" width="33%">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>3. 메뉴 추가 및 삭제</b>
+    </td>
+  </tr>
+  
+  <tr>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>3-1. 메뉴 수정 및 삭제</b>
+    </td>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>4. 뉴스 등록</b>
+    </td>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>4-1. 뉴스 페이징</b>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>5. 관리자 마이페이지</b>
+    </td>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>6. 비로그인 기능 제한</b>
+    </td>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>7. 회원가입 및 프로필 변경</b>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>8. 맛집 정렬 기능</b>
+    </td>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>9. 찜(Bookmark) 기능</b>
+    </td>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>10. 리뷰 기능</b>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>11. 마이 리뷰 관리</b>
+    </td>
+    <td align="center">
+      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
+      <b>12. 회원 탈퇴</b>
+    </td>
+    <td align="center">
+      </td>
+  </tr>
+</table>
