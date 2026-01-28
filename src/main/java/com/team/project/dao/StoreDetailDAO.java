@@ -58,4 +58,46 @@ public class StoreDetailDAO {
         
         return dto;
     }
+    
+ // 가게 정보 수정 (UPDATE)
+    public int updateStore(StoreDTO dto) {
+        int result = 0;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        
+        // SQL 쿼리: 이미지와 좌표, 카카오ID 등 모든 정보를 업데이트
+        String sql = "UPDATE store SET "
+                   + "store_name=?, store_category=?, store_tel=?, store_intro=?, "
+                   + "store_addr=?, latitude=?, longitude=?, kakao_id=?, place_url=?, "
+                   + "store_img=?, store_img2=?, store_img3=?, store_update_at=NOW() "
+                   + "WHERE store_idx=?";
+        try {
+            conn = DBConn.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            
+            // 파라미터 순서대로 값 설정
+            pstmt.setString(1, dto.getStoreName());
+            pstmt.setString(2, dto.getStoreCategory());
+            pstmt.setString(3, dto.getStoreTel());
+            pstmt.setString(4, dto.getStoreIntro());
+            pstmt.setString(5, dto.getStoreAddr());
+            pstmt.setDouble(6, dto.getLatitude());
+            pstmt.setDouble(7, dto.getLongitude());
+            pstmt.setString(8, dto.getKakaoId());
+            pstmt.setString(9, dto.getPlaceUrl());
+            pstmt.setString(10, dto.getStoreImg());
+            pstmt.setString(11, dto.getStoreImg2());
+            pstmt.setString(12, dto.getStoreImg3());
+            pstmt.setLong(13, dto.getStoreIdx()); // WHERE 조건의 idx
+            
+            result = pstmt.executeUpdate();
+            
+        } catch (Exception e) {
+            System.out.println("[StoreDAO] 정보 수정 실패");
+            e.printStackTrace();
+        } finally {
+            DBConn.close(null, pstmt, conn);
+        }
+        return result;
+    }
 }
