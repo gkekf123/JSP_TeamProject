@@ -62,78 +62,59 @@
 
 <br>
 
-### In Action
-<table width="100%">
-  <tr>
-    <td align="center" width="33%">
-      <video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926768-8c7baa0c-a094-4cb3-af46-be752cdc9c52.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDQ5MTMsIm5iZiI6MTc2OTY0NDYxMywicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY3NjgtOGM3YmFhMGMtYTA5NC00Y2IzLWFmNDYtYmU3NTJjZGM5YzUyLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjglMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI4VDIzNTY1M1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTNhZWZmNTA0N2JhNDVkZjNjY2QyNThhMjAwZjg1MjJkNzJkYWI4M2Y3OGQ1ZWI1YjcyYTlhNTdjYjU2MzQ0ODgmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.m_g8bALCGnMevG8W2piRAVexf6v6_0RttwTkQe6xN_U" controls width="100%"></video><br>
-      <b>1. 로그인 (통합)</b>
-    </td>
-    <td align="center" width="33%">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>2. 맛집 등록 및 수정</b>
-    </td>
-    <td align="center" width="33%">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>3. 메뉴 추가 및 삭제</b>
-    </td>
-  </tr>
-  
-  <tr>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>3-1. 메뉴 수정 및 삭제</b>
-    </td>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>4. 뉴스 등록</b>
-    </td>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>4-1. 뉴스 페이징</b>
-    </td>
-  </tr>
+## 🎬 In Action (Demonstration)
 
-  <tr>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>5. 관리자 마이페이지</b>
-    </td>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>6. 비로그인 기능 제한</b>
-    </td>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>7. 회원가입 및 프로필 변경</b>
-    </td>
-  </tr>
+### 1. 로그인
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926768-8c7baa0c-a094-4cb3-af46-be752cdc9c52.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY3NjgtOGM3YmFhMGMtYTA5NC00Y2IzLWFmNDYtYmU3NTJjZGM5YzUyLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWFmNTU5NGJiOTdiMzE3MTM0NjBmMjMzZWVmOGJlOWE0NzE4NmIyZWYxYTZlM2U3YzdmM2VkYzg1ZDIxOWUzYjcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.zjDPGNgBtCs6-ECcd1eBwpYXSWTGnSCw1BRNUQWiHME" controls width="100%"></video>
+<br><br>
 
-  <tr>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>8. 맛집 정렬 기능</b>
-    </td>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>9. 찜(Bookmark) 기능</b>
-    </td>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>10. 리뷰 기능</b>
-    </td>
-  </tr>
+### 2. 관리자_맛집등록
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926786-3c04f773-3a91-4a02-b7ae-52af8bf966b7.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY3ODYtM2MwNGY3NzMtM2E5MS00YTAyLWI3YWUtNTJhZjhiZjk2NmI3Lm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTIzNGMxYzdlM2E2Nzg3YWZlM2FkNGQwNGE0OWJiZDA4YzczMGUwZWYzZTE4NjM1MDBlODVmMTlkYzBmNzc0YjImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.cjzGZoi1GQ-F5NlOtxDemEw94pGHN2KT9oX0rqiI13o" controls width="100%"></video>
+<br><br>
 
-  <tr>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>11. 마이 리뷰 관리</b>
-    </td>
-    <td align="center">
-      <video src="https://github.com/user-attachments/assets/..." controls width="100%"></video><br>
-      <b>12. 회원 탈퇴</b>
-    </td>
-    <td align="center">
-      </td>
-  </tr>
-</table>
+### 3. 관리자_메뉴 추가 및 삭제
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926805-cd3f8a04-d831-40e8-95be-2cd750bb99d6.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY4MDUtY2QzZjhhMDQtZDgzMS00MGU4LTk1YmUtMmNkNzUwYmI5OWQ2Lm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWY4MmE5NjBkMWZlNjZkZjZmMGI4NjVjYWNhYWI3MjFiYjkxYmNiNWE2MjY1N2RlOTJjODUxZmJhMzRiYTI3YjMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.cQ9MhvZ1vTcQ9gjAjywhBGTFcTPBYjhVmU1Lv7clA_A" controls width="100%"></video>
+<br><br>
+
+### 3-1. 관라저_메뉴 수정 및 삭제
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926810-05b1a860-48fb-4e62-830f-1ea79faa8b06.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY4MTAtMDViMWE4NjAtNDhmYi00ZTYyLTgzMGYtMWVhNzlmYWE4YjA2Lm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTRmZWFmOGM1MDQ4MjE5ODcyYTM5MzI2YTg5ZjZlYTc4NjkwOTU1N2NlNzFjYTlhYmFkMzZhMTBkZjI2MTJhOTEmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.Z3pxuO7rw3xOfQwAIrf5__hbx6hyvMPYxRvseJqk5lA" controls width="100%"></video>
+<br><br>
+
+### 4. 관리자_뉴스 등록
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926810-05b1a860-48fb-4e62-830f-1ea79faa8b06.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY4MTAtMDViMWE4NjAtNDhmYi00ZTYyLTgzMGYtMWVhNzlmYWE4YjA2Lm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTRmZWFmOGM1MDQ4MjE5ODcyYTM5MzI2YTg5ZjZlYTc4NjkwOTU1N2NlNzFjYTlhYmFkMzZhMTBkZjI2MTJhOTEmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.Z3pxuO7rw3xOfQwAIrf5__hbx6hyvMPYxRvseJqk5lA" controls width="100%"></video>
+<br><br>
+
+### 4-1. 관리자_뉴스 페이징
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926820-69955a7b-655b-4746-9ff0-2aa4e0485f00.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY4MjAtNjk5NTVhN2ItNjU1Yi00NzQ2LTlmZjAtMmFhNGUwNDg1ZjAwLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWU1MmQ3M2JjODdiNDRhYTJmZWYzOGM0YTY0NjRhNjViZDBiZDgxY2IwODU2ZWQxZWIyYTUyZDU0YWQwYTM1YjgmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.53eGFGZW8ZsCGI6Y3EPMvMrORL6FunFoSHZ30rLFPQc" controls width="100%"></video>
+<br><br>
+
+### 5. 관리자_마이페이지
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541926829-8006bc7e-d6e3-43d4-884c-ca06ee840089.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjY4MjktODAwNmJjN2UtZDZlMy00M2Q0LTg4NGMtY2EwNmVlODQwMDg5Lm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI4NzVjMDhkNDE1MTI4OGVlOGRmNTczOTcyYmNiYmIzY2NjOTU1Mzg1ZmJhMGZmNTFkMWU1ODk2OWVhOGJkNmEmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.c_g4fg5xeKEJ18IXDiAyVxDhhIEWmIvuX61LoCQ-7MA" controls width="100%"></video>
+<br><br>
+
+### 6. 비로그인 기능 제한
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541927025-07bddab0-fc04-4e74-bc83-7eb44c1edade.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjcwMjUtMDdiZGRhYjAtZmMwNC00ZTc0LWJjODMtN2ViNDRjMWVkYWRlLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI5NmY0MTM4ZGUzMWFkYTJiMWZkMjc0ZmUzMTYzMDYwNTc2ZTBhODI5Njg5ZGI1YmZiNDU2NmUxZjBhMDc3YjEmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.0vy124R5bkURW6Ysfv67obEW9PQzjbapQud--tbnHbw" controls width="100%"></video>
+<br><br>
+
+### 7. 일반_회원가입 및 프로필 변경
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541927039-22ca36e5-0543-4a86-93fe-62d2b983ae3e.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjcwMzktMjJjYTM2ZTUtMDU0My00YTg2LTkzZmUtNjJkMmI5ODNhZTNlLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTQ0ZjU5MTM5YjNlMzM4ODM2MDJjMTY2OTdjM2QyNWJhM2I3MDUwODNhMDM0ZjQ0ZDI2MTZjOWYxMWQyNzY5OTMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.BgkLEw8vWbA6BoY3BDEYEVU-6nDT1EbwSGOutcmEam4" controls width="100%"></video>
+<br><br>
+
+### 8. 일반_맛집 정렬 기능
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541927058-468e1300-ab29-4944-ae25-b8609437ea41.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjcwNTgtNDY4ZTEzMDAtYWIyOS00OTQ0LWFlMjUtYjg2MDk0MzdlYTQxLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWM4ZTJiNTc5ZjJjNWU5YjYwY2JjMjhkNTIzZTg2ZjU5ODBlMDRmM2NkZWM5ZjU4ZDkyYmU3NzUwYmI1ZjQ3MDYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.MjEJkUcPjOSdeO2DL3xmLXOYdpEPhq5oS1rlRghRyDI" controls width="100%"></video>
+<br><br>
+
+### 9. 일반_찜(Bookmark) 기능
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541927188-d00f1e55-7ccf-4fa8-bd61-b834aa9dca18.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjcxODgtZDAwZjFlNTUtN2NjZi00ZmE4LWJkNjEtYjgzNGFhOWRjYTE4Lm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTBjN2FhNTU5MjRmMWMzYTUwNzhiMDI1OGE5ODEyNDNiZDY0YWMxMWZkZDdiYjU4ZDVmYzFmZWUyYjMyZDBhYjUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.Ab734vbkF8jAP3UfcjZUWKcyelJsiFYAi_PGXtRRMt4" controls width="100%"></video>
+<br><br>
+
+### 10. 일반_리뷰 기능
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541927222-436d4490-ea3d-479d-9185-30c0d792aee4.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjcyMjItNDM2ZDQ0OTAtZWEzZC00NzlkLTkxODUtMzBjMGQ3OTJhZWU0Lm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWFjMWFhNDMxMjE4NzczNDZjYzEwYWI0YmU3ZTgzM2NhOWFmNjFhYTgzMWFlMDljMjQ2YzAxNWM0ODNlOGJjMTkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.1VOI561ZFbmXhGfdJBZ5KhqmXj59wyuJ8-tIkYmnyb4" controls width="100%"></video>
+<br><br>
+
+### 11. 일반_마이 리뷰 관리
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541927352-5b8d4b68-0d7a-4905-9a95-3807d5bc99ac.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjczNTItNWI4ZDRiNjgtMGQ3YS00OTA1LTlhOTUtMzgwN2Q1YmM5OWFjLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTU2NmUzMTFhOTM5YTVlNmMzMGI2MTVhZGEzZTFiZTc3YzE0NDliMzI2MmQ5MWI0NTdkOTA5ZDNjYmEzZGU1MWImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.CHFE5inBMPVEtqO2qUKkVNfr-QftPCJwDaJ7fUOGeH0" controls width="100%"></video>
+<br><br>
+
+### 12. 일반_회원 탈퇴
+<video src="https://github.com/user-attachments/assets/https://private-user-images.githubusercontent.com/92421686/541927375-8d3f8173-ece3-47e0-877e-971ff170d8dd.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Njk2NDUzMjAsIm5iZiI6MTc2OTY0NTAyMCwicGF0aCI6Ii85MjQyMTY4Ni81NDE5MjczNzUtOGQzZjgxNzMtZWNlMy00N2UwLTg3N2UtOTcxZmYxNzBkOGRkLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAxMjklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMTI5VDAwMDM0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI4NDRmNmNiOGViNDdiNGEzODkzMDI5NWQyNjU0MjQxZDJkODllNTQ5ODM4YWRjN2U3YjY5M2NjNTBhMTNmYTgmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.R23PlKQ-FsT-bm12KyxLpG1THy0ci_vCWX_9fVPxNkc" controls width="100%"></video>
